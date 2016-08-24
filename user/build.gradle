@@ -1,0 +1,6 @@
+bootRepackage {
+    //mainClass = 'cn.hopever.platform.user.example.Example'
+}
+dependencies {
+    //compile 'org.springframework.security.oauth:spring-security-oauth2'
+}
