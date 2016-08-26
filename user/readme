@@ -1,0 +1,8 @@
+1.hateoas基础整合成功
+http://docs.spring.io/spring-hateoas/docs/0.20.0.RELEASE/reference/html/
+2.cros实现
+3.oauth2
+4.db 完成， test and prod
+5.结合部分前端，走通
+6.放入实体服务器
+7.区分其他应用对user模块（oauth2）的使用（调用）
