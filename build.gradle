@@ -2,7 +2,7 @@ allprojects {
     group 'cn.hopever.platform'
     version '1.0-SNAPSHOT'
 }
-
+def springBootVersion = "1.4.0.RELEASE"
 repositories {
     mavenCentral()
 }
@@ -13,7 +13,7 @@ buildscript {
         maven { url 'http://repo.spring.io/plugins-release' }
     }
     dependencies {
-        classpath 'io.spring.gradle:dependency-management-plugin:0.6.0.RELEASE'
+        //classpath 'io.spring.gradle:dependency-management-plugin:0.6.0.RELEASE'
         classpath 'org.springframework.boot:spring-boot-gradle-plugin:1.4.0.RELEASE'
         classpath 'org.springframework.build.gradle:propdeps-plugin:0.0.7'
     }
@@ -21,7 +21,7 @@ buildscript {
 subprojects {
     apply plugin: 'java'
     apply plugin: 'maven'
-    apply plugin: 'io.spring.dependency-management'
+    //apply plugin: 'io.spring.dependency-management'
     apply plugin: 'spring-boot'
     apply plugin: 'propdeps'
     sourceCompatibility = 1.8
@@ -35,18 +35,31 @@ subprojects {
     repositories {
         mavenCentral()
     }
-    dependencyManagement {
-        imports {
-            mavenBom 'io.spring.platform:platform-bom:2.0.7.RELEASE'
-        }
-    }
+//    dependencyManagement {
+//        imports {
+//            mavenBom 'io.spring.platform:platform-bom:2.0.7.RELEASE'
+//        }
+//    }
     dependencies {
-        testCompile group: 'junit', name: 'junit'
-        testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test'
-        optional group: 'org.springframework.boot', name: 'spring-boot-devtools'
-        optional group: 'org.springframework.boot', name: 'spring-boot-configuration-processor'
-        compile group: 'org.springframework.boot', name: 'spring-boot-starter-web'
-        compile group: 'org.springframework.boot', name: 'spring-boot-starter-hateoas'
+        //TEST
+        testCompile ('org.springframework.boot:spring-boot-starter-test:'+springBootVersion)
+
+        //DEV TOOL
+        optional ('org.springframework.boot:spring-boot-devtools:'+springBootVersion)
+
+        //CONFIGURE PROPERTIES
+        optional ('org.springframework.boot:spring-boot-configuration-processor:'+springBootVersion)
+
+        //WEB
+        compile ('org.springframework.boot:spring-boot-starter-web:'+springBootVersion)
+
+        //REST
+        compile ('org.springframework.boot:spring-boot-starter-hateoas:'+springBootVersion)
+
+        //DB
+        compile ('org.springframework.boot:spring-boot-starter-data-jpa:'+springBootVersion)
+        testRuntime('org.hsqldb:hsqldb:2.3.3')
+        runtime('org.postgresql:postgresql:9.4.1209.jre7')
     }
     compileJava.dependsOn(processResources)
 }

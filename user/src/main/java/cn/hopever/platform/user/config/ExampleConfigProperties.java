@@ -7,17 +7,17 @@ import org.springframework.stereotype.Component;
  * Created by Donghui Huo on 2016/8/22.
  */
 @Component
-@ConfigurationProperties(prefix = "my")
-public class ConfigTest2Properties {
+@ConfigurationProperties(prefix = "logging")
+public class ExampleConfigProperties {
 
-    public String getDesc() {
-        return desc;
+    public String getPath() {
+        return path;
     }
 
-    public void setDesc(String desc) {
-        this.desc = desc;
+    public void setPath(String path) {
+        this.path = path;
     }
 
-    private String desc;
+    private String path;
 
 }
