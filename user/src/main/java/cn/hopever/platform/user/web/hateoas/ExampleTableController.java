@@ -4,6 +4,7 @@ import cn.hopever.platform.user.domain.ExampleTable;
 import cn.hopever.platform.user.resources.ExampleTableResource;
 import cn.hopever.platform.user.service.ExampleTableService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.PagedResources;
 import org.springframework.hateoas.Resources;
 import org.springframework.http.HttpEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -43,6 +44,28 @@ public class ExampleTableController {
                 .withSelfRel());
         return new HttpEntity<>(wrapped);
     }
+
+    @RequestMapping(value = "/paged/{size}/{number}", method = RequestMethod.GET)
+    public HttpEntity<PagedResources<ExampleTableResource>> showAllPaged(@PathVariable("size") Integer size, @PathVariable("number") Integer number) {
+
+        //here find paged data
+        //find the total count
+        Iterable<ExampleTable> list = testTableService.findAll();
+        List<ExampleTableResource> resources = exampleTableAssembler.toResources(list);
+        long totalElements = resources.size();
+        long totalPages = totalElements / size + (totalElements % size > 0 ? 1 : 0);
+        PagedResources.PageMetadata pageMetadata = new PagedResources.PageMetadata(size, number, totalElements, totalPages);
+        PagedResources<ExampleTableResource> pagedResources = new PagedResources<ExampleTableResource>(resources, pageMetadata);
+        pagedResources.add(linkTo(ExampleTableController.class).slash(size).slash(number).withSelfRel());
+        if (number < totalPages) {
+            pagedResources.add(linkTo(ExampleTableController.class).slash(size).slash(number + 1).withRel("next_page"));
+        }
+        if (number > 1) {
+            pagedResources.add(linkTo(ExampleTableController.class).slash(size).slash(number - 1).withRel("last_page"));
+        }
+        return new HttpEntity<>(pagedResources);
+    }
+
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public HttpEntity<ExampleTableResource> getOne(@PathVariable("id") Integer id) {
