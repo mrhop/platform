@@ -1,6 +1,6 @@
 package cn.hopever.platform.user.test;
 
-import cn.hopever.platform.user.web.rest.ExampleRestController;
+import cn.hopever.platform.user.web.hateoas.ExampleTableController;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,7 +34,7 @@ public class ExampleTestMvc {
     private WebApplicationContext context;
 
     @InjectMocks
-    ExampleRestController defaultRestController;
+    ExampleTableController defaultRestController;
 
     @Before
     public void setUp() {
@@ -45,10 +45,9 @@ public class ExampleTestMvc {
     //
     @Test
     public void testSayHelloWorld() throws Exception {
-        this.mockMvc.perform(get("/addtest").accept(MediaType.parseMediaType("application/json;charset=UTF-8")))
+        this.mockMvc.perform(get("/example").accept(MediaType.parseMediaType("application/json;charset=UTF-8")))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType("application/json;charset=UTF-8"))
-                .andExpect(content().string("you know"));
+                .andExpect(content().contentType("application/json;charset=UTF-8"));
     }
 
 

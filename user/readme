@@ -1,4 +1,4 @@
-1.hateoas基础整合
+1.hateoas基础整合（list link的添加 以及其他的具体基础含义的清晰）
 http://docs.spring.io/spring-hateoas/docs/0.20.0.RELEASE/reference/html/
 [不加入静态页面部分，所有的静态页面都独立实现，仅使用api调用方式处理]
 2.cros实现

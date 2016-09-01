@@ -60,6 +60,11 @@ subprojects {
         compile ('org.springframework.boot:spring-boot-starter-data-jpa:'+springBootVersion)
         testRuntime('org.hsqldb:hsqldb:2.3.3')
         runtime('org.postgresql:postgresql:9.4.1209.jre7')
+
+        //TOOLS
+        compile ('org.projectlombok:lombok:1.16.10')
+        compile ('org.modelmapper:modelmapper:0.7.6')
+
     }
     compileJava.dependsOn(processResources)
 }

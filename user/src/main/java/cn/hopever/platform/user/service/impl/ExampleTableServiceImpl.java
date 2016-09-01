@@ -14,11 +14,16 @@ public class ExampleTableServiceImpl implements ExampleTableService {
     @Autowired
     private ExampleTableRepository testTableRepository;
 
+
     @Override
-    public String insertOne() {
-        ExampleTable testTable = new ExampleTable();
-        testTable.setUserName("you know");
-        return testTableRepository.save(testTable).getUserName();
+    public ExampleTable addOne(ExampleTable exampleTable) {
+        return testTableRepository.save(exampleTable);
+    }
+
+
+    @Override
+    public ExampleTable getOneById(Integer id) {
+        return testTableRepository.findOne(id);
     }
 
     @Override

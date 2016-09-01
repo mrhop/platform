@@ -7,7 +7,8 @@ import cn.hopever.platform.user.domain.ExampleTable;
  */
 public interface ExampleTableService {
 
-    public String insertOne();
+    public ExampleTable addOne(ExampleTable exampleTable);
+    public ExampleTable getOneById(Integer id);
     public Iterable<ExampleTable> findAll();
 
 }

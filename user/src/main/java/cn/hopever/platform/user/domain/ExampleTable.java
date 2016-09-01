@@ -1,5 +1,8 @@
 package cn.hopever.platform.user.domain;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
 import javax.persistence.*;
 
 /**
@@ -7,6 +10,8 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "example_table")
+@Data
+@EqualsAndHashCode(exclude={"id"})
 public class ExampleTable {
 
     public ExampleTable(){}
@@ -17,27 +22,10 @@ public class ExampleTable {
         this.id = id;
         this.userName = userName;
     }
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(name = "user_name",nullable = false, length=32)
     private String userName;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
 }

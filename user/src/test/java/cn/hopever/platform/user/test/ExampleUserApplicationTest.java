@@ -1,5 +1,6 @@
 package cn.hopever.platform.user.test;
 
+import cn.hopever.platform.user.domain.ExampleTable;
 import cn.hopever.platform.user.service.ExampleTableService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,7 +28,7 @@ public class ExampleUserApplicationTest {
 
     @Test
     public void  addtest() {
-        testTableService.insertOne();
+        testTableService.addOne(new ExampleTable("you know"));
     }
 
     @Test
