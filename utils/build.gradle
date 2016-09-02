@@ -2,5 +2,5 @@ bootRepackage {
     //mainClass = 'cn.hopever.platform.user.example.Example'
 }
 dependencies {
-    compile project(':utils')
+    //compile 'org.springframework.security.oauth:spring-security-oauth2'
 }

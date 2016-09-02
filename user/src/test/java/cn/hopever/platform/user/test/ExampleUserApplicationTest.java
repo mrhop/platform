@@ -28,7 +28,7 @@ public class ExampleUserApplicationTest {
 
     @Test
     public void  addtest() {
-        testTableService.addOne(new ExampleTable("you know"));
+        testTableService.saveOne(new ExampleTable("you know"));
     }
 
     @Test

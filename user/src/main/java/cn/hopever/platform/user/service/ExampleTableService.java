@@ -7,8 +7,11 @@ import cn.hopever.platform.user.domain.ExampleTable;
  */
 public interface ExampleTableService {
 
-    public ExampleTable addOne(ExampleTable exampleTable);
+    public ExampleTable saveOne(ExampleTable exampleTable);
+    public void deleteOne(Integer id);
     public ExampleTable getOneById(Integer id);
+    public ExampleTable getOneByUserName(String userName);
+    public Iterable<ExampleTable> getByUserName(String userName);
     public Iterable<ExampleTable> findAll();
 
 }

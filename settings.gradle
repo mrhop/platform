@@ -1,3 +1,4 @@
 rootProject.name = 'platform'
 include 'user'
+include 'utils'
 

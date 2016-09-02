@@ -8,4 +8,5 @@ import org.springframework.data.repository.CrudRepository;
  */
 public interface ExampleTableRepository extends CrudRepository<ExampleTable, Integer> {
     public ExampleTable findByUserName(String username);
+    public ExampleTable findByUserNameContaining(String username);
 }
