@@ -9,7 +9,7 @@ import javax.persistence.*;
  * Created by Donghui Huo on 2016/8/30.
  */
 @Entity
-@Table(name = "example_table")
+@Table(name = "platform_user_example")
 @Data
 @EqualsAndHashCode(exclude={"id"})
 public class ExampleTable {
