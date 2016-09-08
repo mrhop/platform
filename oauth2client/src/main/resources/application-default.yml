@@ -1,0 +1,6 @@
+server:
+    port: 9090
+    contextPath: /oauth2client
+security:
+    basic:
+        enabled: false

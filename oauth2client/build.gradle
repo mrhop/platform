@@ -1,0 +1,11 @@
+bootRepackage {
+    //mainClass = 'cn.hopever.platform.user.example.Example'
+}
+configurations {
+    compile.exclude  group: 'org.springframework.boot', module: 'spring-boot-starter-data-jpa'
+    testRuntime.exclude  group: 'org.hsqldb', module: 'hsqldb'
+    runtime.exclude  group: 'org.postgresql', module: 'postgresql'
+}
+dependencies {
+    compile project(':utils')
+}

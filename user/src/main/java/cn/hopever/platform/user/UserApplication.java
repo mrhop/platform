@@ -1,20 +1,23 @@
 package cn.hopever.platform.user;
 
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.web.support.SpringBootServletInitializer;
 
 /**
  * Created by Donghui Huo on 2016/8/19.
  */
 @SpringBootApplication
-public class UserApplication implements CommandLineRunner {
+//@EnableResourceServer
+public class UserApplication extends SpringBootServletInitializer {
 
     public static void main(String[] args) throws Exception {
         SpringApplication.run(UserApplication.class, args);
     }
 
     @Override
-    public void run(String... args) throws Exception {
+    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+        return application.sources(UserApplication.class);
     }
 }

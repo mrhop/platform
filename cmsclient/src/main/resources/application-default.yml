@@ -1,0 +1,6 @@
+server:
+    port: 9091
+    contextPath: /cmsclient
+security:
+    basic:
+        enabled: false

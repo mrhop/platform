@@ -51,7 +51,12 @@ subprojects {
         optional ('org.springframework.boot:spring-boot-configuration-processor:'+springBootVersion)
 
         //WEB
-        compile ('org.springframework.boot:spring-boot-starter-web:'+springBootVersion)
+        compile ('org.springframework.boot:spring-boot-starter-web:'+springBootVersion){
+            exclude(module: 'spring-boot-starter-tomcat')
+            exclude(group: 'org.apache.tomcat.embed')
+        }
+        provided(group: 'org.springframework.boot', name: 'spring-boot-starter-tomcat')
+
 
         //REST
         compile ('org.springframework.boot:spring-boot-starter-hateoas:'+springBootVersion)
@@ -64,6 +69,13 @@ subprojects {
         //TOOLS
         compile ('org.projectlombok:lombok:1.16.10')
         compile ('org.modelmapper:modelmapper:0.7.6')
+
+        //SECURITY
+        compile ('org.springframework.boot:spring-boot-starter-security:'+springBootVersion)
+        compile ('org.springframework.security:spring-security-jwt:1.0.4.RELEASE')
+        compile ('org.springframework.security.oauth:spring-security-oauth2:2.0.10.RELEASE'){
+            exclude(module: 'jackson-mapper-asl')
+        }
 
     }
     compileJava.dependsOn(processResources)

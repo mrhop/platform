@@ -1,7 +1,7 @@
 1.hateoas基础整合然后cros的实现)
 http://docs.spring.io/spring-hateoas/docs/0.20.0.RELEASE/reference/html/
 [不加入静态页面部分，所有的静态页面都独立实现，仅使用api调用方式处理] done!!!
-2.cros实现 now~~~~~~~~
+2.cros实现 done
 3.oauth2
 4.db 完成， test and prod done !!!
 5.结合部分前端，走通

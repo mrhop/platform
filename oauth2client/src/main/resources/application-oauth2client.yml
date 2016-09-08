@@ -1,0 +1,7 @@
+config:
+    oauth2:
+        clientID: confidential
+        clientSecret: secret
+        accessTokenUri: http://localhost:8080/user/oauth/token
+        userAuthorizationUri: http://localhost:8080/user/oauth/authorize
+        principalURI: http://localhost:8080/user/resources/principal

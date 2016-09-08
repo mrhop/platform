@@ -25,6 +25,7 @@ import java.util.List;
 @RestController
 @ExposesResourceFor(ExampleTableResource.class)
 @RequestMapping(value = "/example", produces = "application/json")
+@CrossOrigin
 public class ExampleTableController {
     Logger logger = LoggerFactory.getLogger(ExampleTableController.class);
     @Autowired
