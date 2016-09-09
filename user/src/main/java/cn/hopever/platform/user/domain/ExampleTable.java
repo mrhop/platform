@@ -11,21 +11,24 @@ import javax.persistence.*;
 @Entity
 @Table(name = "platform_user_example")
 @Data
-@EqualsAndHashCode(exclude={"id"})
+@EqualsAndHashCode(of = {"id"})
 public class ExampleTable {
+    public ExampleTable() {
+    }
 
-    public ExampleTable(){}
-    public ExampleTable(String userName){
+    public ExampleTable(String userName) {
         this.userName = userName;
     }
-    public ExampleTable(Integer id, String userName){
+
+    public ExampleTable(Integer id, String userName) {
         this.id = id;
         this.userName = userName;
     }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "user_name",nullable = false, length=32)
+    @Column(name = "user_name", nullable = false, length = 32)
     private String userName;
 }

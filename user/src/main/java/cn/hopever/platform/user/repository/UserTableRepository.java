@@ -6,5 +6,6 @@ import org.springframework.data.repository.CrudRepository;
 /**
  * Created by Donghui Huo on 2016/8/30.
  */
-public interface UserRepository extends CrudRepository<UserTable, Integer> {
+public interface UserTableRepository extends CrudRepository<UserTable, Integer> {
+    public UserTable findOneByUsername(String username);
 }
