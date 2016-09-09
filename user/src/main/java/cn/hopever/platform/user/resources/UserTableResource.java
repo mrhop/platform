@@ -11,10 +11,17 @@ import javax.validation.constraints.NotNull;
  */
 @Data
 @EqualsAndHashCode(callSuper=false)
+//用于获取用户信息并授权第三方client
+//其他用于后台管理部分的则需要考虑其他的userresource方案，用于管理用户的可用性
 public class UserTableResource extends ResourceSupport {
+
     @NotNull
     private String username;
 
+    private String email;
 
+    private String phone;
+
+    private String additionalMessage;
 
 }
