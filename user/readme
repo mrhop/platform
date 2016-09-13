@@ -7,3 +7,7 @@ http://docs.spring.io/spring-hateoas/docs/0.20.0.RELEASE/reference/html/
 5.结合部分前端，走通
 6.放入实体服务器
 7.区分其他应用对user模块（oauth2）的使用（调用）
+
+1. oauth2 user 部分实现 client 并实现静态，并使用js登陆，并在，并将user client设为管理平台的样式，并内置一个super user，登陆后，给出一个super_admin_client的概念，和一个super_admin的概念
+2. user client,既有普通用户又有超级用户
+3.

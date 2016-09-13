@@ -35,8 +35,8 @@ public class UserTableServiceImpl implements UserTableService, UserDetailsServic
     }
 
     @Override
-    public void save(UserTable user){
+    public UserTable save(UserTable user){
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        userTableRepository.save(user);
+        return userTableRepository.save(user);
     }
 }

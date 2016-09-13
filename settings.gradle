@@ -6,4 +6,6 @@ include 'crm'
 include 'workflow'
 include 'oauth2client'
 include 'cmsclient'
+include 'userclient'
+include 'navigate'
 

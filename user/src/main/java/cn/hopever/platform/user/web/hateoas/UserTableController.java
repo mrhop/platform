@@ -47,7 +47,7 @@ public class UserTableController {
         UserTable userTable = new UserTable();
         BeanUtils.copyNotNullProperties(resource, userTable);
         try {
-            userTableService.saveOne(userTable);
+            userTableService.save(userTable);
             return new CommonResult(true, "create success");
         } catch (Exception e) {
             logger.error("createUserTable error", e);
@@ -60,7 +60,6 @@ public class UserTableController {
     @PreAuthorize("hasRole('user')")
     @RequestMapping("/user")
     public UserTableResource get(Principal principal) {
-
         return null;
     }
 

@@ -1,0 +1,12 @@
+server:
+    port: 8081
+    contextPath: /userclient
+security:
+    basic:
+        enabled: false
+config:
+    oauth2:
+        clientID: super_admin_client
+        clientSecret: secret
+        clientScopes:
+              - super_admin_client

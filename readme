@@ -1,0 +1,11 @@
+navigate： 8080
+userclient：8081
+cmsclient：8082
+crmclient：8083
+oauth2client：---
+
+
+
+user：9091
+cms:9092
+crm:9093

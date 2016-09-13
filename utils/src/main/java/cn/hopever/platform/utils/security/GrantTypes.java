@@ -5,5 +5,5 @@ package cn.hopever.platform.utils.security;
  */
 //"client_credentials", "password", "authorization_code", "refresh_token"
 public enum GrantTypes {
-    client_credentials, password, authorization_code, refresh_token;
+    client_credentials, password, authorization_code,implicit, refresh_token;
 }

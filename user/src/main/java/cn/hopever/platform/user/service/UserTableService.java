@@ -10,7 +10,6 @@ import cn.hopever.platform.user.domain.UserTable;
 // then password
 // then client then consider about the different system to use,like cms crm,etc
 public interface UserTableService {
-    public UserTable saveOne(UserTable user);
-    public UserTable getOneById(long id);
+    public UserTable save(UserTable user);
 
 }
