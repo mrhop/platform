@@ -1,3 +1,13 @@
 server:
     port: 8080
     contextPath: /navigate
+security:
+    enable-csrf: true
+platform:
+    list:
+      - name: userPlatform
+        url:  http://localhost:8081/userclient/login.html
+      - name: cmsPlatform
+        url:  http://localhost:8082/cmsclient/login.html
+      - name: crmPlatform
+        url:  http://localhost:8083/crmclient/login.html
