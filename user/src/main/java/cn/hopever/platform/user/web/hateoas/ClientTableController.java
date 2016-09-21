@@ -1,7 +1,6 @@
 package cn.hopever.platform.user.web.hateoas;
 
 import cn.hopever.platform.user.resources.ClientTableResource;
-import cn.hopever.platform.user.resources.UserTableResource;
 import cn.hopever.platform.user.service.ClientTableService;
 import cn.hopever.platform.utils.web.CommonResult;
 import org.slf4j.Logger;
@@ -18,7 +17,7 @@ import java.security.Principal;
  * Created by Donghui Huo on 2016/8/29.
  */
 @RestController
-@ExposesResourceFor(UserTableResource.class)
+@ExposesResourceFor(ClientTableResource.class)
 @RequestMapping(value = "/client", produces = "application/json")
 @CrossOrigin
 public class ClientTableController {

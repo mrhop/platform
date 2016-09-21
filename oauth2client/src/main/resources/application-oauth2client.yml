@@ -2,3 +2,5 @@ config:
     oauth2:
         accessTokenUri: http://localhost:9091/user/oauth/token
         userAuthorizationUri: http://localhost:9091/user/oauth/authorize
+        #domainName: hopever.cn #用于保证单点登录的实现，在不同的子系统之间，但是为了保证唯一性，以cookie为首要准则
+        secretKey: .hopever #用于加密accesstoken，并返回客户端

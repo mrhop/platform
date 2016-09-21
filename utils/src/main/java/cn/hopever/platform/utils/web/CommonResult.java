@@ -8,33 +8,34 @@ import java.io.Serializable;
  * Created by Donghui Huo on 2016/9/2.
  */
 @Data
-public class CommonResult {
+public class CommonResult implements Serializable {
 
     public CommonResult() {
     }
 
-    public CommonResult(boolean status, String message) {
+    public CommonResult(String status, String message) {
         this.status = status;
         this.message = message;
     }
 
-    public CommonResult(boolean status, Serializable result) {
+    public CommonResult(String status, Serializable responseData) {
         this.status = status;
-        this.result = result;
+        this.responseData = responseData;
     }
 
-    public CommonResult(boolean status, String message, Serializable result) {
+    public CommonResult(String status, String message, Serializable responseData) {
         this.status = status;
         this.message = message;
-        this.result = result;
+        this.responseData = responseData;
     }
 
 
-    private boolean status;
+    private String status;
 
     private String message;
 
-    private Serializable result;
-
+    private Serializable responseData;
 
 }
+
+

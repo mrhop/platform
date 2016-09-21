@@ -46,7 +46,7 @@ public class ClientTable{
     @Column(name = "grant_types",nullable = false)
     private String grantTypes;
 
-    @Column(name = "grant_types",nullable = true,length= 2000)
+    @Column(name = "redirect_uris",nullable = true,length= 2000)
     private String redirectUris;
 
     @Column(name = "scopes",nullable = true)

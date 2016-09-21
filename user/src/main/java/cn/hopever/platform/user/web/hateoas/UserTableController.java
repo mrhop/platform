@@ -48,10 +48,10 @@ public class UserTableController {
         BeanUtils.copyNotNullProperties(resource, userTable);
         try {
             userTableService.save(userTable);
-            return new CommonResult(true, "create success");
+            return new CommonResult("success", "create success");
         } catch (Exception e) {
             logger.error("createUserTable error", e);
-            return new CommonResult(false, "create failure:" + e.getMessage());
+            return new CommonResult("serverFailure", "create failure:" + e.getMessage());
         }
     }
 

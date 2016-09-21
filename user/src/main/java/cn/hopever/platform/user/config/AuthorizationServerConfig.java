@@ -92,6 +92,14 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .authorizedGrantTypes("client_credentials", "password", "authorization_code", "refresh_token")
                 .scopes("read", "write")
                 .redirectUris("http://localhost:9090/oauth2client/login","http://localhost:9091/cmsclient/login")
+
+                .and()
+
+                // Trusted client: similar to confidential client but also allowed to handle user password
+                .withClient("super_admin_client").secret("secret")
+                .authorities("super_admin_client","client")
+                .authorizedGrantTypes("client_credentials", "password", "authorization_code", "refresh_token")
+                .scopes("super_admin_client","read")
         ;
     }
 

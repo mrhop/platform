@@ -13,7 +13,7 @@ import java.security.Principal;
 @RequestMapping(value = "/resources/principal", produces = "application/json")
 public class PrincipalController {
 
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('user') or hasRole('client')")
     @RequestMapping("")
     public Principal resource(Principal principal) {
         return principal;
