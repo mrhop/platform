@@ -38,11 +38,18 @@ public class ErrorController extends BasicErrorController {
     public ModelAndView errorHtml(HttpServletRequest request,
                                   HttpServletResponse response)  {
         HttpStatus status = getStatus(request);
-        Map<String, Object> model = Collections.unmodifiableMap(getErrorAttributes(
-                request, isIncludeStackTrace(request, MediaType.TEXT_HTML)));
-        response.setStatus(status.value());
+//        Map<String, Object> model = Collections.unmodifiableMap(getErrorAttributes(
+//                request, isIncludeStackTrace(request, MediaType.TEXT_HTML)));
+//        response.setStatus(status.value());
         logger.error("mvc error code:"+status,request.getAttribute("javax.servlet.error.exception"));
-        ModelAndView modelAndView = resolveErrorView(request, response, status, model);
-        return (modelAndView == null ? new ModelAndView("error", model) : modelAndView);
+//        ModelAndView modelAndView = resolveErrorView(request, response, status, model);
+//        return (modelAndView == null ? new ModelAndView("error", model) : modelAndView);
+        //do just redirect
+        try {
+            response.sendRedirect("error/"+status+".html");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

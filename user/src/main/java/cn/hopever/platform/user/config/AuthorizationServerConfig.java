@@ -99,7 +99,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .withClient("super_admin_client").secret("secret")
                 .authorities("super_admin_client","client")
                 .authorizedGrantTypes("client_credentials", "password", "authorization_code", "refresh_token")
-                .scopes("super_admin_client","read")
+                .scopes("super_admin_client","internal_client")
         ;
     }
 

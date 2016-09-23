@@ -10,4 +10,4 @@ config:
         clientSecret: secret
         clientScopes:
               - super_admin_client
-              - read
+              - internal_client

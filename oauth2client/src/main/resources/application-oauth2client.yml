@@ -4,3 +4,5 @@ config:
         userAuthorizationUri: http://localhost:9091/user/oauth/authorize
         #domainName: hopever.cn #用于保证单点登录的实现，在不同的子系统之间，但是为了保证唯一性，以cookie为首要准则
         secretKey: .hopever #用于加密accesstoken，并返回客户端
+        validateUserUri: http://localhost:9091/user/resources/principal/check #用于校验用户是否符合该内部客户端
+        getUserUri: http://localhost:9091/user/resources/principal #用于返回登录的用户的基本信息

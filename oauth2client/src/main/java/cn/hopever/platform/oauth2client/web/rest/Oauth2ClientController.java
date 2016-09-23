@@ -1,31 +1,25 @@
 package cn.hopever.platform.oauth2client.web.rest;
 
 import cn.hopever.platform.oauth2client.config.Oauth2Properties;
+import cn.hopever.platform.oauth2client.web.common.CommonMethods;
 import cn.hopever.platform.utils.security.AesUtil;
 import cn.hopever.platform.utils.security.DesECBUtil;
 import cn.hopever.platform.utils.web.CommonResult;
 import cn.hopever.platform.utils.web.CommonResultStatus;
-import cn.hopever.platform.utils.web.CookieUtil;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.security.oauth2.client.OAuth2ClientContext;
 import org.springframework.security.oauth2.client.OAuth2RestOperations;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.security.oauth2.client.token.grant.password.ResourceOwnerPasswordResourceDetails;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
 
 /**
  * Created by Donghui Huo on 2016/9/6.
@@ -58,8 +52,11 @@ public class Oauth2ClientController {
     private OAuth2RestOperations clientRestTemplate;
 
     @Autowired
-    @Qualifier("restTemplate")
-    private RestTemplate restTemplate;
+    @Qualifier("passwordOAuth2ClientContext")
+    private OAuth2ClientContext passwordOAuth2ClientContext;
+
+    @Autowired
+    private CommonMethods commonMethods;
 
     @RequestMapping(value = "/gettokenbycode", method = RequestMethod.GET)
     public CommonResult getTokenByCode(HttpServletResponse response) {
@@ -83,20 +80,21 @@ public class Oauth2ClientController {
     }
 
     @RequestMapping(value = "/gettokenbyclient", method = RequestMethod.GET)
-    public CommonResult getTokenByClient() {
+    public CommonResult getTokenByClient( HttpServletRequest request) {
         CommonResult c = new CommonResult();
-        try {
+        if(request.getSession().getAttribute("clientAccessToken")!=null){
+            //说明已经进行过client的登录，否则进行登录
+            c.setStatus(CommonResultStatus.SUCCESS.toString());
+        }else{
             OAuth2AccessToken oa = clientRestTemplate.getAccessToken();
             c.setStatus(CommonResultStatus.SUCCESS.toString());
-        } catch (Exception e) {
-            c.setStatus(CommonResultStatus.SERVERFAILURE.toString());
-            c.setMessage(e.getMessage());
+            request.getSession().setAttribute("clientAccessToken",oa.getValue());
         }
         return c;
     }
 
     @RequestMapping(value = "/gettokenbypassword", method = RequestMethod.POST)
-    public CommonResult getTokenbyPassword(@RequestBody JsonNode body, HttpServletResponse response) {
+    public Object getTokenbyPassword(@RequestBody JsonNode body, HttpServletRequest request, HttpServletResponse response) {
         CommonResult c = new CommonResult();
         try {
             OAuth2AccessToken oa = getPasswordRestTemplate(body.get("data").get("username").asText(), body.get("data").get("password").asText()).getAccessToken();
@@ -107,8 +105,22 @@ public class Oauth2ClientController {
                 cookie.setDomain(oauth2Properties.getDomainName());
             }
             cookie.setMaxAge(oa.getExpiresIn());
-            response.addCookie(cookie);
-            c.setStatus(CommonResultStatus.SUCCESS.toString());
+            //此处进行校验，并返回index
+            if(commonMethods.validateUser(request,cookie)){
+                response.addCookie(cookie);
+                //rest 里面如何sendredirect
+                //必须使用前台ajax调用
+                c.setStatus(CommonResultStatus.SUCCESS.toString());
+                c.setMessage("to index");
+                HashMap<String,Object> map = new HashMap<>();
+                map.put("redirect","index.html");
+                c.setResponseData(map);
+                //response.sendRedirect("/index.html");
+               // return "redirect:/index.html";
+            }else{
+                c.setStatus(CommonResultStatus.SERVERFAILURE.toString());
+                c.setMessage("401,Authorization Error");
+            }
         } catch (Exception e) {
             c.setStatus(CommonResultStatus.SERVERFAILURE.toString());
             c.setMessage(e.getMessage());
@@ -117,55 +129,14 @@ public class Oauth2ClientController {
     }
 
     @RequestMapping(value = "/postresource", method = RequestMethod.POST)
-    public CommonResult postResource(@RequestBody JsonNode body, HttpServletRequest request) {
-        Cookie c =  CookieUtil.getCookieByName("accesstoken",request.getCookies());
-        if(c!=null){
-            CommonResult cr =null;
-            try{
-                MultiValueMap<String, String> headers = new LinkedMultiValueMap<String, String>();
-                headers.add("Authorization", "Bearer " + AesUtil.aesDecrypt(c.getValue(), oauth2Properties.getSecretKey()));
-                headers.add("Content-Type", "application/json;charset=UTF-8");
-                restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-                HttpEntity<JsonNode> httpEntity = new HttpEntity<JsonNode>(body, headers);
-                ResponseEntity<CommonResult> re = restTemplate.exchange(request.getHeader("resourceUrl"), HttpMethod.POST, httpEntity, CommonResult.class);
-                return re.getBody();
-            }catch(Exception e){
-                cr = new CommonResult();
-                cr.setStatus(CommonResultStatus.SERVERFAILURE.toString());
-                cr.setMessage(e.getMessage());
-            }
-            return cr;
-        }else{
-                //需要重新指向到登陆页面 redirect
-            return null;
-        }
+    public CommonResult postResource(@RequestBody JsonNode body, HttpServletRequest request) throws Exception {
+        return commonMethods.postResource(body, request);
     }
 
     @RequestMapping(value = "/getresource", method = RequestMethod.GET)
-    public CommonResult getResource(HttpServletRequest request) {
-        Cookie c =  CookieUtil.getCookieByName("accesstoken",request.getCookies());
-        if(c!=null){
-            CommonResult cr =null;
-            try{
-                MultiValueMap<String, String> headers = new LinkedMultiValueMap<String, String>();
-                headers.add("Authorization", "Bearer " + DesECBUtil.decryptDES(c.getValue(), oauth2Properties.getSecretKey()));
-                headers.add("Content-Type", "application/json;charset=UTF-8");
-                restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-                HttpEntity<?> httpEntity = new HttpEntity<Object>( headers);
-                ResponseEntity<CommonResult> re = restTemplate.exchange(request.getHeader("resourceUrl"), HttpMethod.GET, httpEntity, CommonResult.class);
-                return re.getBody();
-            }catch(Exception e){
-                cr = new CommonResult();
-                cr.setStatus(CommonResultStatus.SERVERFAILURE.toString());
-                cr.setMessage(e.getMessage());
-            }
-            return cr;
-        }else{
-            //需要重新指向到登陆页面 redirect
-            return null;
-        }
+    public CommonResult getResource(HttpServletRequest request) throws Exception {
+        return commonMethods.getResource(request);
     }
-
 
 
     private OAuth2RestOperations getPasswordRestTemplate(String username, String password) {
@@ -176,7 +147,7 @@ public class Oauth2ClientController {
         resource.setUsername(username);
         resource.setPassword(password);
         resource.setScope(oauth2Properties.getClientScopes());
-        return new OAuth2RestTemplate(resource, oauth2ClientContext);
+        return new OAuth2RestTemplate(resource, passwordOAuth2ClientContext);
     }
 
 }

@@ -20,4 +20,6 @@ public class Oauth2Properties {
     private List<String> clientScopes;
     private String domainName;
     private String secretKey;
+    private String validateUserUri;
+    private String getUserUri;
 }

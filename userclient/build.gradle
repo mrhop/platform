@@ -1,3 +1,6 @@
+war {
+    baseName = 'userclient'
+}
 bootRepackage {
     //mainClass = 'cn.hopever.platform.user.example.Example'
 }

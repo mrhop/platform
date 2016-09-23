@@ -1,0 +1,42 @@
+[
+  {
+    "id": "1",
+    "url": "dashboard",
+    "iconClass": "home",
+    "name": "Dashboard"
+  },
+  {
+    "id": "2",
+    "iconClass": "cog",
+    "name": "Modules",
+    "subItems": [
+      {
+        "id": "3",
+        "url": "table",
+        "name": "Tables"
+      },
+      {
+        "id": "4",
+        "url": "chart",
+        "name": "Charts"
+      },
+      {
+        "id": "5",
+        "url": "form",
+        "name": "Form"
+      },
+      {
+        "id": "6",
+        "url": "dragdrop",
+        "name": "DragDrop"
+      }
+    ]
+  },
+  {
+    "id": "6",
+    "url": "#",
+    "selected": false,
+    "iconClass": "home",
+    "name": "Test"
+  }
+]

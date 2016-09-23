@@ -19,4 +19,18 @@ aes加密没问题
 4.开始index页面的设计和处理，【延迟的话，应该是用来设计oauth部分和数据库的结合】
 
 
+完成了部分cookie和session的部分，目前是static html 404的相对路径错误问题 done
+
+1.以后需要静态通用页面和js以及css的放置！！ 适用于本工程的js单独列出，适用于通用的单独列出
+2.考虑【apache的跳转+tomcat的使用，此处需要考虑到war的生成】
+3.首先生成war，done，tomcat 目前整合问题
+4.考虑apache跳转
+5.logout的实现
+6.user的数据库部分的处理
+7.前后台的功能的整合
+
+
+
+
+
 

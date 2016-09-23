@@ -3,6 +3,7 @@ package cn.hopever.platform.utils.web;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.HashMap;
 
 /**
  * Created by Donghui Huo on 2016/9/2.
@@ -18,12 +19,12 @@ public class CommonResult implements Serializable {
         this.message = message;
     }
 
-    public CommonResult(String status, Serializable responseData) {
+    public CommonResult(String status, HashMap<String,Object> responseData) {
         this.status = status;
         this.responseData = responseData;
     }
 
-    public CommonResult(String status, String message, Serializable responseData) {
+    public CommonResult(String status, String message, HashMap<String,Object> responseData) {
         this.status = status;
         this.message = message;
         this.responseData = responseData;
@@ -34,7 +35,7 @@ public class CommonResult implements Serializable {
 
     private String message;
 
-    private Serializable responseData;
+    private HashMap<String,Object> responseData;
 
 }
 
