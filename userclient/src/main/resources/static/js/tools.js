@@ -11996,11 +11996,21 @@ webpackJsonp([4],{
 	        //localeLanguage = navigator.language
 	    }
 	}
+	var name = "baseurl=";
+	var baseUrl = null;
+	var ca = document.cookie.split(';');
+	for (var i = 0; i < ca.length; i++) {
+	    var c = ca[i].trim();
+	    if (c.indexOf(name) == 0) {
+	        baseUrl = c.substring(name.length, c.length);
+	        break;
+	    }
+	}
 	module.exports = {
 	    //locale:'en-US'
 	    //locale:'zh-CN'
 	    locale: localeLanguage,
-	    baseUrl: "/userclient/"
+	    baseUrl: baseUrl
 	};
 	
 	/* REACT HOT LOADER */ }).call(this); } finally { if (false) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = require("D:\\workspaces\\html\\platform\\platform_user\\node_modules\\react-hot-loader\\makeExportsHot.js"); if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "initial.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }

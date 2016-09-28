@@ -1,0 +1,37 @@
+ 【安装mogilefs】
+ https://code.google.com/p/mogilefs/wiki/InstallOnUbuntu 【安装】
+ http://www.cnblogs.com/xiaocen/p/3721390.html 【mogilefs-部分添加】
+ CREATE DATABASE mogilefs; 
+ CREATE USER 'mogilefs'@'127.0.0.1' IDENTIFIED BY 'mogilefs'; 
+  GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,ALTER ON mogilefs.* TO 'mogilefs'@'127.0.0.1';
+  flush privileges;
+  mogdbsetup --dbhost=127.0.0.1 --dbname=mogilefs --dbuser=mogilefs --dbpassword=mogilefs
+   
+  
+  
+  mogadm --trackers=127.0.0.1:7001 host add 127.0.0.1 --ip=127.0.0.1 --status=alive
+  
+  mogadm --trackers=127.0.0.1:7001 host list
+  
+  mogadm --trackers=127.0.0.1:7001 device add 127.0.0.1 1
+  
+  mogadm --trackers=127.0.0.1:7001 domain add images
+  mogadm --trackers=127.0.0.1:7001 domain add files
+  mogadm --trackers=127.0.0.1:7001 domain add docs
+  
+  
+  
+  mogupload --trackers=127.0.0.1:7001 --domain=images --key='bg.jpg' --file='/home/temp/bg.jpg'
+
+mogfileinfo --trackers=172.16.27.1:7001 --domain=files --key='vendor.css'  
+  
+
+【nginx安装并和mogilefs整合】
+wget  https://nginx.org/download/nginx-1.10.1.tar.gz
+wget http://www.grid.net.ru/nginx/download/nginx_mogilefs_module-1.0.4.tar.gz
+./configure --add-module=/usr/local/nginx_mogilefs_module-1.0.4
+grep -nr '-Wno-unused-parameter'  *
+find -name 'Makef*'
+
+接下来【tomcat+nginx+mogilefs】
+http://essun.blog.51cto.com/721033/1410834

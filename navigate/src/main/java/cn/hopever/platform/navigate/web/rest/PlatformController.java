@@ -2,7 +2,6 @@ package cn.hopever.platform.navigate.web.rest;
 
 import cn.hopever.platform.navigate.config.PlatformConfig;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,7 +18,7 @@ public class PlatformController {
     private PlatformConfig platformConfig;
 
     @RequestMapping("")
-    @CrossOrigin
+    //@CrossOrigin
     public List<HashMap<String, String>> getPlatformList() {
         return platformConfig.getList();
     }

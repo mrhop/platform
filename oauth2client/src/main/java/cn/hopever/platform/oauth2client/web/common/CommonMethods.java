@@ -34,14 +34,15 @@ public class CommonMethods {
     @Autowired
     private Oauth2Properties oauth2Properties;
 
+    @SuppressWarnings("unchecked")
     public CommonResult getResource(HttpServletRequest request) throws Exception {
-        Object accesstoken = ((HttpServletRequest) request).getSession().getAttribute("accesstoken");
+        Object accesstoken = request.getSession().getAttribute("accesstoken");
         if (validateUser(request)) {
-            MultiValueMap<String, String> headers = new LinkedMultiValueMap<String, String>();
+            MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
             headers.add("Authorization", "Bearer " + ((Map<String, Object>) accesstoken).get("accesstoken").toString());
             headers.add("Content-Type", "application/json;charset=UTF-8");
             restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-            HttpEntity<?> httpEntity = new HttpEntity<Object>(headers);
+            HttpEntity<?> httpEntity = new HttpEntity<>(headers);
             ResponseEntity<CommonResult> re = restTemplate.exchange(request.getHeader("resourceUrl"), HttpMethod.GET, httpEntity, CommonResult.class);
             return re.getBody();
         } else {
@@ -52,14 +53,15 @@ public class CommonMethods {
         }
     }
 
+    @SuppressWarnings("unchecked")
     public CommonResult postResource(JsonNode body, HttpServletRequest request) throws Exception {
-        Object accesstoken = ((HttpServletRequest) request).getSession().getAttribute("accesstoken");
+        Object accesstoken = request.getSession().getAttribute("accesstoken");
         if (validateUser(request)) {
-            MultiValueMap<String, String> headers = new LinkedMultiValueMap<String, String>();
+            MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
             headers.add("Authorization", "Bearer " + ((Map<String, Object>) accesstoken).get("accesstoken").toString());
             headers.add("Content-Type", "application/json;charset=UTF-8");
             restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-            HttpEntity<JsonNode> httpEntity = new HttpEntity<JsonNode>(body, headers);
+            HttpEntity<JsonNode> httpEntity = new HttpEntity<>(body, headers);
             ResponseEntity<CommonResult> re = restTemplate.exchange(request.getHeader("resourceUrl"), HttpMethod.POST, httpEntity, CommonResult.class);
             return re.getBody();
         } else {
@@ -72,15 +74,16 @@ public class CommonMethods {
 
     public boolean validateUser(HttpServletRequest request) throws Exception {
         Cookie c = CookieUtil.getCookieByName("accesstoken", request.getCookies());
-        return validateUser(request,c);
+        return validateUser(request, c);
     }
 
-    public boolean validateUser(HttpServletRequest request,Cookie cookie) throws Exception {
+    @SuppressWarnings("unchecked")
+    public boolean validateUser(HttpServletRequest request, Cookie cookie) throws Exception {
         if (cookie != null) {
-            Object accesstoken = ((HttpServletRequest) request).getSession().getAttribute("accesstoken");
+            Object accesstoken = request.getSession().getAttribute("accesstoken");
             if (accesstoken == null) {
                 //do validate
-                return internalValidate(request,cookie);
+                return internalValidate(request, cookie);
             } else {
                 String sessionAccesstoken = ((Map<String, Object>) accesstoken).get("accesstoken").toString();
                 boolean available = (boolean) ((Map<String, Object>) accesstoken).get("available");
@@ -88,7 +91,7 @@ public class CommonMethods {
                     return available;
                 } else {
                     //do validate
-                    return internalValidate(request,cookie);
+                    return internalValidate(request, cookie);
                 }
             }
         } else {
@@ -96,17 +99,17 @@ public class CommonMethods {
         }
     }
 
-    private boolean internalValidate(HttpServletRequest request,Cookie cookie) throws Exception {
+    private boolean internalValidate(HttpServletRequest request, Cookie cookie) throws Exception {
         String decryptAccesstoken = AesUtil.aesDecrypt(cookie.getValue(), oauth2Properties.getSecretKey());
         MultiValueMap<String, String> headers = new LinkedMultiValueMap<String, String>();
         headers.add("Authorization", "Bearer " + decryptAccesstoken);
         headers.add("Content-Type", "application/json;charset=UTF-8");
-        HttpEntity<?> httpEntity = new HttpEntity<Object>(headers);
+        HttpEntity<?> httpEntity = new HttpEntity<>(headers);
         ResponseEntity<CommonResult> re = restTemplate.exchange(oauth2Properties.getValidateUserUri(), HttpMethod.GET, httpEntity, CommonResult.class);
         CommonResult cr = re.getBody();
         Map<String, Object> map = cr.getResponseData();
         map.put("accesstoken", decryptAccesstoken);
-        ((HttpServletRequest) request).getSession().setAttribute("accesstoken", map);
+        request.getSession().setAttribute("accesstoken", map);
         return (boolean) map.get("available");
     }
 }
