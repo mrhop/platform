@@ -42,10 +42,8 @@ aes加密没问题
 5.js本身进行了加密
 6.文件的跳转的话需要区分内部文件和外部文件，像样式性的文件不用考虑其安全，但是涉及到资料性的文件则需要进行nginx的负载以及url的屏蔽以及验证，验证后再进行导向所以需要一个fileclient，拆分url中的文件层级，考虑权限问题，比如a.aes......pdf,需要将aes进行解析，并判断权限【放置在后台fileserver的处理中】，返回正确后的路径，然后nginx根据这个路径进行导向到静态资源库
 安全以及架构问题既是如此，等申请完成域名以及云服务器后，开始进行搭建
+http://www.cnblogs.com/edisonchou/p/4281978.html 【keepalive+lvs做负载和高可用，使用keepalive来实现高可用和负载均衡，硬件上的，多linux机】
 
 
-
-目前框架到nginx-->mogilefs
-接下来tomcat
-然后redis
+接下来是tomcat+redis的结合，nginx--》等负载非常高的时候考虑使用zookeeper
 然后是工程的处理
