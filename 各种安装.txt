@@ -1,6 +1,7 @@
  【安装mogilefs】
  https://code.google.com/p/mogilefs/wiki/InstallOnUbuntu 【安装】
  http://www.cnblogs.com/xiaocen/p/3721390.html 【mogilefs-部分添加】
+ http://www.alongsky.com/?p=811【mogilefs特性】
  CREATE DATABASE mogilefs; 
  CREATE USER 'mogilefs'@'127.0.0.1' IDENTIFIED BY 'mogilefs'; 
   GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,ALTER ON mogilefs.* TO 'mogilefs'@'127.0.0.1';
