@@ -47,5 +47,7 @@ http://www.cnblogs.com/edisonchou/p/4281978.html 【keepalive+lvs做负载和高
 
 接下来是tomcat+redis的结合[完事了]，nginx--》等负载非常高的时候考虑使用zookeeper
 
-现在要将navigate进行测试
+现在要将navigate进行测试，完成
 然后是工程的处理
+现在需要进行工程项目的开发，目前登陆部分完成，开始各个restful接口的业务逻辑考量以及实现，
+首先是user部分，然后是file文件系统，然后是cms，然后是crm，然后是oa的基本实现，然后是自定制系统的考量
