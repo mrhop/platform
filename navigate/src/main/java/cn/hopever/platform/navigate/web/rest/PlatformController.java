@@ -16,11 +16,20 @@ import java.util.List;
 public class PlatformController {
     @Autowired
     private PlatformConfig platformConfig;
+//    @Autowired
+//    private RedisTemplate redisTemplate;
 
     @RequestMapping("")
     //@CrossOrigin
     public List<HashMap<String, String>> getPlatformList() {
         return platformConfig.getList();
+
+//        if(redisTemplate.hasKey("platform-lists")){
+//            return (List)redisTemplate.opsForList().leftPop("platform-lists");
+//        }else{
+//            redisTemplate.opsForList().leftPush("platform-lists",platformConfig.getList());
+//            return platformConfig.getList();
+//        }
     }
 
 }
