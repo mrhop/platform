@@ -66,6 +66,9 @@ subprojects {
         //REST
         compile ('org.springframework.boot:spring-boot-starter-hateoas:'+springBootVersion)
 
+        //CACHE
+        compile ('org.springframework.boot:spring-boot-starter-data-redis:'+springBootVersion)
+
         //DB
         compile ('org.springframework.boot:spring-boot-starter-data-jpa:'+springBootVersion)
         testRuntime('org.hsqldb:hsqldb:2.3.3')

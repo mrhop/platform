@@ -7,6 +7,7 @@ configurations {
     compile.exclude  group: 'org.springframework.boot', module: 'spring-boot-starter-data-jpa'
     compile.exclude  group: 'org.springframework.boot', module: 'spring-boot-starter-hateoas'
     compile.exclude  group: 'org.springframework.boot', module: 'spring-boot-starter-security'
+    compile.exclude  group: 'org.springframework.boot', module: 'spring-boot-starter-data-redis'
     compile.exclude  group: 'org.springframework.security', module: 'org.springframework.security'
     compile.exclude  group: 'org.springframework.security.oauth', module: 'spring-security-oauth2'
     compile.exclude  group: 'org.modelmapper', module: 'modelmapper'
