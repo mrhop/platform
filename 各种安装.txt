@@ -65,4 +65,10 @@ https://www.digitalocean.com/community/tutorials/how-to-configure-a-redis-cluste
 http://www.redis.cn/topics/cluster-tutorial.html
 
 
+postgresql 安装并修改用户
+https://www.digitalocean.com/community/tutorials/how-to-install-and-use-postgresql-on-ubuntu-14-04
+ALTER USER postgres WITH PASSWORD ' <***password***> ';
+
+需要jredis的其他操作查看
+http://docs.spring.io/spring-data/redis/docs/1.7.4.RELEASE/reference/html/
 

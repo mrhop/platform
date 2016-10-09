@@ -51,7 +51,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     public void configure(AuthorizationServerSecurityConfigurer oauthServer) throws Exception {
         oauthServer
                 .tokenKeyAccess("isAnonymous() || hasRole('ROLE_TRUSTED_CLIENT')") // permitAll()
-                .checkTokenAccess("hasRole('TRUSTED_CLIENT')"); // isAuthenticated()
+                .checkTokenAccess("hasRole('ROLE_TRUSTED_CLIENT')"); // isAuthenticated() 用于resourceServer获取jwt public key【/oauth/token_key】，或者用于resourceserver校验token【/oauth/check_token】
     }
 
     @Override
