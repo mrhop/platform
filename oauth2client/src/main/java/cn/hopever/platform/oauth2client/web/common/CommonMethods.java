@@ -105,7 +105,7 @@ public class CommonMethods {
         headers.add("Authorization", "Bearer " + decryptAccesstoken);
         headers.add("Content-Type", "application/json;charset=UTF-8");
         HttpEntity<?> httpEntity = new HttpEntity<>(headers);
-        ResponseEntity<CommonResult> re = restTemplate.exchange(oauth2Properties.getValidateUserUri(), HttpMethod.GET, httpEntity, CommonResult.class);
+        ResponseEntity<CommonResult> re = restTemplate.exchange(oauth2Properties.getValidateUserUri()+oauth2Properties.getClientID(), HttpMethod.GET, httpEntity, CommonResult.class);
         CommonResult cr = re.getBody();
         Map<String, Object> map = cr.getResponseData();
         map.put("accesstoken", decryptAccesstoken);

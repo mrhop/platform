@@ -7,5 +7,5 @@ import org.springframework.data.repository.CrudRepository;
  * Created by Donghui Huo on 2016/8/30.
  */
 public interface ClientTableRepository extends CrudRepository<ClientTable, Integer> {
-    public ClientTable findOneByClientname(String clientname);
+    public ClientTable findOneByClientId(String clientId);
 }

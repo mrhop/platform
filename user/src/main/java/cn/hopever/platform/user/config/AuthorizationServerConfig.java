@@ -3,6 +3,7 @@ package cn.hopever.platform.user.config;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,6 +13,7 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.A
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.ClientDetailsService;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 
@@ -33,6 +35,10 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
     @Autowired
     private AuthenticationManager authenticationManager;
+
+    @Autowired
+    @Qualifier("clientTableService")
+    private ClientDetailsService clientDetailsService;
 
     @Bean
     public JwtAccessTokenConverter tokenEnhancer() {
@@ -70,36 +76,37 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-        clients.inMemory()
-
-                // Confidential client where client secret can be kept safe (e.g. server side)
-                .withClient("confidential").secret("secret")
-                .authorizedGrantTypes("client_credentials", "authorization_code", "refresh_token")
-                .scopes("read", "write")
-                .redirectUris("http://localhost:9090/oauth2client/login","http://localhost:9091/cmsclient/login")
-                .and()
-                // Public client where client secret is vulnerable (e.g. mobile apps, browsers)
-                .withClient("public") // No secret!
-                .authorizedGrantTypes("client_credentials", "implicit")
-                .scopes("read")
-                .redirectUris("http://localhost:9090/oauth2client/login","http://localhost:9091/cmsclient/login")
-
-                .and()
-
-                // Trusted client: similar to confidential client but also allowed to handle user password
-                .withClient("trusted").secret("secret")
-                .authorities("ROLE_TRUSTED_CLIENT")
-                .authorizedGrantTypes("client_credentials", "password", "authorization_code", "refresh_token")
-                .scopes("read", "write")
-                .redirectUris("http://localhost:9090/oauth2client/login","http://localhost:9091/cmsclient/login")
-
-                .and()
-
-                // Trusted client: similar to confidential client but also allowed to handle user password
-                .withClient("super_admin_client").secret("secret")
-                .authorities("super_admin_client","client")
-                .authorizedGrantTypes("client_credentials", "password", "authorization_code", "refresh_token")
-                .scopes("super_admin_client","internal_client")
+        clients.withClientDetails(clientDetailsService)
+//                .inMemory()
+//
+//                // Confidential client where client secret can be kept safe (e.g. server side)
+//                .withClient("confidential").secret("secret")
+//                .authorizedGrantTypes("client_credentials", "authorization_code", "refresh_token")
+//                .scopes("read", "write")
+//                .redirectUris("http://localhost:9090/oauth2client/login","http://localhost:9091/cmsclient/login")
+//                .and()
+//                // Public client where client secret is vulnerable (e.g. mobile apps, browsers)
+//                .withClient("public") // No secret!
+//                .authorizedGrantTypes("client_credentials", "implicit")
+//                .scopes("read")
+//                .redirectUris("http://localhost:9090/oauth2client/login","http://localhost:9091/cmsclient/login")
+//
+//                .and()
+//
+//                // Trusted client: similar to confidential client but also allowed to handle user password
+//                .withClient("trusted").secret("secret")
+//                .authorities("ROLE_TRUSTED_CLIENT")
+//                .authorizedGrantTypes("client_credentials", "password", "authorization_code", "refresh_token")
+//                .scopes("read", "write")
+//                .redirectUris("http://localhost:9090/oauth2client/login","http://localhost:9091/cmsclient/login")
+//
+//                .and()
+//
+//                // Trusted client: similar to confidential client but also allowed to handle user password
+//                .withClient("user_admin_client").secret("secret")
+//                .authorities("user_admin_client","client")
+//                .authorizedGrantTypes("client_credentials", "password", "authorization_code", "refresh_token")
+//                .scopes("user_admin_client","internal_client")
         ;
     }
 

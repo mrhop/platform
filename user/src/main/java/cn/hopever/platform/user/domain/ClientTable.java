@@ -1,10 +1,18 @@
 package cn.hopever.platform.user.domain;
 
+import cn.hopever.platform.utils.json.JacksonUtil;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.oauth2.provider.ClientDetails;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by Donghui Huo on 2016/9/8.
@@ -12,51 +20,224 @@ import java.util.Date;
 @Entity
 @Table(name = "platform_user_client")
 @Data
-@EqualsAndHashCode(of={"id"})
-public class ClientTable{
+@EqualsAndHashCode(of = {"id"})
+public class ClientTable implements ClientDetails {
+
+    @Transient
+    Logger logger = LoggerFactory.getLogger(ClientTable.class);
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "client_name",nullable = false,length= 50)
-    private String clientname;
+    @Column(name = "client_id", nullable = false, length = 50)
+    private String clientId;
 
-    @Column(name = "password",nullable = false,length= 120)
-    private String password;
+    @Column(name = "client_secret", nullable = false, length = 120)
+    private String clientSecret;
 
-    @Column(name = "client_non_locked",nullable = false)
-    private boolean clientNonLocked = false;
+    @Column(name = "resource_ids", nullable = true)
+    private String resourceIds;
 
-    @Column(name = "enabled",nullable = false)
-    private boolean enabled = true;
+    @Column(name = "secret_required", nullable = false)
+    private boolean secretRequired = true;
 
-    @Column(name = "email",nullable = true,length= 50)
-    private String email;
+    @Column(name = "scoped")
+    private boolean scoped = true;
 
-    @Column(name = "phone",nullable = true,length= 50)
-    private String phone;
+    @Column(name = "scope", nullable = true)
+    private String scope;
 
-    @Column(name = "additional_message",nullable = true,length= 2000)
-    private String additionalMessage;
+    @Column(name = "authorized_grant_types", nullable = false)
+    private String authorizedGrantTypes;
 
-    @Column(name = "limited_date",nullable = true)
-    private Date limitedDate;
+    @Column(name = "registered_redirect_uri", nullable = true)
+    private String registeredRedirectUri;
 
-    @Column(name = "grant_types",nullable = false)
-    private String grantTypes;
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(name = "platform_user_client_client_role", joinColumns = @JoinColumn(name = "client_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
+    private Set<ClientRoleTable> authorities;
 
-    @Column(name = "redirect_uris",nullable = true,length= 2000)
-    private String redirectUris;
+    @Column(name = "access_token_validity_seconds", nullable = true)
+    private Integer accessTokenValiditySeconds;
 
-    @Column(name = "scopes",nullable = true)
-    private String scopes;
+    @Column(name = "refresh_token_validity_seconds", nullable = true)
+    private Integer refreshTokenValiditySeconds;
 
-    public boolean isClientNonExpired() {
-        if( this.limitedDate!=null){
-            return this.limitedDate.after(new Date());
-        }
-        return true;
+    @Column(name = "additional_information", nullable = true, length = 2000)
+    private String additionalInformation;
+
+
+    public void setResourceIds(String resourceIds) {
+        this.resourceIds = resourceIds;
     }
 
+    public void setResourceIds(Set<String> resourceIds) {
+        if (resourceIds != null) {
+            try {
+                this.resourceIds = JacksonUtil.mapper.writeValueAsString(resourceIds);
+            } catch (IOException e) {
+                e.printStackTrace();
+                logger.error("json format error", e);
+            }
+        } else {
+            this.resourceIds = null;
+        }
+    }
+
+    @Override
+    public Set<String> getResourceIds() {
+        if (this.resourceIds != null) {
+            try {
+                return JacksonUtil.mapper.readValue(this.resourceIds, Set.class);
+            } catch (IOException e) {
+                logger.error("json format error", e);
+            }
+        }
+        return null;
+    }
+
+    public void setScope(String scope) {
+        this.scope = scope;
+    }
+
+    public void setScope(Map<String,Boolean> scope) {
+        if (scope != null) {
+            try {
+                this.scope = JacksonUtil.mapper.writeValueAsString(scope);
+            } catch (IOException e) {
+                logger.error("json format error", e);
+            }
+        }
+    }
+
+
+    @Override
+    public Set<String> getScope() {
+        if (this.scope != null) {
+            try {
+                return JacksonUtil.mapper.readValue(this.scope, Map.class).keySet();
+            } catch (IOException e) {
+                logger.error("json format error", e);
+            }
+        }
+        return null;
+    }
+
+    public Map<String,Boolean> getScopeAndApprove() {
+        if (this.scope != null) {
+            try {
+                return JacksonUtil.mapper.readValue(this.scope, Map.class);
+            } catch (IOException e) {
+                logger.error("json format error", e);
+            }
+        }
+        return null;
+    }
+
+    public void setAuthorizedGrantTypes(String authorizedGrantTypes) {
+        this.authorizedGrantTypes = authorizedGrantTypes;
+    }
+
+    public void setAuthorizedGrantTypes(Set<String> authorizedGrantTypes) {
+        if (authorizedGrantTypes != null) {
+            try {
+                this.authorizedGrantTypes = JacksonUtil.mapper.writeValueAsString(authorizedGrantTypes);
+            } catch (IOException e) {
+                logger.error("json format error", e);
+            }
+        }
+    }
+
+    @Override
+    public Set<String> getAuthorizedGrantTypes() {
+        if (this.authorizedGrantTypes != null) {
+            try {
+                return JacksonUtil.mapper.readValue(this.authorizedGrantTypes, Set.class);
+            } catch (IOException e) {
+                logger.error("json format error", e);
+            }
+        }
+        return null;
+    }
+
+    public void setRegisteredRedirectUri(String registeredRedirectUri) {
+        this.registeredRedirectUri = registeredRedirectUri;
+    }
+
+    public void setRegisteredRedirectUri(Set<String> registeredRedirectUri) {
+        if (registeredRedirectUri != null) {
+            try {
+                this.registeredRedirectUri = JacksonUtil.mapper.writeValueAsString(registeredRedirectUri);
+            } catch (IOException e) {
+                logger.error("json format error", e);
+            }
+        }
+    }
+
+    @Override
+    public Set<String> getRegisteredRedirectUri() {
+        if (this.registeredRedirectUri != null) {
+            try {
+                return JacksonUtil.mapper.readValue(this.registeredRedirectUri, Set.class);
+            } catch (IOException e) {
+                logger.error("json format error", e);
+            }
+        }
+        return null;
+    }
+
+
+    public void setAdditionalInformation(String additionalInformation) {
+        this.additionalInformation = additionalInformation;
+    }
+
+    public void setAdditionalInformation(Map<String, Object> additionalInformation) {
+        if (additionalInformation != null) {
+            try {
+                this.additionalInformation = JacksonUtil.mapper.writeValueAsString(additionalInformation);
+            } catch (IOException e) {
+                logger.error("json format error", e);
+            }
+        }
+    }
+
+    @Override
+    public Map<String, Object> getAdditionalInformation() {
+        if (this.additionalInformation != null) {
+            try {
+                return JacksonUtil.mapper.readValue(this.additionalInformation, Map.class);
+            } catch (IOException e) {
+                logger.error("json format error", e);
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public boolean isAutoApprove(String scope) {
+        //需要根据scope来判定
+        try {
+            Map<String,Boolean> scopes = JacksonUtil.mapper.readValue(this.scope, Map.class);
+            return scopes.get(scope);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    @Override
+    public Set<GrantedAuthority> getAuthorities(){
+        Set<GrantedAuthority> set  = new HashSet<GrantedAuthority>();
+        if(this.authorities!=null){
+            for(GrantedAuthority ga:this.authorities){
+                set.add(ga);
+            }
+            return set;
+        }
+        return null;
+    }
+
+    public Set<ClientRoleTable> getAuthoritiesBasic(){
+        return this.authorities;
+    }
 }

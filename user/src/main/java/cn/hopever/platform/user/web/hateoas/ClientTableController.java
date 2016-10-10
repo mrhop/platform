@@ -33,7 +33,7 @@ public class ClientTableController {
 
 
     //注册内部client，角色为 超级用户
-    @PreAuthorize("hasRole('super_admin') and  #oauth2.hasScope('super_admin_client')")
+    @PreAuthorize("hasRole('super_admin') and  #oauth2.hasScope('user_admin_client')")
     @RequestMapping(value = "/internal/register", method = RequestMethod.POST)
     public CommonResult createClientTable(@RequestBody ClientTableResource resource) {
        return null;

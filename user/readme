@@ -10,4 +10,16 @@ http://docs.spring.io/spring-hateoas/docs/0.20.0.RELEASE/reference/html/
 
 1. oauth2 user 部分实现 client 并实现静态，并使用js登陆，并在，并将user client设为管理平台的样式，并内置一个super user，登陆后，给出一个super_admin_client的概念，和一个super_admin的概念
 2. user client,既有普通用户又有超级用户
-3.
+3.开始进行数据库的对接部分的实现，并使用client进行验证，都走通之后再进行通用的操作
+
+数据库部分设计完成【缺少组织结构之类的，还有就是二级授权，比如功能性的添加新闻，修改内容等】，
+开始考虑用户，client的各项功能实现【增删改查，以及根据user role对应的列表以及点击进入后的处理，所以还需要添加其他的对应操作，是否需要一个tree对应左侧的操作目录，对应的是user的level，】，
+等到进一步组织结构时，再考虑组织结构的数据结构，
+等到cms或者crm部分再考虑授权之类的，这个放置在各个功能模块处，不要放在总体的用户管理模块处
+
+
+
+1 tree table【权限表】  对应 module【子module，比如cms中的新闻module】 的操作，module_id 对应user role 以及sub role【每一个模块的role，比如cms，crm】,另外还有管理级别，0 是所有，1是自有
+
+
+

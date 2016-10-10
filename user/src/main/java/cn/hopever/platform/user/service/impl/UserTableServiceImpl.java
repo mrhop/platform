@@ -5,7 +5,6 @@ import cn.hopever.platform.user.repository.UserTableRepository;
 import cn.hopever.platform.user.service.UserTableService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -16,7 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service("userTableService")
 @Transactional
-public class UserTableServiceImpl implements UserTableService, UserDetailsService {
+public class UserTableServiceImpl implements UserTableService {
+
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -35,7 +35,7 @@ public class UserTableServiceImpl implements UserTableService, UserDetailsServic
     }
 
     @Override
-    public UserTable save(UserTable user){
+    public UserTable save(UserTable user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userTableRepository.save(user);
     }

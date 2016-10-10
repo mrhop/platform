@@ -6,8 +6,8 @@ security:
         enabled: false
 config:
     oauth2:
-        clientID: super_admin_client
+        clientID: user_admin_client
         clientSecret: secret
         clientScopes:
-              - super_admin_client
+              - user_admin_client
               - internal_client

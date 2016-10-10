@@ -39,13 +39,13 @@ public class UserTable implements UserDetails {
     @Column(name = "phone",nullable = false,length= 50)
     private String phone;
 
-    @Column(name = "additional_message",nullable = false,length= 2000)
+    @Column(name = "additional_message",nullable = true,length= 2000)
     private String additionalMessage;
 
     @Column(name = "limited_date",nullable = true)
     private Date limitedDate;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     @JoinTable(name = "platform_user_user_role", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private Set<RoleTable> authorities;
 
@@ -59,6 +59,6 @@ public class UserTable implements UserDetails {
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return true;
     }
 }

@@ -5,7 +5,7 @@ package cn.hopever.platform.utils.security;
  */
 //include internal_client and outer_client
 public enum CommonScopes {
-    internal_client, outer_client,super_admin_client;
+    internal_client,outer_client,user_admin_client;
 
     public static void main(String[] args) {
         for (CommonScopes s : CommonScopes.values()) {
