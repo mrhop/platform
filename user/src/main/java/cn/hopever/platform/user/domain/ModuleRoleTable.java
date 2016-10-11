@@ -11,10 +11,10 @@ import java.util.Set;
  * Created by Donghui Huo on 2016/9/8.
  */
 @Entity
-@Table(name = "platform_user_role")
+@Table(name = "platform_user_module_role")
 @Data
 @EqualsAndHashCode(of={"id"})
-public class RoleTable implements GrantedAuthority {
+public class ModuleRoleTable implements GrantedAuthority {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,6 +27,9 @@ public class RoleTable implements GrantedAuthority {
     private short level;
 
     @ManyToMany(mappedBy = "authorities")
+    private Set<ModuleTable> modules;
+
+    @ManyToMany(mappedBy = "modulesAuthorities")
     private Set<UserTable> users;
 
 }

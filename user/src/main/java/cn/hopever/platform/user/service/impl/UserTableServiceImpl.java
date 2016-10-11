@@ -30,7 +30,6 @@ public class UserTableServiceImpl implements UserTableService {
             throw new UsernameNotFoundException("username " + username
                     + " not found");
         }
-        //比对user 密码
         return user;
     }
 

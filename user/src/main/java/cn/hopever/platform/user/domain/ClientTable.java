@@ -30,7 +30,7 @@ public class ClientTable implements ClientDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "client_id", nullable = false, length = 50)
+    @Column(name = "client_id", nullable = false, length = 50,unique = true)
     private String clientId;
 
     @Column(name = "client_secret", nullable = false, length = 120)
@@ -66,6 +66,9 @@ public class ClientTable implements ClientDetails {
 
     @Column(name = "additional_information", nullable = true, length = 2000)
     private String additionalInformation;
+
+    @OneToMany(mappedBy = "client",cascade = {CascadeType.ALL})
+    private Set<ModuleTable> modules;
 
 
     public void setResourceIds(String resourceIds) {
