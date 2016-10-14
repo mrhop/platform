@@ -57,6 +57,10 @@ public class UserTable implements UserDetails {
     @JoinTable(name = "platform_user_user_role", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private Set<RoleTable> authorities;
 
+    //client many-to-many
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "platform_user_user_client", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "client_id", referencedColumnName = "id"))
+    private Set<ClientTable> clients;
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "platform_user_user_module_role", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
@@ -87,5 +91,16 @@ public class UserTable implements UserDetails {
                 logger.error("json format error", e);
             }
         }
+    }
+
+    public Map<String, Object> getAdditionalMessage() {
+        if (this.additionalMessage != null) {
+            try {
+                return JacksonUtil.mapper.readValue(this.additionalMessage, Map.class);
+            } catch (IOException e) {
+                logger.error("json format error", e);
+            }
+        }
+        return null;
     }
 }

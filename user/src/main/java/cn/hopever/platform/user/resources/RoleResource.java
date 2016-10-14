@@ -5,23 +5,24 @@ import lombok.EqualsAndHashCode;
 import org.springframework.hateoas.ResourceSupport;
 
 import javax.validation.constraints.NotNull;
+import java.util.Set;
 
 /**
  * Created by Donghui Huo on 2016/8/31.
  */
 @Data
 @EqualsAndHashCode(callSuper=false)
-//用于获取client信息，用于注册client-通用或者内部
-//用于返回注册后的client信息，或者列表信息
-public class ClientTableResource extends ResourceSupport {
+//获取角色的一些信息并进行处理，
+public class RoleResource extends ResourceSupport {
 
     @NotNull
-    private String clientname;
+    private long internalId;
 
-    private String email;
+    @NotNull
+    private String authority;
 
-    private String phone;
+    private short level;
 
-    private String additionalMessage;
+    private Set<UserResource> users;
 
 }

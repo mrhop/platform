@@ -70,6 +70,10 @@ public class ClientTable implements ClientDetails {
     @OneToMany(mappedBy = "client",cascade = {CascadeType.ALL})
     private Set<ModuleTable> modules;
 
+    @ManyToMany(mappedBy = "clients")
+    private Set<UserTable> users;
+
+
 
     public void setResourceIds(String resourceIds) {
         this.resourceIds = resourceIds;

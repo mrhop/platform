@@ -29,7 +29,7 @@ public class ModuleTable{
     @Column(name = "module_order", nullable = false)
     private Integer moduleOrder = 0;
 
-    @Column(name = "module_url", nullable = false, length = 200)
+    @Column(name = "module_url", length = 200)
     private String moduleUrl;
 
     @ManyToOne
@@ -39,11 +39,11 @@ public class ModuleTable{
     @OneToMany(mappedBy = "parent",cascade = {CascadeType.ALL})
     private Set<ModuleTable> children;
 
-    @Column(name = "available")
+    @Column(name = "available",nullable = false)
     private boolean available = true;
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "platform_user_module_module_role", joinColumns = @JoinColumn(name = "module_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
-    private Set<RoleTable> authorities;
+    private Set<ModuleRoleTable> authorities;
 
 }

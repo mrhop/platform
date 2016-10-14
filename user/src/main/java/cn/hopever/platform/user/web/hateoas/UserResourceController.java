@@ -1,7 +1,7 @@
 package cn.hopever.platform.user.web.hateoas;
 
 import cn.hopever.platform.user.domain.UserTable;
-import cn.hopever.platform.user.resources.UserTableResource;
+import cn.hopever.platform.user.resources.UserResource;
 import cn.hopever.platform.user.service.UserTableService;
 import cn.hopever.platform.utils.tools.BeanUtils;
 import cn.hopever.platform.utils.web.CommonResult;
@@ -19,11 +19,11 @@ import java.security.Principal;
  * Created by Donghui Huo on 2016/8/29.
  */
 @RestController
-@ExposesResourceFor(UserTableResource.class)
+@ExposesResourceFor(UserResource.class)
 @RequestMapping(value = "/user", produces = "application/json")
 @CrossOrigin
-public class UserTableController {
-    Logger logger = LoggerFactory.getLogger(UserTableController.class);
+public class UserResourceController {
+    Logger logger = LoggerFactory.getLogger(UserResourceController.class);
     @Autowired
     private UserTableService userTableService;
 
@@ -31,7 +31,7 @@ public class UserTableController {
     EntityLinks entityLinks;
 
     @Autowired
-    private UserTableAssembler userTableAssembler;
+    private UserResourceAssembler userTableAssembler;
 
 
     //client 应该是内部应用才可以使用注册
@@ -39,7 +39,7 @@ public class UserTableController {
     //考虑内部scope和外部scope的que
     @PreAuthorize("#oauth2.hasScope('internal_client')")
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public CommonResult createUserTable(@RequestBody UserTableResource resource,Principal principal) {
+    public CommonResult createUserTable(@RequestBody UserResource resource,Principal principal) {
         //post json，
         //下一步里面需要根据client id 给予基本的role， user and client_id 相关的基本操作role
         //根据client给用户填上基本的role
@@ -59,7 +59,7 @@ public class UserTableController {
     //用户登录授权完成后获取用户的信息,每一个用户都有一个role 标明为user，标明是登录用户，才可获取基本信息
     @PreAuthorize("hasRole('user')")
     @RequestMapping("/user")
-    public UserTableResource get(Principal principal) {
+    public UserResource get(Principal principal) {
         return null;
     }
 

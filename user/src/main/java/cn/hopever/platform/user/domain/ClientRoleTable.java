@@ -20,7 +20,7 @@ public class ClientRoleTable implements GrantedAuthority {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "authority",nullable = false,length= 50)
+    @Column(name = "authority",nullable = false,length= 50,unique = true)
     private String authority;
 
     @Column(name = "level",nullable = false)

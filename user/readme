@@ -56,5 +56,11 @@ http://docs.spring.io/spring-hateoas/docs/0.20.0.RELEASE/reference/html/
 首先将module以及role进行数据的初始化，然后获取左侧的树，然后初始化左侧的树，
 然后进行role table的初步操作和测试完善，tomorrow do it
 
+用户管理
+ --用户列表 【新增用户，查看用户详细，修改用户，删除用户】
+ --新增用户
+ --修改个人信息
+
+做至ModuleResourceAssembler.java部分，接下来继续
 
 
