@@ -14,7 +14,9 @@ import org.springframework.hateoas.EntityLinks;
 import org.springframework.hateoas.mvc.ResourceAssemblerSupport;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -75,12 +77,12 @@ public class UserResourceAssembler extends ResourceAssemblerSupport<UserTable, U
     }
 
 
-    public Set<UserResource> toResources(Set<UserTable> userTables) {
-        Set<UserResource> returnSet = new LinkedHashSet<>();
+    public List<UserResource> toResourcesCustomized(Iterable<UserTable> userTables) {
+        List<UserResource> returnList = new ArrayList<>();
         for (UserTable ut : userTables) {
-            returnSet.add(this.createResource(ut));
+            returnList.add(this.createResource(ut));
         }
-        return returnSet;
+        return returnList;
     }
 
     private UserResource createResource(UserTable userTable) {

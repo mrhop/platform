@@ -61,6 +61,8 @@ http://docs.spring.io/spring-hateoas/docs/0.20.0.RELEASE/reference/html/
  --新增用户
  --修改个人信息
 
-做至ModuleResourceAssembler.java部分，接下来继续
+做至ModuleResourceController部分，接下来继续 //接下来做resource的转换工作
+
+
 
 

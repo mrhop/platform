@@ -3,6 +3,8 @@ package cn.hopever.platform.user.service.impl;
 import cn.hopever.platform.user.domain.UserTable;
 import cn.hopever.platform.user.repository.UserTableRepository;
 import cn.hopever.platform.user.service.UserTableService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -17,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class UserTableServiceImpl implements UserTableService {
 
+    Logger logger = LoggerFactory.getLogger(UserTableServiceImpl.class);
 
     @Autowired
     private PasswordEncoder passwordEncoder;

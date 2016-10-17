@@ -37,6 +37,7 @@ public class ModuleTable{
     private ModuleTable parent;
 
     @OneToMany(mappedBy = "parent",cascade = {CascadeType.ALL})
+    @OrderBy("moduleOrder asc")
     private Set<ModuleTable> children;
 
     @Column(name = "available",nullable = false)

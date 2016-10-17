@@ -18,4 +18,6 @@ public interface RoleTableService {
 
     public List<RoleTable> getList(String authority);
 
+    public Iterable<RoleTable> getList();
+
 }

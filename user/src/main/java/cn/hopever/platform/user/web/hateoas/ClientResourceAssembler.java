@@ -12,9 +12,10 @@ import org.springframework.hateoas.EntityLinks;
 import org.springframework.hateoas.mvc.ResourceAssemblerSupport;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
-
 /**
  * Created by Donghui Huo on 2016/9/1.
  */
@@ -58,12 +59,12 @@ public class ClientResourceAssembler extends ResourceAssemblerSupport<ClientTabl
         return resource;
     }
 
-    public Set<ClientResource> toResources(Set<ClientTable> clientTables) {
-        Set<ClientResource> returnSet = new LinkedHashSet<>();
+    public List<ClientResource> toResourcesCustomized(Iterable<ClientTable> clientTables) {
+        List<ClientResource> returnList = new ArrayList<>();
         for (ClientTable ct : clientTables) {
-            returnSet.add(this.createResource(ct));
+            returnList.add(this.createResource(ct));
         }
-        return returnSet;
+        return returnList;
     }
 
     private ClientResource createResource(ClientTable clientTable) {

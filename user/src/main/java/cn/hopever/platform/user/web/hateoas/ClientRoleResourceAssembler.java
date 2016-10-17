@@ -9,9 +9,6 @@ import org.springframework.hateoas.EntityLinks;
 import org.springframework.hateoas.mvc.ResourceAssemblerSupport;
 import org.springframework.stereotype.Component;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
-
 /**
  * Created by Donghui Huo on 2016/9/1.
  */
@@ -32,14 +29,6 @@ public class ClientRoleResourceAssembler extends ResourceAssemblerSupport<Client
     public ClientRoleResource toResource(ClientRoleTable clientRoleTable) {
         ClientRoleResource resource = createResource(clientRoleTable);
         return resource;
-    }
-
-    public Set<ClientRoleResource> toResources(Set<ClientRoleTable> clientRoleTables) {
-        Set<ClientRoleResource> returnSet = new LinkedHashSet<>();
-        for (ClientRoleTable crt : clientRoleTables) {
-            returnSet.add(this.createResource(crt));
-        }
-        return returnSet;
     }
 
     private ClientRoleResource createResource(ClientRoleTable clientRoleTable) {
