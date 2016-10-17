@@ -48,12 +48,10 @@ public class PrincipalController {
         map.put("available", false);
         //如果是super_admin
         Collection<? extends GrantedAuthority> authorities = SecurityContextHolder.getContext().getAuthentication().getAuthorities();
-        if (authorities != null) {
-            for (GrantedAuthority rt : authorities) {
-                if ("super_admin".equals(rt.getAuthority())) {
-                    map.put("available", true);
-                    break;
-                }
+        if (authorities != null && authorities.size() > 0) {
+            String authority = authorities.iterator().next().getAuthority();
+            if ("super_admin".equals(authority)) {
+                map.put("available", true);
             }
         }
         //else if(){
