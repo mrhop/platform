@@ -19,6 +19,7 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -43,8 +44,14 @@ public class CommonMethods {
             headers.add("Content-Type", "application/json;charset=UTF-8");
             restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
             HttpEntity<?> httpEntity = new HttpEntity<>(headers);
-            ResponseEntity<CommonResult> re = restTemplate.exchange(request.getHeader("resourceUrl"), HttpMethod.GET, httpEntity, CommonResult.class);
-            return re.getBody();
+            ResponseEntity<Object> re = restTemplate.exchange(request.getAttribute("resourceUrl").toString(), HttpMethod.GET, httpEntity, Object.class);
+            CommonResult cr = new CommonResult();
+            HashMap<String,Object> responseData = new HashMap<>();
+            responseData.put("data",re.getBody());
+            cr.setStatus(CommonResultStatus.SUCCESS.toString());
+            cr.setMessage("success");
+            cr.setResponseData(responseData);
+            return cr;
         } else {
             CommonResult cr = new CommonResult();
             cr.setStatus(CommonResultStatus.SERVERFAILURE.toString());
@@ -62,8 +69,14 @@ public class CommonMethods {
             headers.add("Content-Type", "application/json;charset=UTF-8");
             restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
             HttpEntity<JsonNode> httpEntity = new HttpEntity<>(body, headers);
-            ResponseEntity<CommonResult> re = restTemplate.exchange(request.getHeader("resourceUrl"), HttpMethod.POST, httpEntity, CommonResult.class);
-            return re.getBody();
+            ResponseEntity<Object> re = restTemplate.exchange(request.getAttribute("resourceUrl").toString(), HttpMethod.POST, httpEntity, Object.class);
+            CommonResult cr = new CommonResult();
+            HashMap<String,Object> responseData = new HashMap<>();
+            responseData.put("data",re.getBody());
+            cr.setStatus(CommonResultStatus.SUCCESS.toString());
+            cr.setMessage("success");
+            cr.setResponseData(responseData);
+            return cr;
         } else {
             CommonResult cr = new CommonResult();
             cr.setStatus(CommonResultStatus.SERVERFAILURE.toString());

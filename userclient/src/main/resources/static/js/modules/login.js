@@ -236,7 +236,7 @@ webpackJsonp([3],{
 	        var _this = _possibleConstructorReturn(this, (Login.__proto__ || Object.getPrototypeOf(Login)).call(this, props));
 	
 	        _this.state = { submitProcess: false };
-	        _this.submitUrl = baseUrl + "gettokenbypassword";
+	        _this.submitUrl = endpoints.gettokenbypassword;
 	        _this.initRule = {
 	            structure: [{
 	                name: 'username',
@@ -286,7 +286,7 @@ webpackJsonp([3],{
 	
 	            //data init
 	            //该属性从何得出
-	            this.props.initClientLoginDispatch({ endpoint: baseUrl + "gettokenbyclient" });
+	            this.props.initClientLoginDispatch({ endpoint: endpoints.gettokenbyclient });
 	        }
 	    }, {
 	        key: 'render',

@@ -177,7 +177,7 @@ webpackJsonp([2],{
 	    return _ref = {}, _defineProperty(_ref, MiddleWare.CALL_API, {
 	        httpType: 'get',
 	        types: [DASHBOARD_FRAMEWORK_LEFTMENU_REQUEST, DASHBOARD_FRAMEWORK_LEFTMENU_SUCCESS, DASHBOARD_FRAMEWORK_LEFTMENU_FAILURE],
-	        endpoint: 'demoData/dashboardFramework/leftmenu.json'
+	        endpoint: endpoints.dashboardleftmenu
 	    }), _defineProperty(_ref, 'requestCondition', requestCondition), _ref;
 	}
 	function getLeftMenuDispatch(requestCondition) {
@@ -3987,7 +3987,7 @@ webpackJsonp([2],{
 	                    React.createElement(
 	                        CustomScrollbar,
 	                        { style: { 'heigh': '100%' } },
-	                        this.props.leftMenu.data && React.createElement(DashboardLeftList, _extends({}, this.props, { data: this.props.leftMenu.data }))
+	                        this.props.leftMenu.data && React.createElement(DashboardLeftList, _extends({ data: this.props.leftMenu.data.responseData.data.content }, this.props))
 	                    )
 	                )
 	            );
@@ -4057,26 +4057,26 @@ webpackJsonp([2],{
 	            var items = this.props.data.map(function (item) {
 	                var liClass = classNames('al-sidebar-list-item', { 'selected': item.url && item.url === this.props.leftMenu.selectedUrl ? 'selected' : null });
 	                //var liClass = classNames('al-sidebar-list-item', {'selected': item.selected});
-	                return React.createElement(
+	                return item.available && React.createElement(
 	                    'li',
-	                    { key: item.id, className: liClass, 'data-url': item.url,
+	                    { key: item.internalId, className: liClass, 'data-url': item.moduleUrl,
 	                        onClick: this.onClick.bind(this) },
 	                    React.createElement(
 	                        ReactRouter.Link,
-	                        { className: "al-sidebar-list-link", to: item.url ? item.url : '#',
+	                        { className: "al-sidebar-list-link", to: item.moduleUrl ? item.moduleUrl : '#',
 	                            onMouseOver: this.onMouseOver,
-	                            onClick: !item.url ? function (e) {
+	                            onClick: !item.moduleUrl ? function (e) {
 	                                return e.preventDefault();
 	                            } : null },
 	                        React.createElement('i', { className: item.iconClass }),
 	                        React.createElement(
 	                            'span',
 	                            null,
-	                            item.name
+	                            item.moduleName
 	                        ),
-	                        item.subItems ? React.createElement('b', { className: 'down' }) : null
+	                        item.children ? React.createElement('b', { className: 'down' }) : null
 	                    ),
-	                    item.subItems ? React.createElement(DashboardLeftSubList, _extends({}, this.props, { data: item.subItems })) : null
+	                    item.children ? React.createElement(DashboardLeftSubList, _extends({}, this.props, { data: item.children })) : null
 	                );
 	            }, this);
 	
@@ -4123,18 +4123,19 @@ webpackJsonp([2],{
 	        value: function render() {
 	            var classNames = __webpack_require__(/*! classnames */ 174);
 	            var subItems = this.props.data.map(function (subItem) {
-	                var liClass = classNames('al-sidebar-sublist-item', { 'selected': subItem.url && subItem.url === this.props.leftMenu.selectedUrl ? 'selected' : null });
-	                return React.createElement(
+	                var liClass = classNames('al-sidebar-sublist-item', { 'selected': subItem.moduleUrl && subItem.moduleUrl === this.props.leftMenu.selectedUrl ? 'selected' : null });
+	                return subItem.available && React.createElement(
 	                    'li',
-	                    { key: subItem.id, 'data-url': subItem.url, className: liClass, onClick: this.onClick.bind(this),
+	                    { key: subItem.internalId, 'data-url': subItem.moduleUrl, className: liClass,
+	                        onClick: this.onClick.bind(this),
 	                        onMouseOver: this.onMouseOver },
 	                    React.createElement(
 	                        ReactRouter.Link,
-	                        { className: "al-sidebar-list-link", to: subItem.url },
+	                        { className: "al-sidebar-list-link", to: subItem.moduleUrl },
 	                        React.createElement(
 	                            'span',
 	                            null,
-	                            subItem.name
+	                            subItem.moduleName
 	                        )
 	                    )
 	                );
@@ -4198,7 +4199,7 @@ webpackJsonp([2],{
 	
 	
 	// module
-	exports.push([module.id, ".al-sidebar {\n  width: 180px;\n  top: 66px;\n  left: 0;\n  z-index: 904;\n  display: block;\n  min-height: 500px;\n  background: rgba(0, 0, 0, 0.5);\n  height: 100%;\n  position: fixed;\n  -webkit-transition: all 200ms linear;\n  -o-transition: all 200ms linear;\n  transition: all 200ms linear; }\n  @media (max-width: 1199px) {\n    .al-sidebar {\n      width: 52px; } }\n  @media (max-width: 479px) {\n    .al-sidebar {\n      width: 0px; } }\n  .al-sidebar.collapse {\n    width: 52px !important; }\n    @media (max-width: 479px) {\n      .al-sidebar.collapse {\n        width: 0px !important; } }\n    .al-sidebar.collapse .al-sidebar-list b {\n      opacity: 0;\n      filter: alpha(opacity=0); }\n    .al-sidebar.collapse .al-sidebar-sublist {\n      position: absolute;\n      width: 0;\n      overflow: hidden;\n      left: 52px;\n      top: -1px; }\n  .al-sidebar.un-collapse {\n    width: 180px !important; }\n    .al-sidebar.un-collapse .al-sidebar-list b {\n      opacity: 1;\n      filter: alpha(opacity=100); }\n    .al-sidebar.un-collapse .al-sidebar-sublist {\n      position: static;\n      width: auto; }\n\n.al-sidebar .direct-line {\n  position: absolute;\n  width: 3px;\n  right: 0px;\n  top: -200px;\n  height: 43px;\n  background-color: #0473b6;\n  -webkit-transition: all 200ms ease-in-out;\n  -o-transition: all 200ms ease-in-out;\n  transition: all 200ms ease-in-out; }\n\n.al-sidebar-list, .al-sidebar-sublist {\n  margin: 0;\n  padding: 18px 0 0;\n  list-style: none; }\n\n.al-sidebar-list {\n  font-size: 14px; }\n\n.al-sidebar-list li {\n  display: block;\n  position: relative;\n  float: none;\n  padding: 0; }\n\n.al-sidebar-list li.selected {\n  background-color: #0473b6; }\n\n.al-sidebar-list a {\n  color: #fff;\n  display: block;\n  padding-left: 18px;\n  line-height: 42px;\n  cursor: pointer;\n  text-transform: capitalize;\n  white-space: nowrap; }\n\n.al-sidebar-list li:not(.selected) a:hover, .al-sidebar-list li:not(.selected) a:active {\n  color: #0593e8; }\n  .al-sidebar-list li:not(.selected) a:hover b, .al-sidebar-list li:not(.selected) a:active b {\n    color: #0593e8; }\n\n.al-sidebar-list li.selected a:hover, .al-sidebar-list li.selected a:active {\n  color: #fff; }\n  .al-sidebar-list li.selected a:hover b, .al-sidebar-list li.selected a:active b {\n    color: #fff; }\n\n.al-sidebar-list i {\n  margin-right: 18px;\n  width: 16px;\n  display: inline-block;\n  font-family: \"Icomoon Icon\";\n  font-style: normal; }\n\n.al-sidebar-list i.home:before {\n  content: '\\E900'; }\n\n.al-sidebar-list i.cog:before {\n  content: '\\E901'; }\n\n.al-sidebar-list b {\n  display: block;\n  line-height: 16px;\n  text-shadow: none;\n  font-size: 20px;\n  position: absolute;\n  right: 10px;\n  top: 14px;\n  padding: 0;\n  text-align: center;\n  color: #ccc;\n  font-weight: normal;\n  font-family: \"Icomoon Icon\";\n  opacity: 1;\n  filter: alpha(opacity=100); }\n  @media (max-width: 1199px) {\n    .al-sidebar-list b {\n      opacity: 0;\n      filter: alpha(opacity=0); } }\n\n.al-sidebar-list b.down:before {\n  content: '\\E903'; }\n\n.al-sidebar-list b.up:before {\n  content: '\\E906'; }\n\n.al-sidebar-sublist {\n  font-size: 13px;\n  padding-top: 0;\n  height: 0px;\n  overflow: hidden;\n  -webkit-transition: all 200ms linear;\n  -o-transition: all 200ms linear;\n  transition: all 200ms linear; }\n  @media (max-width: 1199px) {\n    .al-sidebar-sublist {\n      position: absolute;\n      width: 0;\n      overflow: hidden;\n      left: 52px;\n      top: -1px; } }\n\n.al-sidebar-list-item .down {\n  -webkit-transition: all 200ms linear;\n  -o-transition: all 200ms linear;\n  transition: all 200ms linear;\n  -webkit-transform: rotate(0deg);\n  -ms-transform: rotate(0deg);\n  -o-transform: rotate(0deg);\n  transform: rotate(0deg); }\n\n.al-sidebar-list-item.opened .al-sidebar-sublist {\n  height: auto; }\n\n.al-sidebar-list-item.opened .down {\n  -webkit-transform: rotate(180deg);\n  -ms-transform: rotate(180deg);\n  -o-transform: rotate(180deg);\n  transform: rotate(180deg); }\n\n.al-sidebar-sublist a {\n  padding-left: 52px;\n  line-height: 29px; }\n", ""]);
+	exports.push([module.id, ".al-sidebar {\n  width: 180px;\n  top: 66px;\n  left: 0;\n  z-index: 904;\n  display: block;\n  min-height: 500px;\n  background: rgba(0, 0, 0, 0.5);\n  height: 100%;\n  position: fixed;\n  -webkit-transition: all 200ms linear;\n  -o-transition: all 200ms linear;\n  transition: all 200ms linear; }\n  @media (max-width: 1199px) {\n    .al-sidebar {\n      width: 52px; } }\n  @media (max-width: 479px) {\n    .al-sidebar {\n      width: 0px; } }\n  .al-sidebar.collapse {\n    width: 52px !important; }\n    @media (max-width: 479px) {\n      .al-sidebar.collapse {\n        width: 0px !important; } }\n    .al-sidebar.collapse .al-sidebar-list b {\n      opacity: 0;\n      filter: alpha(opacity=0); }\n    .al-sidebar.collapse .al-sidebar-sublist {\n      position: absolute;\n      width: 0;\n      overflow: hidden;\n      left: 52px;\n      top: -1px; }\n  .al-sidebar.un-collapse {\n    width: 180px !important; }\n    .al-sidebar.un-collapse .al-sidebar-list b {\n      opacity: 1;\n      filter: alpha(opacity=100); }\n    .al-sidebar.un-collapse .al-sidebar-sublist {\n      position: static;\n      width: auto; }\n\n.al-sidebar .direct-line {\n  position: absolute;\n  width: 3px;\n  right: 0px;\n  top: -200px;\n  height: 43px;\n  background-color: #0473b6;\n  -webkit-transition: all 200ms ease-in-out;\n  -o-transition: all 200ms ease-in-out;\n  transition: all 200ms ease-in-out; }\n\n.al-sidebar-list, .al-sidebar-sublist {\n  margin: 0;\n  padding: 18px 0 0;\n  list-style: none; }\n\n.al-sidebar-list {\n  font-size: 14px; }\n\n.al-sidebar-list li {\n  display: block;\n  position: relative;\n  float: none;\n  padding: 0; }\n\n.al-sidebar-list li.selected {\n  background-color: #0473b6; }\n\n.al-sidebar-list a {\n  color: #fff;\n  display: block;\n  padding-left: 18px;\n  line-height: 42px;\n  cursor: pointer;\n  text-transform: capitalize;\n  white-space: nowrap; }\n\n.al-sidebar-list li:not(.selected) a:hover, .al-sidebar-list li:not(.selected) a:active {\n  color: #0593e8; }\n  .al-sidebar-list li:not(.selected) a:hover b, .al-sidebar-list li:not(.selected) a:active b {\n    color: #0593e8; }\n\n.al-sidebar-list li.selected a:hover, .al-sidebar-list li.selected a:active {\n  color: #fff; }\n  .al-sidebar-list li.selected a:hover b, .al-sidebar-list li.selected a:active b {\n    color: #fff; }\n\n.al-sidebar-list i {\n  margin-right: 18px;\n  width: 16px;\n  display: inline-block;\n  font-family: \"Icomoon Icon\";\n  font-style: normal; }\n  .al-sidebar-list i.home:before {\n    content: '\\E900'; }\n  .al-sidebar-list i.cog:before {\n    content: '\\E901'; }\n  .al-sidebar-list i.users:before {\n    content: '\\E915'; }\n  .al-sidebar-list i.user:before {\n    content: '\\E916'; }\n  .al-sidebar-list i.lock:before {\n    content: '\\E914'; }\n  .al-sidebar-list i.app:before {\n    content: '\\E917'; }\n  .al-sidebar-list i.module:before {\n    content: '\\E918'; }\n  .al-sidebar-list i.control:before {\n    content: '\\E919'; }\n\n.al-sidebar-list b {\n  display: block;\n  line-height: 16px;\n  text-shadow: none;\n  font-size: 20px;\n  position: absolute;\n  right: 10px;\n  top: 14px;\n  padding: 0;\n  text-align: center;\n  color: #ccc;\n  font-weight: normal;\n  font-family: \"Icomoon Icon\";\n  opacity: 1;\n  filter: alpha(opacity=100); }\n  @media (max-width: 1199px) {\n    .al-sidebar-list b {\n      opacity: 0;\n      filter: alpha(opacity=0); } }\n\n.al-sidebar-list b.down:before {\n  content: '\\E903'; }\n\n.al-sidebar-list b.up:before {\n  content: '\\E906'; }\n\n.al-sidebar-sublist {\n  font-size: 13px;\n  padding-top: 0;\n  height: 0px;\n  overflow: hidden;\n  -webkit-transition: all 200ms linear;\n  -o-transition: all 200ms linear;\n  transition: all 200ms linear; }\n  @media (max-width: 1199px) {\n    .al-sidebar-sublist {\n      position: absolute;\n      width: 0;\n      overflow: hidden;\n      left: 52px;\n      top: -1px; } }\n\n.al-sidebar-list-item .down {\n  -webkit-transition: all 200ms linear;\n  -o-transition: all 200ms linear;\n  transition: all 200ms linear;\n  -webkit-transform: rotate(0deg);\n  -ms-transform: rotate(0deg);\n  -o-transform: rotate(0deg);\n  transform: rotate(0deg); }\n\n.al-sidebar-list-item.opened .al-sidebar-sublist {\n  height: auto; }\n\n.al-sidebar-list-item.opened .down {\n  -webkit-transform: rotate(180deg);\n  -ms-transform: rotate(180deg);\n  -o-transform: rotate(180deg);\n  transform: rotate(180deg); }\n\n.al-sidebar-sublist a {\n  padding-left: 52px;\n  line-height: 29px; }\n", ""]);
 	
 	// exports
 

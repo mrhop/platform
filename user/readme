@@ -62,6 +62,12 @@ http://docs.spring.io/spring-hateoas/docs/0.20.0.RELEASE/reference/html/
  --修改个人信息
 
 做至ModuleResourceController部分，接下来继续 //接下来做resource的转换工作
+完事了之后
+然后leftmenu-->需要进行获取并格式化
+
+1.iconClass 需要一个iconClass moduletable
+2.package之后再次进行测试
+目前进行到此处！！！
 
 
 

@@ -11,9 +11,7 @@ import org.springframework.hateoas.mvc.ResourceAssemblerSupport;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by Donghui Huo on 2016/9/1.
@@ -56,11 +54,14 @@ public class ModuleResourceAssembler extends ResourceAssemblerSupport<ModuleTabl
         for (ModuleTable moduleTable : moduleTables) {
             ModuleResource resource = createResource(moduleTable);
             if (moduleTable.getChildren() != null) {
-                Set<ModuleResource> setMr = new LinkedHashSet<>();
+                ArrayList<ModuleResource> setMr = new ArrayList<>();
                 for (ModuleTable mt : moduleTable.getChildren()) {
                     ModuleResource moduleResource = new ModuleResource();
                     moduleResource.setInternalId(mt.getId());
                     moduleResource.setModuleName(mt.getModuleName());
+                    moduleResource.setAvailable(mt.isAvailable());
+                    moduleResource.setModuleUrl(mt.getModuleUrl());
+                    moduleResource.setIconClass(mt.getIconClass());
                     setMr.add(moduleResource);
                 }
                 resource.setChildren(setMr);
@@ -80,6 +81,9 @@ public class ModuleResourceAssembler extends ResourceAssemblerSupport<ModuleTabl
                 ModuleResource moduleResourceParent = new ModuleResource();
                 moduleResourceParent.setInternalId(mt.getId());
                 moduleResourceParent.setModuleName(mt.getModuleName());
+                moduleResourceParent.setAvailable(mt.isAvailable());
+                moduleResourceParent.setModuleUrl(mt.getModuleUrl());
+                moduleResourceParent.setIconClass(mt.getIconClass());
                 moduleResource.setParent(moduleResourceParent);
             }
             if (moduleTable.getClient() != null) {
@@ -89,7 +93,7 @@ public class ModuleResourceAssembler extends ResourceAssemblerSupport<ModuleTabl
                 clientResource.setClientId(ct.getClientId());
                 moduleResource.setClient(clientResource);
             }
-            moduleResource.add(entityLinks.linkFor(ClientResource.class).slash(moduleTable.getId()).withSelfRel());
+            moduleResource.add(entityLinks.linkFor(ModuleResource.class).slash(moduleTable.getId()).withSelfRel());
         }
         return moduleResource;
     }

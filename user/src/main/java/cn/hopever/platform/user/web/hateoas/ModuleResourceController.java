@@ -16,6 +16,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.Collection;
+import java.util.List;
+
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 
 /**
  * Created by Donghui Huo on 2016/8/29.
@@ -46,8 +49,11 @@ public class ModuleResourceController {
             Iterable<ModuleTable> moduleTables = null;
             String authority = authorities.iterator().next().getAuthority();
             moduleTables = moduleTableService.getListByClientAndAuthorityAndUser(clientId, authority, principal.getName());
+            List<ModuleResource> list = moduleResourceAssembler.toResourcesCustomized(moduleTables);
+            Resources<ModuleResource> wrapped = new Resources<ModuleResource>(list, linkTo(ModuleResourceController.class).slash("/list")
+                    .withSelfRel());
             //接下来做resource的转换工作，然后测试获取，并进行装配到html中，然后进行每个页面的实现
-
+            return wrapped;
         }
         return null;
     }

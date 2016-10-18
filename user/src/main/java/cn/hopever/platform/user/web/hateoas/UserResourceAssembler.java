@@ -15,9 +15,7 @@ import org.springframework.hateoas.mvc.ResourceAssemblerSupport;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by Donghui Huo on 2016/9/1.
@@ -42,7 +40,7 @@ public class UserResourceAssembler extends ResourceAssemblerSupport<UserTable, U
         // … do further mapping
         //关联其他资源
         if (userTable.getClients() != null) {
-            Set<ClientResource> setCr = new LinkedHashSet<>();
+            ArrayList<ClientResource> setCr = new ArrayList<>();
             for (ClientTable ct : userTable.getClients()) {
                 ClientResource clientResource = new ClientResource();
                 clientResource.setInternalId(ct.getId());
@@ -53,7 +51,7 @@ public class UserResourceAssembler extends ResourceAssemblerSupport<UserTable, U
         }
 
         if (userTable.getAuthorities() != null) {
-            Set<RoleResource> setRr = new LinkedHashSet<>();
+            ArrayList<RoleResource> setRr = new ArrayList<>();
             for (RoleTable rt : userTable.getAuthorities()) {
                 RoleResource roleResource = new RoleResource();
                 roleResource.setInternalId(rt.getId());
@@ -64,7 +62,7 @@ public class UserResourceAssembler extends ResourceAssemblerSupport<UserTable, U
         }
 
         if (userTable.getModulesAuthorities() != null) {
-            Set<ModuleRoleResource> setMrr = new LinkedHashSet<>();
+            ArrayList<ModuleRoleResource> setMrr = new ArrayList<>();
             for (ModuleRoleTable mrt : userTable.getModulesAuthorities()) {
                 ModuleRoleResource moduleRoleResource = new ModuleRoleResource();
                 moduleRoleResource.setInternalId(mrt.getId());

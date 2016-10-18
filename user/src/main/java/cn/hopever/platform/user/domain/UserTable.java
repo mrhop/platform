@@ -10,8 +10,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Created by Donghui Huo on 2016/9/8.
@@ -55,16 +55,16 @@ public class UserTable implements UserDetails {
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "platform_user_user_role", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
-    private Set<RoleTable> authorities;
+    private List<RoleTable> authorities;
 
     //client many-to-many
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "platform_user_user_client", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "client_id", referencedColumnName = "id"))
-    private Set<ClientTable> clients;
+    private List<ClientTable> clients;
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "platform_user_user_module_role", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
-    private Set<ModuleRoleTable> modulesAuthorities;
+    private List<ModuleRoleTable> modulesAuthorities;
 
     @Override
     public boolean isAccountNonExpired() {

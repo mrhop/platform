@@ -5,7 +5,7 @@ import lombok.EqualsAndHashCode;
 import org.springframework.hateoas.ResourceSupport;
 
 import javax.validation.constraints.NotNull;
-import java.util.Set;
+import java.util.List;
 
 /**
  * Created by Donghui Huo on 2016/8/31.
@@ -26,13 +26,15 @@ public class ModuleResource extends ResourceSupport {
 
     private String moduleUrl;
 
+    private String iconClass;
+
     private ModuleResource parent;
 
-    private Set<ModuleResource> children;
+    private List<ModuleResource> children;
 
     private boolean available;
 
-    private Set<ModuleRoleResource> authorities;
+    private List<ModuleRoleResource> authorities;
 
 
 }

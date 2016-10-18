@@ -4,7 +4,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
-import java.util.Set;
+import java.util.List;
 
 /**
  * Created by Donghui Huo on 2016/9/8.
@@ -32,19 +32,22 @@ public class ModuleTable{
     @Column(name = "module_url", length = 200)
     private String moduleUrl;
 
+    @Column(name = "icon_class", length = 50)
+    private String iconClass;
+
     @ManyToOne
     @JoinColumn(name = "parent_id")
     private ModuleTable parent;
 
     @OneToMany(mappedBy = "parent",cascade = {CascadeType.ALL})
     @OrderBy("moduleOrder asc")
-    private Set<ModuleTable> children;
+    private List<ModuleTable> children;
 
     @Column(name = "available",nullable = false)
     private boolean available = true;
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "platform_user_module_module_role", joinColumns = @JoinColumn(name = "module_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
-    private Set<ModuleRoleTable> authorities;
+    private List<ModuleRoleTable> authorities;
 
 }

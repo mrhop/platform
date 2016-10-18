@@ -13,9 +13,7 @@ import org.springframework.hateoas.mvc.ResourceAssemblerSupport;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 /**
  * Created by Donghui Huo on 2016/9/1.
  */
@@ -37,7 +35,7 @@ public class ClientResourceAssembler extends ResourceAssemblerSupport<ClientTabl
         ClientResource resource = createResource(clientTable);
         //关联其他资源
         if (clientTable.getAuthoritiesBasic() != null) {
-            Set<ClientRoleResource> sCrr = new LinkedHashSet<>();
+            ArrayList<ClientRoleResource> sCrr = new ArrayList<>();
             for (ClientRoleTable crt : clientTable.getAuthoritiesBasic()) {
                 ClientRoleResource crr = new ClientRoleResource();
                 crr.setInternalId(crt.getId());
@@ -47,7 +45,7 @@ public class ClientResourceAssembler extends ResourceAssemblerSupport<ClientTabl
             resource.setAuthorities(sCrr);
         }
         if (clientTable.getModules() != null) {
-            Set<ModuleResource> sMr = new LinkedHashSet<>();
+            ArrayList<ModuleResource> sMr = new ArrayList<>();
             for (ModuleTable mt : clientTable.getModules()) {
                 ModuleResource mr = new ModuleResource();
                 mr.setInternalId(mt.getId());

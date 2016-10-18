@@ -80,15 +80,15 @@ public class Oauth2ClientController {
     }
 
     @RequestMapping(value = "/gettokenbyclient", method = RequestMethod.GET)
-    public CommonResult getTokenByClient( HttpServletRequest request) {
+    public CommonResult getTokenByClient(HttpServletRequest request) {
         CommonResult c = new CommonResult();
-        if(request.getSession().getAttribute("clientAccessToken")!=null){
+        if (request.getSession().getAttribute("clientAccessToken") != null) {
             //说明已经进行过client的登录，否则进行登录
             c.setStatus(CommonResultStatus.SUCCESS.toString());
-        }else{
+        } else {
             OAuth2AccessToken oa = clientRestTemplate.getAccessToken();
             c.setStatus(CommonResultStatus.SUCCESS.toString());
-            request.getSession().setAttribute("clientAccessToken",oa.getValue());
+            request.getSession().setAttribute("clientAccessToken", oa.getValue());
         }
         return c;
     }
@@ -106,18 +106,18 @@ public class Oauth2ClientController {
             }
             cookie.setMaxAge(oa.getExpiresIn());
             //此处进行校验，并返回index
-            if(commonMethods.validateUser(request,cookie)){
+            if (commonMethods.validateUser(request, cookie)) {
                 response.addCookie(cookie);
                 //rest 里面如何sendredirect
                 //必须使用前台ajax调用
                 c.setStatus(CommonResultStatus.SUCCESS.toString());
                 c.setMessage("to index");
-                HashMap<String,Object> map = new HashMap<>();
-                map.put("redirect","index.html");
+                HashMap<String, Object> map = new HashMap<>();
+                map.put("redirect", "index.html");
                 c.setResponseData(map);
                 //response.sendRedirect("/index.html");
-               // return "redirect:/index.html";
-            }else{
+                // return "redirect:/index.html";
+            } else {
                 c.setStatus(CommonResultStatus.SERVERFAILURE.toString());
                 c.setMessage("401,Authorization Error");
             }
@@ -135,6 +135,12 @@ public class Oauth2ClientController {
 
     @RequestMapping(value = "/getresource", method = RequestMethod.GET)
     public CommonResult getResource(HttpServletRequest request) throws Exception {
+        return commonMethods.getResource(request);
+    }
+
+    @RequestMapping(value = "/leftmenu", method = RequestMethod.GET)
+    public CommonResult getLeftmenu(HttpServletRequest request) throws Exception {
+        request.setAttribute("resourceUrl", oauth2Properties.getModuleList() + oauth2Properties.getClientID());
         return commonMethods.getResource(request);
     }
 

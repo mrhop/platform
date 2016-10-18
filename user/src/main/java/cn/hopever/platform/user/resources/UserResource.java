@@ -7,8 +7,8 @@ import org.springframework.hateoas.ResourceSupport;
 
 import javax.validation.constraints.NotNull;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Created by Donghui Huo on 2016/8/31.
@@ -37,11 +37,11 @@ public class UserResource extends ResourceSupport {
 
     private Date limitedDate;
 
-    private Set<RoleResource> authorities;
+    private List<RoleResource> authorities;
 
-    private Set<ClientResource> clients;
+    private List<ClientResource> clients;
 
     private Map<String,Object> additionalMessage;
 
-    private Set<ModuleRoleResource> modulesAuthorities;
+    private List<ModuleRoleResource> modulesAuthorities;
 }

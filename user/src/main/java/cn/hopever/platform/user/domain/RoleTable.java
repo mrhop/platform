@@ -5,7 +5,7 @@ import lombok.EqualsAndHashCode;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
-import java.util.Set;
+import java.util.List;
 
 /**
  * Created by Donghui Huo on 2016/9/8.
@@ -27,6 +27,6 @@ public class RoleTable implements GrantedAuthority {
     private short level;
 
     @ManyToMany(mappedBy = "authorities")
-    private Set<UserTable> users;
+    private List<UserTable> users;
 
 }

@@ -6,6 +6,7 @@ import org.omg.CORBA.Object;
 import org.springframework.hateoas.ResourceSupport;
 
 import javax.validation.constraints.NotNull;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -38,7 +39,7 @@ public class ClientResource extends ResourceSupport {
 
     private String registeredRedirectUri;
 
-    private Set<ClientRoleResource> authorities;
+    private List<ClientRoleResource> authorities;
 
     private Integer accessTokenValiditySeconds;
 
@@ -46,8 +47,8 @@ public class ClientResource extends ResourceSupport {
 
     private Map<String, Object> additionalInformation;
 
-    private Set<ModuleResource> modules;
+    private List<ModuleResource> modules;
 
-    private Set<UserResource> users;
+    private List<UserResource> users;
 
 }

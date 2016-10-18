@@ -5,7 +5,7 @@ import lombok.EqualsAndHashCode;
 import org.springframework.hateoas.ResourceSupport;
 
 import javax.validation.constraints.NotNull;
-import java.util.Set;
+import java.util.List;
 
 /**
  * Created by Donghui Huo on 2016/8/31.
@@ -23,6 +23,6 @@ public class RoleResource extends ResourceSupport {
 
     private short level;
 
-    private Set<UserResource> users;
+    private List<UserResource> users;
 
 }

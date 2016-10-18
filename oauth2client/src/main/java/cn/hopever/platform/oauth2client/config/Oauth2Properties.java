@@ -21,5 +21,6 @@ public class Oauth2Properties {
     private String domainName;
     private String secretKey;
     private String validateUserUri;
-    private String getUserUri;
+    private String userUri;
+    private String moduleList;
 }

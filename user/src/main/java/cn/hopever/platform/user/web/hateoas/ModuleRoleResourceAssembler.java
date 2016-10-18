@@ -12,9 +12,7 @@ import org.springframework.hateoas.mvc.ResourceAssemblerSupport;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by Donghui Huo on 2016/9/1.
@@ -36,7 +34,7 @@ public class ModuleRoleResourceAssembler extends ResourceAssemblerSupport<Module
     public ModuleRoleResource toResource(ModuleRoleTable moduleRoleTable) {
         ModuleRoleResource resource = createResource(moduleRoleTable);
         if (moduleRoleTable.getModules() != null) {
-            Set<ModuleResource> setMr = new LinkedHashSet<>();
+            ArrayList<ModuleResource> setMr = new ArrayList<>();
             for (ModuleTable mt : moduleRoleTable.getModules()) {
                 ModuleResource moduleResource = new ModuleResource();
                 moduleResource.setInternalId(mt.getId());

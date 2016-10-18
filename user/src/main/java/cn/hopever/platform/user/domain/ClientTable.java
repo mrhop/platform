@@ -11,6 +11,7 @@ import org.springframework.security.oauth2.provider.ClientDetails;
 import javax.persistence.*;
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -56,7 +57,7 @@ public class ClientTable implements ClientDetails {
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "platform_user_client_client_role", joinColumns = @JoinColumn(name = "client_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
-    private Set<ClientRoleTable> authorities;
+    private List<ClientRoleTable> authorities;
 
     @Column(name = "access_token_validity_seconds", nullable = true)
     private Integer accessTokenValiditySeconds;
@@ -68,10 +69,10 @@ public class ClientTable implements ClientDetails {
     private String additionalInformation;
 
     @OneToMany(mappedBy = "client",cascade = {CascadeType.ALL})
-    private Set<ModuleTable> modules;
+    private List<ModuleTable> modules;
 
     @ManyToMany(mappedBy = "clients")
-    private Set<UserTable> users;
+    private List<UserTable> users;
 
 
 
@@ -244,7 +245,7 @@ public class ClientTable implements ClientDetails {
         return null;
     }
 
-    public Set<ClientRoleTable> getAuthoritiesBasic(){
+    public List<ClientRoleTable> getAuthoritiesBasic(){
         return this.authorities;
     }
 }

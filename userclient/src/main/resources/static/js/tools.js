@@ -11803,6 +11803,7 @@ webpackJsonp([4],{
 	    global.locale = _intl2.default[locale] ? locale : _initial2.default.locale;
 	    global.globalProps = _intl2.default[global.locale]['app'];
 	    global.baseUrl = _initial2.default.baseUrl;
+	    global.endpoints = _initial2.default.endpoints;
 	};
 	utilFun.prototype = {
 	    name: 'utilFun',
@@ -12010,7 +12011,12 @@ webpackJsonp([4],{
 	    //locale:'en-US'
 	    //locale:'zh-CN'
 	    locale: localeLanguage,
-	    baseUrl: baseUrl
+	    baseUrl: baseUrl,
+	    endpoints: {
+	        gettokenbypassword: 'gettokenbypassword',
+	        gettokenbyclient: 'gettokenbyclient',
+	        dashboardleftmenu: 'leftmenu'
+	    }
 	};
 	
 	/* REACT HOT LOADER */ }).call(this); } finally { if (false) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = require("D:\\workspaces\\html\\platform\\platform_user\\node_modules\\react-hot-loader\\makeExportsHot.js"); if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "initial.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
