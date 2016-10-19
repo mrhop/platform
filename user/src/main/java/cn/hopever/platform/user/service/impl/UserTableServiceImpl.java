@@ -61,6 +61,11 @@ public class UserTableServiceImpl implements UserTableService {
     }
 
     @Override
+    public Iterable<UserTable> getListWithOutSelf(String username) {
+        return userTableRepository.findByUsernameNot(username);
+    }
+
+    @Override
     public Iterable<UserTable> getSubList(String username) {
         UserTable ut = userTableRepository.findOneByUsername(username);
         List<RoleTable> list = new ArrayList<>();

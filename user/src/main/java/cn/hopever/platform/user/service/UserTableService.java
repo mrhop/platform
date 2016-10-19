@@ -17,6 +17,8 @@ public interface UserTableService extends UserDetailsService {
 
     public Iterable<UserTable> getList();
 
+    public Iterable<UserTable> getListWithOutSelf(String username);
+
     public Iterable<UserTable> getSubList(String username);
 
 }

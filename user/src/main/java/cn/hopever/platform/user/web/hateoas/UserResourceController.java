@@ -57,7 +57,7 @@ public class UserResourceController {
         String authority = ((OAuth2Authentication) principal).getAuthorities().iterator().next().getAuthority();
         List<UserResource> list = new ArrayList<>();
         if("ROLE_super_admin".equals(authority)){
-            list = userTableAssembler.toResourcesCustomized(userTableService.getList());
+            list = userTableAssembler.toResourcesCustomized(userTableService.getListWithOutSelf(principal.getName()));
         }else{
             list = userTableAssembler.toResourcesCustomized(userTableService.getSubList(principal.getName()));
         }

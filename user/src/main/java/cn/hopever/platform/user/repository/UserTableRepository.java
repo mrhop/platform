@@ -16,4 +16,5 @@ public interface UserTableRepository extends PagingAndSortingRepository<UserTabl
     public UserTable findOneByUsername(String username);
     public List<UserTable> findByUsernameLike(String username, Pageable pageable);
     public List<UserTable> findByAuthoritiesInAndClientsIn(Collection<RoleTable> authorities, Collection<ClientTable> clients);
+    public List<UserTable> findByUsernameNot(String username);
 }
