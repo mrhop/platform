@@ -3,6 +3,7 @@ package cn.hopever.platform.user.domain;
 import cn.hopever.platform.utils.json.JacksonUtil;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
@@ -22,6 +23,7 @@ import java.util.Set;
 @Table(name = "platform_user_client")
 @Data
 @EqualsAndHashCode(of = {"id"})
+@ToString(exclude = {"authorities","modules", "users"})
 public class ClientTable implements ClientDetails {
 
     @Transient

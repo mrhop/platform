@@ -2,6 +2,7 @@ package cn.hopever.platform.user.domain;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.List;
@@ -12,15 +13,16 @@ import java.util.List;
 @Entity
 @Table(name = "platform_user_module")
 @Data
-@EqualsAndHashCode(of={"id"})
-public class ModuleTable{
+@EqualsAndHashCode(of = {"id"})
+@ToString(exclude = {"client", "parent", "children", "authorities"})
+public class ModuleTable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @ManyToOne
-    @JoinColumn(name = "client_id",nullable = false)
+    @JoinColumn(name = "client_id", nullable = false)
     private ClientTable client;
 
     @Column(name = "module_name", nullable = false, length = 50, unique = true)
@@ -39,11 +41,11 @@ public class ModuleTable{
     @JoinColumn(name = "parent_id")
     private ModuleTable parent;
 
-    @OneToMany(mappedBy = "parent",cascade = {CascadeType.ALL})
+    @OneToMany(mappedBy = "parent", cascade = {CascadeType.ALL})
     @OrderBy("moduleOrder asc")
     private List<ModuleTable> children;
 
-    @Column(name = "available",nullable = false)
+    @Column(name = "available", nullable = false)
     private boolean available = true;
 
     @ManyToMany(cascade = CascadeType.ALL)

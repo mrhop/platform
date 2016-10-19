@@ -1,6 +1,6 @@
 package cn.hopever.platform.user.web.hateoas;
 
-import cn.hopever.platform.user.resources.ClientResource;
+import cn.hopever.platform.user.resources.ModuleRoleResource;
 import cn.hopever.platform.user.service.ModuleRoleTableService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
  * Created by Donghui Huo on 2016/8/29.
  */
 @RestController
-@ExposesResourceFor(ClientResource.class)
+@ExposesResourceFor(ModuleRoleResource.class)
 @RequestMapping(value = "/modulerole", produces = "application/json")
 @CrossOrigin
 public class ModuleRoleResourceController {

@@ -3,6 +3,7 @@ package cn.hopever.platform.user.domain;
 import cn.hopever.platform.utils.json.JacksonUtil;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,6 +21,7 @@ import java.util.Map;
 @Table(name = "platform_user_user")
 @Data
 @EqualsAndHashCode(of = {"id"})
+@ToString(exclude = {"authorities","clients","modulesAuthorities"})
 public class UserTable implements UserDetails {
 
     @Transient

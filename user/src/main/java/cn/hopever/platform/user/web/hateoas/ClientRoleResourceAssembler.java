@@ -4,6 +4,7 @@ import cn.hopever.platform.user.domain.ClientRoleTable;
 import cn.hopever.platform.user.resources.ClientResource;
 import cn.hopever.platform.user.resources.ClientRoleResource;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.PropertyMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityLinks;
 import org.springframework.hateoas.mvc.ResourceAssemblerSupport;
@@ -15,7 +16,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class ClientRoleResourceAssembler extends ResourceAssemblerSupport<ClientRoleTable, ClientRoleResource> {
 
-    @Autowired
     private ModelMapper modelMapper;
 
     @Autowired
@@ -23,6 +23,13 @@ public class ClientRoleResourceAssembler extends ResourceAssemblerSupport<Client
 
     public ClientRoleResourceAssembler() {
         super(ClientRoleResourceController.class, ClientRoleResource.class);
+        modelMapper = new ModelMapper();
+        PropertyMap<ClientRoleTable, ClientRoleResource> map = new PropertyMap<ClientRoleTable, ClientRoleResource>() {
+            protected void configure() {
+                skip().setClients(null);
+            }
+        };
+        modelMapper.addMappings(map);
     }
 
     @Override

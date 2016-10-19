@@ -2,10 +2,10 @@ package cn.hopever.platform.user.web.hateoas;
 
 import cn.hopever.platform.user.domain.ModuleRoleTable;
 import cn.hopever.platform.user.domain.ModuleTable;
-import cn.hopever.platform.user.resources.ClientResource;
 import cn.hopever.platform.user.resources.ModuleResource;
 import cn.hopever.platform.user.resources.ModuleRoleResource;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.PropertyMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityLinks;
 import org.springframework.hateoas.mvc.ResourceAssemblerSupport;
@@ -20,7 +20,6 @@ import java.util.List;
 @Component
 public class ModuleRoleResourceAssembler extends ResourceAssemblerSupport<ModuleRoleTable, ModuleRoleResource> {
 
-    @Autowired
     private ModelMapper modelMapper;
 
     @Autowired
@@ -28,6 +27,14 @@ public class ModuleRoleResourceAssembler extends ResourceAssemblerSupport<Module
 
     public ModuleRoleResourceAssembler() {
         super(ModuleRoleResourceController.class, ModuleRoleResource.class);
+        modelMapper = new ModelMapper();
+        PropertyMap<ModuleRoleTable, ModuleRoleResource> map = new PropertyMap<ModuleRoleTable, ModuleRoleResource>() {
+            protected void configure() {
+                skip().setModules(null);
+                skip().setUsers(null);
+            }
+        };
+        modelMapper.addMappings(map);
     }
 
     @Override
@@ -57,9 +64,9 @@ public class ModuleRoleResourceAssembler extends ResourceAssemblerSupport<Module
     private ModuleRoleResource createResource(ModuleRoleTable moduleRoleTable) {
         ModuleRoleResource moduleRoleResource = null;
         if (moduleRoleTable != null) {
-            moduleRoleResource = modelMapper.map(moduleRoleTable, ModuleRoleResource.class);
+            moduleRoleResource = modelMapper.map(moduleRoleTable,ModuleRoleResource.class);
             moduleRoleResource.setInternalId(moduleRoleTable.getId());
-            moduleRoleResource.add(entityLinks.linkFor(ClientResource.class).slash(moduleRoleTable.getId()).withSelfRel());
+            moduleRoleResource.add(entityLinks.linkFor(ModuleRoleResource.class).slash(moduleRoleTable.getId()).withSelfRel());
         }
         return moduleRoleResource;
     }

@@ -7,6 +7,7 @@ import cn.hopever.platform.user.resources.ClientResource;
 import cn.hopever.platform.user.resources.ClientRoleResource;
 import cn.hopever.platform.user.resources.ModuleResource;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.PropertyMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityLinks;
 import org.springframework.hateoas.mvc.ResourceAssemblerSupport;
@@ -20,7 +21,6 @@ import java.util.List;
 @Component
 public class ClientResourceAssembler extends ResourceAssemblerSupport<ClientTable, ClientResource> {
 
-    @Autowired
     private ModelMapper modelMapper;
 
     @Autowired
@@ -28,6 +28,15 @@ public class ClientResourceAssembler extends ResourceAssemblerSupport<ClientTabl
 
     public ClientResourceAssembler() {
         super(ClientResourceController.class, ClientResource.class);
+        modelMapper = new ModelMapper();
+        PropertyMap<ClientTable, ClientResource> map = new PropertyMap<ClientTable, ClientResource>() {
+            protected void configure() {
+                skip().setAuthorities(null);
+                skip().setModules(null);
+                skip().setUsers(null);
+            }
+        };
+        modelMapper.addMappings(map);
     }
 
     @Override

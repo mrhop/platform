@@ -9,6 +9,7 @@ import cn.hopever.platform.user.resources.ModuleRoleResource;
 import cn.hopever.platform.user.resources.RoleResource;
 import cn.hopever.platform.user.resources.UserResource;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.PropertyMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityLinks;
 import org.springframework.hateoas.mvc.ResourceAssemblerSupport;
@@ -23,7 +24,6 @@ import java.util.List;
 @Component
 public class UserResourceAssembler extends ResourceAssemblerSupport<UserTable, UserResource> {
 
-    @Autowired
     private ModelMapper modelMapper;
 
     @Autowired
@@ -31,6 +31,15 @@ public class UserResourceAssembler extends ResourceAssemblerSupport<UserTable, U
 
     public UserResourceAssembler() {
         super(UserResourceController.class, UserResource.class);
+        modelMapper = new ModelMapper();
+        PropertyMap<UserTable, UserResource> map = new PropertyMap<UserTable, UserResource>() {
+            protected void configure() {
+                skip().setModulesAuthorities(null);
+                skip().setAuthorities(null);
+                skip().setClients(null);
+            }
+        };
+        modelMapper.addMappings(map);
     }
 
     @Override

@@ -8,5 +8,6 @@ import cn.hopever.platform.user.domain.ModuleTable;
 public interface ModuleTableService {
 
     public Iterable<ModuleTable> getListByClientAndAuthorityAndUser(String clientId, String authority, String username);
+    public Iterable<ModuleTable> getAll();
 
 }

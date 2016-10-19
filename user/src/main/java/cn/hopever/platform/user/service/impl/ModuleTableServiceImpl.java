@@ -69,4 +69,9 @@ public class ModuleTableServiceImpl implements ModuleTableService {
         }
         return null;
     }
+
+    @Override
+    public Iterable<ModuleTable> getAll() {
+        return this.moduleTableRepository.findAll();
+    }
 }

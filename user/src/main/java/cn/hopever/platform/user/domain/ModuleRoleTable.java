@@ -2,6 +2,7 @@ package cn.hopever.platform.user.domain;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
@@ -14,6 +15,7 @@ import java.util.List;
 @Table(name = "platform_user_module_role")
 @Data
 @EqualsAndHashCode(of={"id"})
+@ToString(exclude = {"modules", "users"})
 public class ModuleRoleTable implements GrantedAuthority {
 
     @Id
