@@ -34,9 +34,9 @@ public class ModuleTableServiceImpl implements ModuleTableService {
     @Override
     public Iterable<ModuleTable> getListByClientAndAuthorityAndUser(String clientId, String authority, String username) {
         ClientTable ct = clientTableRepository.findOneByClientId(clientId);
-        if ("super_admin".equals(authority)) {
+        if ("ROLE_super_admin".equals(authority)) {
             return  moduleTableRepository.findByParentAndClient(null, ct);
-        } else if ("admin".equals(authority)) {
+        } else if ("ROLE_admin".equals(authority)) {
             if ("user_admin_client".equals(clientId)) {
                 //手动过滤
                 return moduleTableRepository.findByParentAndClientAndModuleName(null,ct,"User Mgmt");
@@ -44,7 +44,7 @@ public class ModuleTableServiceImpl implements ModuleTableService {
             } else {
                 return  moduleTableRepository.findByParentAndClient(null, ct);
             }
-        } else if ("common_user".equals(authority)) {
+        } else if ("ROLE_common_user".equals(authority)) {
             if ("user_admin_client".equals(clientId)) {
                 //手动过滤
                 //过滤掉Role，moduleRole，Module。client，client Role，只留存user部分的个人信息处理

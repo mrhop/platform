@@ -21,7 +21,7 @@ import java.util.Map;
 @Table(name = "platform_user_user")
 @Data
 @EqualsAndHashCode(of = {"id"})
-@ToString(exclude = {"authorities","clients","modulesAuthorities"})
+@ToString(exclude = {"authorities", "clients", "modulesAuthorities"})
 public class UserTable implements UserDetails {
 
     @Transient
@@ -54,6 +54,10 @@ public class UserTable implements UserDetails {
 
     @Column(name = "limited_date", nullable = true)
     private Date limitedDate;
+
+    @ManyToOne
+    @JoinColumn(name = "create_user", nullable = true)
+    private UserTable createUser;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "platform_user_user_role", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))

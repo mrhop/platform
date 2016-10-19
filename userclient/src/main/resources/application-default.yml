@@ -11,3 +11,6 @@ config:
         clientScopes:
               - user_admin_client
               - internal_client
+    user:
+        personalinfo: http://localhost:9091/user/user
+        userlist: http://localhost:9091/user/user/list

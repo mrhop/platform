@@ -34,6 +34,7 @@ public class UserResourceAssembler extends ResourceAssemblerSupport<UserTable, U
         modelMapper = new ModelMapper();
         PropertyMap<UserTable, UserResource> map = new PropertyMap<UserTable, UserResource>() {
             protected void configure() {
+                skip().setPassword(null);
                 skip().setModulesAuthorities(null);
                 skip().setAuthorities(null);
                 skip().setClients(null);

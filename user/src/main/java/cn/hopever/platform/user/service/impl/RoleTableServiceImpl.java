@@ -1,9 +1,7 @@
 package cn.hopever.platform.user.service.impl;
 
 import cn.hopever.platform.user.domain.RoleTable;
-import cn.hopever.platform.user.domain.UserTable;
 import cn.hopever.platform.user.repository.RoleTableRepository;
-import cn.hopever.platform.user.repository.UserTableRepository;
 import cn.hopever.platform.user.service.RoleTableService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,8 +24,6 @@ public class RoleTableServiceImpl implements RoleTableService {
     @Autowired
     private RoleTableRepository roleTableRepository;
 
-    @Autowired
-    private UserTableRepository userTableRepository;
     @Override
     public RoleTable save(RoleTable role) {
         return null;
@@ -46,7 +42,11 @@ public class RoleTableServiceImpl implements RoleTableService {
     @Override
     public Iterable<RoleTable> getList() {
          Iterable<RoleTable> rt =  roleTableRepository.findAll(new Sort(Sort.Direction.ASC, "id"));
-        Iterable<UserTable> ut = userTableRepository.findAll();
         return rt;
+    }
+
+    @Override
+    public RoleTable get(Long id) {
+        return roleTableRepository.findOne(id);
     }
 }

@@ -13,4 +13,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 public interface UserTableService extends UserDetailsService {
     public UserTable save(UserTable user);
 
+    public UserTable getUserByUsername(String username);
+
+    public Iterable<UserTable> getList();
+
+    public Iterable<UserTable> getSubList(String username);
+
 }

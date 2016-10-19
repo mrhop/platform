@@ -1,6 +1,8 @@
 package cn.hopever.platform.user.service.impl;
 
+import cn.hopever.platform.user.domain.RoleTable;
 import cn.hopever.platform.user.domain.UserTable;
+import cn.hopever.platform.user.repository.RoleTableRepository;
 import cn.hopever.platform.user.repository.UserTableRepository;
 import cn.hopever.platform.user.service.UserTableService;
 import org.slf4j.Logger;
@@ -11,6 +13,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Donghui Huo on 2016/8/30.
@@ -26,6 +31,9 @@ public class UserTableServiceImpl implements UserTableService {
     @Autowired
     private UserTableRepository userTableRepository;
 
+    @Autowired
+    private RoleTableRepository roleTableRepository;
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserTable user = userTableRepository.findOneByUsername(username);
@@ -40,5 +48,23 @@ public class UserTableServiceImpl implements UserTableService {
     public UserTable save(UserTable user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userTableRepository.save(user);
+    }
+
+    @Override
+    public UserTable getUserByUsername(String username) {
+        return userTableRepository.findOneByUsername(username);
+    }
+
+    @Override
+    public Iterable<UserTable> getList() {
+        return userTableRepository.findAll();
+    }
+
+    @Override
+    public Iterable<UserTable> getSubList(String username) {
+        UserTable ut = userTableRepository.findOneByUsername(username);
+        List<RoleTable> list = new ArrayList<>();
+        list.add(roleTableRepository.findOneByAuthority("ROLE_common_user"));
+        return userTableRepository.findByAuthoritiesInAndClientsIn(list, ut.getClients());
     }
 }

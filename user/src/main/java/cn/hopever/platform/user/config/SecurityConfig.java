@@ -68,6 +68,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .httpBasic().disable()
                 .anonymous().disable()
-                .authorizeRequests().anyRequest().authenticated();
+                .authorizeRequests()
+                //.antMatchers("/role/**","/module/**").permitAll()
+                .anyRequest().authenticated();
     }
 }

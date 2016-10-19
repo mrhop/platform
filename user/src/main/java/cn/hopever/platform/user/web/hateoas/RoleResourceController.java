@@ -8,10 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityLinks;
 import org.springframework.hateoas.ExposesResourceFor;
 import org.springframework.hateoas.Resources;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 
@@ -33,11 +31,17 @@ public class RoleResourceController {
     @Autowired
     private RoleResourceAssembler roleResourceAssembler;
 
-    //@PreAuthorize("#oauth2.hasScope('user_admin_client') and hasRole('super_admin')")
+    @PreAuthorize("#oauth2.hasScope('user_admin_client') and hasRole('ROLE_super_admin')")
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public Resources<RoleResource> getList() {
         Resources<RoleResource> wrapped = new Resources<RoleResource>(roleResourceAssembler.toResources(roleTableService.getList()), linkTo(RoleResourceController.class).slash("list")
                 .withSelfRel());
         return wrapped;
+    }
+
+    @PreAuthorize("#oauth2.hasScope('user_admin_client') and hasRole('ROLE_super_admin')")
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    public RoleResource get(@PathVariable Long id) {
+        return roleResourceAssembler.toResource(roleTableService.get(id));
     }
 }

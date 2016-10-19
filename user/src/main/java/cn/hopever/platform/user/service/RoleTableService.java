@@ -20,4 +20,6 @@ public interface RoleTableService {
 
     public Iterable<RoleTable> getList();
 
+    public RoleTable get(Long id);
+
 }
