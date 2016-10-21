@@ -20,8 +20,9 @@ public class AesUtil {
      */
     public static byte[] aesEncryptToBytes(String content, String encryptKey) throws Exception {
         KeyGenerator kgen = KeyGenerator.getInstance("AES");
-        kgen.init(128, new SecureRandom(encryptKey.getBytes()));
-
+        SecureRandom random = SecureRandom.getInstance("SHA1PRNG");
+        random.setSeed(encryptKey.getBytes());
+        kgen.init(128, random);
         Cipher cipher = Cipher.getInstance("AES");
         cipher.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(kgen.generateKey().getEncoded(), "AES"));
 
@@ -48,8 +49,9 @@ public class AesUtil {
      */
     public static String aesDecryptByBytes(byte[] encryptBytes, String decryptKey) throws Exception {
         KeyGenerator kgen = KeyGenerator.getInstance("AES");
-        kgen.init(128, new SecureRandom(decryptKey.getBytes()));
-
+        SecureRandom random = SecureRandom.getInstance("SHA1PRNG");
+        random.setSeed(decryptKey.getBytes());
+        kgen.init(128, random);
         Cipher cipher = Cipher.getInstance("AES");
         cipher.init(Cipher.DECRYPT_MODE, new SecretKeySpec(kgen.generateKey().getEncoded(), "AES"));
         byte[] decryptBytes = cipher.doFinal(encryptBytes);
