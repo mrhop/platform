@@ -40,6 +40,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
+        org.springframework.security.oauth2.client.token.AccessTokenRequest a;
+        org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter b;
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
         authenticationProvider.setUserDetailsService(userDetailsService);
         authenticationProvider.setPasswordEncoder(passwordEncoder());
@@ -69,7 +71,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .httpBasic().disable()
                 .anonymous().disable()
                 .authorizeRequests()
-                //.antMatchers("/role/**","/module/**").permitAll()
+               // .antMatchers("/role/**","/module/**").permitAll()
                 .anyRequest().authenticated();
     }
 }

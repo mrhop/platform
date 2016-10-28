@@ -31,10 +31,10 @@ public class RoleResourceController {
     @Autowired
     private RoleResourceAssembler roleResourceAssembler;
 
-    @PreAuthorize("#oauth2.hasScope('user_admin_client') and hasRole('ROLE_super_admin')")
+   // @PreAuthorize("#oauth2.hasScope('user_admin_client') and hasRole('ROLE_super_admin')")
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public Resources<RoleResource> getList() {
-        Resources<RoleResource> wrapped = new Resources<RoleResource>(roleResourceAssembler.toResources(roleTableService.getList()), linkTo(RoleResourceController.class).slash("list")
+        Resources<RoleResource> wrapped = new Resources<>(roleResourceAssembler.toResources(roleTableService.getList()), linkTo(RoleResourceController.class).slash("list")
                 .withSelfRel());
         return wrapped;
     }
