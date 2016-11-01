@@ -1,0 +1,69 @@
+{
+  "roleList":{
+    "thead": [{
+      "className": "td-id",
+      "title": "#",
+      "value": "serialNum",
+      "sort": "asc"
+    },
+      {
+        "title": "角色名",
+        "value": "authority"
+      },
+      {
+        "title": "等级",
+        "value": "level"
+      }],
+    "tfoot": [{
+      "className": "td-foot",
+      "colSpan": 3,
+      "title": "内部基础角色"
+    }]
+  },
+  "userList":{
+    "thead": [{
+      "className": "td-id",
+      "title": "#",
+      "value": "serialNum"
+    },
+      {
+        "title": "用户名",
+        "value": "username"
+      },
+      {
+        "title": "邮箱",
+        "value": "email"
+      },
+      {
+        "title": "电话",
+        "value": "phone"
+      },
+      {
+        "title": "已激活",
+        "value": "enabled"
+      },
+      {
+        "title": "有效期内",
+        "value": "accountNonExpired"
+      },
+      {
+        "title": "创建人",
+        "value": "createUser"
+      }],
+    "tfoot": [{
+      "className": "td-foot",
+      "colSpan": 7,
+      "title": "用户列表基础信息"
+    }]
+  },
+  "userListAdditionalFeature":{
+    "sortAvailable": true,
+    "pager": {
+      "show": true,
+      "rowSize": {
+        "show": true,
+        "currentSize": 10
+      }
+    }
+}
+}

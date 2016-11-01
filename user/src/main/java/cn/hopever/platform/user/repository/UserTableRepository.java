@@ -3,6 +3,7 @@ package cn.hopever.platform.user.repository;
 import cn.hopever.platform.user.domain.ClientTable;
 import cn.hopever.platform.user.domain.RoleTable;
 import cn.hopever.platform.user.domain.UserTable;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
@@ -15,6 +16,6 @@ import java.util.List;
 public interface UserTableRepository extends PagingAndSortingRepository<UserTable, Long> {
     public UserTable findOneByUsername(String username);
     public List<UserTable> findByUsernameLike(String username, Pageable pageable);
-    public List<UserTable> findByAuthoritiesInAndClientsIn(Collection<RoleTable> authorities, Collection<ClientTable> clients);
-    public List<UserTable> findByUsernameNot(String username);
+    public Page<UserTable> findByAuthoritiesInAndClientsIn(Collection<RoleTable> authorities, Collection<ClientTable> clients, Pageable pageable);
+    public Page<UserTable> findByUsernameNot(String username,Pageable pageable);
 }

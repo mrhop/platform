@@ -23,7 +23,7 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
  */
 @RestController
 @ExposesResourceFor(UserResource.class)
-@RequestMapping(value = "/user", produces = "application/json")
+@RequestMapping(value = "/hateoas/user", produces = "application/json")
 @CrossOrigin
 public class UserResourceController {
     Logger logger = LoggerFactory.getLogger(UserResourceController.class);
@@ -57,9 +57,9 @@ public class UserResourceController {
         String authority = ((OAuth2Authentication) principal).getAuthorities().iterator().next().getAuthority();
         List<UserResource> list = new ArrayList<>();
         if("ROLE_super_admin".equals(authority)){
-            list = userTableAssembler.toResourcesCustomized(userTableService.getListWithOutSelf(principal.getName()));
+            list = userTableAssembler.toResourcesCustomized(userTableService.getListWithOutSelf(principal.getName(),null));
         }else{
-            list = userTableAssembler.toResourcesCustomized(userTableService.getSubList(principal.getName()));
+            list = userTableAssembler.toResourcesCustomized(userTableService.getSubList(principal.getName(),null));
         }
         Resources<UserResource> wrapped = new Resources<UserResource>(list, linkTo(UserResourceController.class).slash("/list")
                 .withSelfRel());

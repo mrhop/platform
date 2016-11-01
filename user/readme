@@ -65,9 +65,26 @@ http://docs.spring.io/spring-hateoas/docs/0.20.0.RELEASE/reference/html/
 完事了之后
 然后leftmenu-->需要进行获取并格式化
 
-1.iconClass 需要一个iconClass moduletable
-2.package之后再次进行测试
-目前进行到此处！！！
+now doing！！！！！！
+1.给左侧模块tree一个redis缓存
+目前遇到序列化的问题
+https://gist.github.com/thomasdarimont/9a252f4d8d6914d8d559
+http://projects.spring.io/spring-data-redis/
+考虑这两个！！ done
+另外考虑redisreposity[这个暂时不考虑]
+
+2. 开始user接口的处理
+1.是否考虑使用客户端的数据格式
+2.坚定的表示，是，但是去除value部分
+3.那就需要在client内部处理完成数据结构，以及表结构【因为涉及权限，所以目的是给予其他操作的可行性】
+4.开始着手实施，客户端侧需要完善，统一将redux封装一下，并将action和数据结构进行更改【不使用value对应，多选使用[]，而不是，】
+5.先做客户端【table，chart】，数据结构完善，再做客户端后台
+
+
+2.等user接口完事后，开始客户端对接，然后考虑分页的实现，然后是其他模块，另外就是 in 对应manytomany的过程中的实现验证，如果不合适，则需要重新处理
+
+
+
 
 
 

@@ -18,7 +18,7 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
  */
 @RestController
 @ExposesResourceFor(RoleResource.class)
-@RequestMapping(value = "/role", produces = "application/json")
+@RequestMapping(value = "/hateoas/role", produces = "application/json")
 @CrossOrigin
 public class RoleResourceController {
     Logger logger = LoggerFactory.getLogger(RoleResourceController.class);

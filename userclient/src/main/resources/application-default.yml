@@ -14,3 +14,4 @@ config:
     user:
         personalinfo: http://localhost:9091/user/user
         userlist: http://localhost:9091/user/user/list
+        rolelist: http://localhost:9091/user/role/list

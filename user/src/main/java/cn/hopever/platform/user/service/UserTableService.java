@@ -1,6 +1,8 @@
 package cn.hopever.platform.user.service;
 
 import cn.hopever.platform.user.domain.UserTable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 /**
@@ -17,8 +19,7 @@ public interface UserTableService extends UserDetailsService {
 
     public Iterable<UserTable> getList();
 
-    public Iterable<UserTable> getListWithOutSelf(String username);
-
-    public Iterable<UserTable> getSubList(String username);
+    public Page<UserTable> getListWithOutSelf(String username,Pageable pageable);
+    public Page<UserTable> getSubList(String username, Pageable pageable);
 
 }

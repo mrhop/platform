@@ -58,3 +58,17 @@ http://www.cnblogs.com/edisonchou/p/4281978.html 【keepalive+lvs做负载和高
 ~~1 （后续需要处理）目前是user，将每个方法进行日志记录，所有都完成后，进行日志数据库接口的实现以及筛选tool的实现
 更改需要日志---一切都需要进行日志记录！！！！！！！！！！！！！！！并存储在table中~~~~~~？？？
 
+不考虑采用jsp的方式，而考虑采用手动修改contextpath的方式，不将html移植到nginx中因为涉及到cookie等的设置和判定，最主要的都是安全
+
+userclient部分在域名下保证好用，
+域名替换的过程中遇到了反向代理的cookie path问题 注意application-oauth2client.yml，application-util.yml 以及application-default.yml等的修改
+遇到了server_name的设置问题
+当使用proxy_pass的情况下，rewrite时一定要带上webapp name，如rewrite ^(?!/error/|/login|/index)(.*)\.html$ /userclient/index.html break;
+nginx禁止ip访问实现
+ufw 防火墙 来控制端口http://forum.ubuntu.org.cn/viewtopic.php?f=169&t=292611
+
+接下来继续功能性的实现！！
+
+user表部分--明天接着处理，更新用户基本信息等
+注意sortable的sort实现，考虑在创建时间处使用【此处需要加一个创建时间！！！】，filter在username和角色处进行过滤
+

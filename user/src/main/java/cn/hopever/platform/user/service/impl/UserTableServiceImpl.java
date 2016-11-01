@@ -8,6 +8,8 @@ import cn.hopever.platform.user.service.UserTableService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -61,15 +63,17 @@ public class UserTableServiceImpl implements UserTableService {
     }
 
     @Override
-    public Iterable<UserTable> getListWithOutSelf(String username) {
-        return userTableRepository.findByUsernameNot(username);
+    public Page<UserTable> getListWithOutSelf(String username,Pageable pageable) {
+        return userTableRepository.findByUsernameNot(username,pageable);
     }
 
     @Override
-    public Iterable<UserTable> getSubList(String username) {
+    public Page<UserTable> getSubList(String username, Pageable pageable) {
         UserTable ut = userTableRepository.findOneByUsername(username);
         List<RoleTable> list = new ArrayList<>();
         list.add(roleTableRepository.findOneByAuthority("ROLE_common_user"));
-        return userTableRepository.findByAuthoritiesInAndClientsIn(list, ut.getClients());
+        return userTableRepository.findByAuthoritiesInAndClientsIn(list, ut.getClients(),pageable);
     }
+
+
 }
