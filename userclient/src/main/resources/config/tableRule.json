@@ -1,11 +1,12 @@
 {
-  "roleList":{
-    "thead": [{
-      "className": "td-id",
-      "title": "#",
-      "value": "serialNum",
-      "sort": "asc"
-    },
+  "roleList": {
+    "thead": [
+      {
+        "className": "td-id",
+        "title": "#",
+        "value": "serialNum",
+        "sort": "asc"
+      },
       {
         "title": "角色名",
         "value": "authority"
@@ -13,22 +14,28 @@
       {
         "title": "等级",
         "value": "level"
-      }],
-    "tfoot": [{
-      "className": "td-foot",
-      "colSpan": 3,
-      "title": "内部基础角色"
-    }]
+      }
+    ],
+    "tfoot": [
+      {
+        "className": "td-foot",
+        "colSpan": 3,
+        "title": "内部基础角色"
+      }
+    ]
   },
-  "userList":{
-    "thead": [{
-      "className": "td-id",
-      "title": "#",
-      "value": "serialNum"
-    },
+  "userList": {
+    "thead": [
+      {
+        "className": "td-id",
+        "title": "#",
+        "value": "serialNum"
+      },
       {
         "title": "用户名",
-        "value": "username"
+        "value": "username",
+        "filter": true,
+        "editType":"text"
       },
       {
         "title": "邮箱",
@@ -49,15 +56,24 @@
       {
         "title": "创建人",
         "value": "createUser"
-      }],
-    "tfoot": [{
-      "className": "td-foot",
-      "colSpan": 7,
-      "title": "用户列表基础信息"
-    }]
+      },
+      {
+        "title": "创建时间",
+        "value": "createdDate",
+        "sortable": "true"
+      }
+    ],
+    "tfoot": [
+      {
+        "className": "td-foot",
+        "colSpan": 8,
+        "title": "用户列表基础信息"
+      }
+    ]
   },
-  "userListAdditionalFeature":{
+  "userListAdditionalFeature": {
     "sortAvailable": true,
+    "filterAvailable": true,
     "pager": {
       "show": true,
       "rowSize": {
@@ -65,5 +81,5 @@
         "currentSize": 10
       }
     }
-}
+  }
 }

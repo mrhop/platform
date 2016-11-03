@@ -70,5 +70,5 @@ ufw 防火墙 来控制端口http://forum.ubuntu.org.cn/viewtopic.php?f=169&t=29
 接下来继续功能性的实现！！
 
 user表部分--明天接着处理，更新用户基本信息等
-注意sortable的sort实现，考虑在创建时间处使用【此处需要加一个创建时间！！！】，filter在username和角色处进行过滤
+注意sortable的sort实现，考虑在创建时间处使用【此处需要加一个创建时间！！！】，filter在username 进行过滤
 

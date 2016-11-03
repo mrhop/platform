@@ -59,6 +59,9 @@ public class UserTable implements UserDetails {
     @JoinColumn(name = "create_user", nullable = true)
     private UserTable createUser;
 
+    @Column(name = "created_date", nullable = true)
+    private Date createdDate;
+
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "platform_user_user_role", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private List<RoleTable> authorities;

@@ -57,9 +57,9 @@ public class UserResourceController {
         String authority = ((OAuth2Authentication) principal).getAuthorities().iterator().next().getAuthority();
         List<UserResource> list = new ArrayList<>();
         if("ROLE_super_admin".equals(authority)){
-            list = userTableAssembler.toResourcesCustomized(userTableService.getListWithOutSelf(principal.getName(),null));
+            list = userTableAssembler.toResourcesCustomized(userTableService.getListWithOutSelf(principal.getName(),null,null));
         }else{
-            list = userTableAssembler.toResourcesCustomized(userTableService.getSubList(principal.getName(),null));
+            list = userTableAssembler.toResourcesCustomized(userTableService.getSubList(principal.getName(),null,null));
         }
         Resources<UserResource> wrapped = new Resources<UserResource>(list, linkTo(UserResourceController.class).slash("/list")
                 .withSelfRel());

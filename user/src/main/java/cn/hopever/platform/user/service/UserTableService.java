@@ -5,6 +5,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
+import java.util.Map;
+
 /**
  * Created by Donghui Huo on 2016/8/30.
  */
@@ -19,7 +21,8 @@ public interface UserTableService extends UserDetailsService {
 
     public Iterable<UserTable> getList();
 
-    public Page<UserTable> getListWithOutSelf(String username,Pageable pageable);
-    public Page<UserTable> getSubList(String username, Pageable pageable);
+    public Page<UserTable> getListWithOutSelf(String username, Pageable pageable, Map<String, Object> filterMap);
+
+    public Page<UserTable> getSubList(String username, Pageable pageable, Map<String, Object> filterMap);
 
 }

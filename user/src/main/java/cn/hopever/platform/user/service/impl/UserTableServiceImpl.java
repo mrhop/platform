@@ -2,6 +2,7 @@ package cn.hopever.platform.user.service.impl;
 
 import cn.hopever.platform.user.domain.RoleTable;
 import cn.hopever.platform.user.domain.UserTable;
+import cn.hopever.platform.user.repository.CustomUserTableRepository;
 import cn.hopever.platform.user.repository.RoleTableRepository;
 import cn.hopever.platform.user.repository.UserTableRepository;
 import cn.hopever.platform.user.service.UserTableService;
@@ -18,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Donghui Huo on 2016/8/30.
@@ -32,6 +34,8 @@ public class UserTableServiceImpl implements UserTableService {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private UserTableRepository userTableRepository;
+    @Autowired
+    private CustomUserTableRepository customUserTableRepository;
 
     @Autowired
     private RoleTableRepository roleTableRepository;
@@ -63,16 +67,25 @@ public class UserTableServiceImpl implements UserTableService {
     }
 
     @Override
-    public Page<UserTable> getListWithOutSelf(String username,Pageable pageable) {
-        return userTableRepository.findByUsernameNot(username,pageable);
+    public Page<UserTable> getListWithOutSelf(String username, Pageable pageable, Map<String, Object> filterMap) {
+        if (filterMap == null) {
+            return userTableRepository.findByUsernameNot(username, pageable);
+        } else {
+            return customUserTableRepository.findByUsernameNotAndFilters(username, filterMap, pageable);
+        }
     }
 
     @Override
-    public Page<UserTable> getSubList(String username, Pageable pageable) {
+    public Page<UserTable> getSubList(String username, Pageable pageable, Map<String, Object> filterMap) {
         UserTable ut = userTableRepository.findOneByUsername(username);
         List<RoleTable> list = new ArrayList<>();
+        list.add(roleTableRepository.findOneByAuthority("ROLE_admin"));
         list.add(roleTableRepository.findOneByAuthority("ROLE_common_user"));
-        return userTableRepository.findByAuthoritiesInAndClientsIn(list, ut.getClients(),pageable);
+        if (filterMap == null) {
+            return userTableRepository.findByCreateUserAndAuthoritiesInAndClientsIn(ut, list, ut.getClients(), pageable);
+        } else {
+            return customUserTableRepository.findByCreateUserAndAuthoritiesInAndClientsInAndFilters(ut, list, ut.getClients(), filterMap, pageable);
+        }
     }
 
 
