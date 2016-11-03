@@ -35,7 +35,7 @@
         "title": "用户名",
         "value": "username",
         "filter": true,
-        "editType":"text"
+        "editType": "text"
       },
       {
         "title": "邮箱",
@@ -74,6 +74,10 @@
   "userListAdditionalFeature": {
     "sortAvailable": true,
     "filterAvailable": true,
+    "editable": true,
+    "deletable": true,
+    "addable": true,
+    "extraClass": "hover",
     "pager": {
       "show": true,
       "rowSize": {

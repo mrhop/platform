@@ -88,5 +88,9 @@ public class UserTableServiceImpl implements UserTableService {
         }
     }
 
-
+    @Override
+    public void delete(Long id) {
+        this.userTableRepository.updateCreateUser(null,this.userTableRepository.findOne(id));
+        this.userTableRepository.delete(id);
+    }
 }

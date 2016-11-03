@@ -25,4 +25,7 @@ public interface UserTableService extends UserDetailsService {
 
     public Page<UserTable> getSubList(String username, Pageable pageable, Map<String, Object> filterMap);
 
+
+    public void delete(Long id);
+
 }

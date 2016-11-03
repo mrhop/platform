@@ -5,6 +5,8 @@ import cn.hopever.platform.user.domain.RoleTable;
 import cn.hopever.platform.user.domain.UserTable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 import java.util.Collection;
@@ -21,4 +23,8 @@ public interface UserTableRepository extends PagingAndSortingRepository<UserTabl
 
     public Page<UserTable> findByCreateUserAndAuthoritiesInAndClientsIn(UserTable userTable,Collection<RoleTable> authorities, Collection<ClientTable> clients, Pageable pageable);
 
+
+    @Modifying
+    @Query("update UserTable u set u.createUser = ?1 where u.createUser = ?2")
+    int updateCreateUser(UserTable userTable, UserTable userTablePrev);
 }

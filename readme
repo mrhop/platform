@@ -72,3 +72,11 @@ ufw 防火墙 来控制端口http://forum.ubuntu.org.cn/viewtopic.php?f=169&t=29
 user表部分--明天接着处理，更新用户基本信息等
 注意sortable的sort实现，考虑在创建时间处使用【此处需要加一个创建时间！！！】，filter在username 进行过滤
 
+在table中主要依靠
+addable
+editable
+deletable
+来确定是否有这几个权限，所以rule应是可变的，所以当读取到rule的json后要结合module的角色和用户结合来判断
+
+明天 新增，修改结合form的完成
+然后footer右侧加上总记录数

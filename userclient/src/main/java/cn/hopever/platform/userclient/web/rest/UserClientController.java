@@ -34,6 +34,36 @@ public class UserClientController {
         return commonMethods.getResource(request);
     }
 
+    @RequestMapping(value = "/user/delete", method = {RequestMethod.DELETE})
+    public CommonResult deleteUser(HttpServletRequest request) throws Exception {
+        request.setAttribute("resourceUrl", baseConfig.getDelete()+"?id="+request.getParameter("key"));
+        return commonMethods.getResource(request);
+    }
+
+    @RequestMapping(value = "/user/info", method = {RequestMethod.GET})
+    public CommonResult getUser(HttpServletRequest request) throws Exception {
+        request.setAttribute("resourceUrl", baseConfig.getPersonalinfo());
+        return commonMethods.getResource(request);
+    }
+
+    @RequestMapping(value = "/user/update", method = {RequestMethod.POST})
+    public CommonResult updateUser(HttpServletRequest request,@RequestBody JsonNode body) throws Exception {
+        request.setAttribute("resourceUrl", baseConfig.getPersonalinfo());
+        return commonMethods.postResource(body,request);
+    }
+
+    @RequestMapping(value = "/user/add", method = {RequestMethod.POST})
+    public CommonResult addUser(HttpServletRequest request,@RequestBody JsonNode body) throws Exception {
+        request.setAttribute("resourceUrl", baseConfig.getPersonalinfo());
+        return commonMethods.postResource(body,request);
+    }
+
+    @RequestMapping(value = "/user/save", method = {RequestMethod.POST})
+    public CommonResult saveUser(HttpServletRequest request,@RequestBody JsonNode body) throws Exception {
+        request.setAttribute("resourceUrl", baseConfig.getPersonalinfo());
+        return commonMethods.postResource(body,request);
+    }
+
     @RequestMapping(value = "/user/list", method = {RequestMethod.GET, RequestMethod.POST})
     public CommonResult getUserList(HttpServletRequest request, @RequestBody JsonNode body) throws Exception {
         request.setAttribute("resourceUrl", baseConfig.getUserlist());

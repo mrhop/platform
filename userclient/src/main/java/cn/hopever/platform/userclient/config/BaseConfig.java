@@ -25,6 +25,7 @@ public class BaseConfig {
     private String personalinfo;
     private String userlist;
     private String rolelist;
+    private String delete;
     private Map<String,Object> mapRules;
 
     public BaseConfig(){
