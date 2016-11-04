@@ -10,6 +10,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -36,7 +37,16 @@ public class RoleTableServiceImpl implements RoleTableService {
 
     @Override
     public List<RoleTable> getList(String authority) {
-        return null;
+        List<RoleTable> listReturn = new ArrayList<>();
+        if( authority.equals("ROLE_admin")){
+            listReturn.add(roleTableRepository.findOneByAuthority("ROLE_admin"));
+            listReturn.add(roleTableRepository.findOneByAuthority("ROLE_common_user"));
+        }else{
+            listReturn.add(roleTableRepository.findOneByAuthority("ROLE_super_admin"));
+            listReturn.add(roleTableRepository.findOneByAuthority("ROLE_admin"));
+            listReturn.add(roleTableRepository.findOneByAuthority("ROLE_common_user"));
+        }
+        return listReturn;
     }
 
     @Override

@@ -80,3 +80,6 @@ deletable
 
 明天 新增，修改结合form的完成
 然后footer右侧加上总记录数
+
+下午开始更新页面的实现和更新的实现，
+然后更新后要返回list页面，如何在调用后手动route是一个问题，cancel直接返回list

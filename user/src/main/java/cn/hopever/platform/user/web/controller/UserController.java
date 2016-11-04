@@ -2,6 +2,7 @@ package cn.hopever.platform.user.web.controller;
 
 import cn.hopever.platform.user.domain.UserTable;
 import cn.hopever.platform.user.service.UserTableService;
+import cn.hopever.platform.user.web.hateoas.UserResourceAssembler;
 import cn.hopever.platform.utils.json.JacksonUtil;
 import cn.hopever.platform.utils.tools.DateFormat;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -31,6 +32,9 @@ public class UserController {
     @Autowired
     private UserTableService userTableService;
 
+    @Autowired
+    private UserResourceAssembler userTableAssembler;
+
 
     @PreAuthorize("#oauth2.hasScope('internal_client') and ( hasRole('ROLE_super_admin') or hasRole('ROLE_admin'))")
     @RequestMapping(value = "/list", method = {RequestMethod.POST})
@@ -47,7 +51,7 @@ public class UserController {
         }
         Map<String, Object> filterMap = null;
         if (body.get("filters") != null && !body.get("filters").isNull()) {
-            filterMap = JacksonUtil.mapper.convertValue(body.get("filters"),Map.class);
+            filterMap = JacksonUtil.mapper.convertValue(body.get("filters"), Map.class);
         }
         if ("ROLE_super_admin".equals(authority)) {
             list = userTableService.getListWithOutSelf(principal.getName(), pageRequest, filterMap);
@@ -75,11 +79,11 @@ public class UserController {
             map.put("totalCount", list.getTotalElements());
             map.put("rowSize", body.get("rowSize").asInt());
             map.put("currentPage", list.getNumber());
-        }else{
+        } else {
             map.put("data", null);
             map.put("totalCount", 0);
-            map.put("rowSize",body.get("rowSize").asInt());
-            map.put("currentPage",0);
+            map.put("rowSize", body.get("rowSize").asInt());
+            map.put("currentPage", 0);
         }
         return map;
     }
@@ -87,6 +91,14 @@ public class UserController {
     @PreAuthorize("#oauth2.hasScope('internal_client') and ( hasRole('ROLE_super_admin') or hasRole('ROLE_admin'))")
     @RequestMapping(value = "/delete", method = {RequestMethod.GET})
     public void delete(@RequestParam Long id) {
-         this.userTableService.delete(id);
+        this.userTableService.delete(id);
+    }
+
+    @PreAuthorize("#oauth2.hasScope('internal_client') and ( hasRole('ROLE_super_admin') or hasRole('ROLE_admin'))")
+    @RequestMapping(value = "/info", method = {RequestMethod.GET})
+    public Map info(@RequestParam Long id) {
+        //返回user是无法解析的，要使用对象解析为map 的形式
+        UserTable ut = this.userTableService.get(id);
+        return JacksonUtil.mapper.convertValue(userTableAssembler.toResource(ut), Map.class);
     }
 }

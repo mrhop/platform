@@ -6,10 +6,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -40,6 +42,25 @@ public class RoleController {
                 listTmp.add(rt.getAuthority());
                 listTmp.add(rt.getLevel());
                 mapTemp.put("value", listTmp);
+                listReturn.add(mapTemp);
+            }
+        }
+        return listReturn;
+    }
+
+    @PreAuthorize("#oauth2.hasScope('user_admin_client') and ( hasRole('ROLE_super_admin') or hasRole('ROLE_admin'))")
+    @RequestMapping(value = "/options", method = RequestMethod.GET)
+    public List getOptionsList(Principal principal) {
+        String authority = ((OAuth2Authentication) principal).getAuthorities().iterator().next().getAuthority();
+
+        List<HashMap<String, Object>> listReturn = null;
+        Iterable<RoleTable> list = roleTableService.getList(authority);
+        if (list.iterator().hasNext()) {
+            listReturn = new ArrayList<>();
+            for (RoleTable rt : list) {
+                HashMap<String, Object> mapTemp = new HashMap<>();
+                mapTemp.put("value", rt.getId());
+                mapTemp.put("label", rt.getName());
                 listReturn.add(mapTemp);
             }
         }

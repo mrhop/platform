@@ -36,6 +36,9 @@ public class ClientTable implements ClientDetails {
     @Column(name = "client_id", nullable = false, length = 50,unique = true)
     private String clientId;
 
+    @Column(name = "client_name", nullable = false)
+    private String clientName;
+
     @Column(name = "client_secret", nullable = false, length = 120)
     private String clientSecret;
 

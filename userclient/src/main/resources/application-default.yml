@@ -16,3 +16,5 @@ config:
         userlist: http://localhost:9091/user/user/list
         rolelist: http://localhost:9091/user/role/list
         delete: http://localhost:9091/user/user/delete
+        info: http://localhost:9091/user/user/info
+        roleoptions: http://localhost:9091/user/role/options

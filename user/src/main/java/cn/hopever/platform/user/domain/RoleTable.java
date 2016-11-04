@@ -25,6 +25,9 @@ public class RoleTable implements GrantedAuthority {
     @Column(name = "authority", nullable = false, length = 50, unique = true)
     private String authority;
 
+    @Column(name = "name", nullable = false, length = 50, unique = true)
+    private String name;
+
     @Column(name = "level", nullable = false)
     private short level;
 

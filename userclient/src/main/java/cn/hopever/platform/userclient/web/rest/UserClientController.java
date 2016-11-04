@@ -11,6 +11,8 @@ import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -36,32 +38,73 @@ public class UserClientController {
 
     @RequestMapping(value = "/user/delete", method = {RequestMethod.DELETE})
     public CommonResult deleteUser(HttpServletRequest request) throws Exception {
-        request.setAttribute("resourceUrl", baseConfig.getDelete()+"?id="+request.getParameter("key"));
+        request.setAttribute("resourceUrl", baseConfig.getDelete() + "?id=" + request.getParameter("key"));
         return commonMethods.getResource(request);
     }
 
+    //do user get by id
     @RequestMapping(value = "/user/info", method = {RequestMethod.GET})
     public CommonResult getUser(HttpServletRequest request) throws Exception {
-        request.setAttribute("resourceUrl", baseConfig.getPersonalinfo());
-        return commonMethods.getResource(request);
+        request.setAttribute("resourceUrl", baseConfig.getInfo() + "?id=" + request.getParameter("key"));
+        CommonResult c = commonMethods.getResource(request);
+        HashMap<String, Object> rule = (HashMap) ((Map) baseConfig.getMapRules().get("formRules")).get("user");
+        List<Map> list = (List<Map>) rule.get("structure");
+
+        if (CommonResultStatus.SUCCESS.toString().equals(c.getStatus())) {
+            if (c.getResponseData() != null) {
+                if (c.getResponseData().get("data") != null) {
+                    Map<String, Object> mapData = (Map) c.getResponseData().get("data");
+                    // List<Map> listReturn = new ArrayList<>();
+                    for (Map map : list) {
+                        if (mapData.get(map.get("name")) != null) {
+                            map.put("defaultValue", mapData.get(map.get("name")));
+                            // listReturn.add(map);
+                        }
+                        if("id".equals(map.get("name"))){
+                            map.put("defaultValue", mapData.get("internalId"));
+                        }
+                        if("authorities".equals(map.get("name"))){
+                            map.put("defaultValue", (((List<Map>)mapData.get("authorities")).get(0).get("internalId")));
+                        }
+                    }
+
+                }
+            }
+        }
+        for (Map map : list) {
+            if ("authorities".equals(map.get("name"))) {
+                request.setAttribute("resourceUrl", baseConfig.getRoleoptions());
+                CommonResult c1 = commonMethods.getResource(request);
+                if (CommonResultStatus.SUCCESS.toString().equals(c1.getStatus())) {
+                    map.put("items", c1.getResponseData().get("data"));
+                }else{
+                    map.put("items", new ArrayList());
+                }
+                // listReturn.add(map);
+                break;
+            }
+        }
+
+        c.setResponseData(rule);
+        return c;
     }
 
     @RequestMapping(value = "/user/update", method = {RequestMethod.POST})
-    public CommonResult updateUser(HttpServletRequest request,@RequestBody JsonNode body) throws Exception {
+    public CommonResult updateUser(HttpServletRequest request, @RequestBody JsonNode body) throws Exception {
         request.setAttribute("resourceUrl", baseConfig.getPersonalinfo());
-        return commonMethods.postResource(body,request);
+        return commonMethods.postResource(body, request);
     }
 
     @RequestMapping(value = "/user/add", method = {RequestMethod.POST})
-    public CommonResult addUser(HttpServletRequest request,@RequestBody JsonNode body) throws Exception {
+    public CommonResult addUser(HttpServletRequest request, @RequestBody JsonNode body) throws Exception {
         request.setAttribute("resourceUrl", baseConfig.getPersonalinfo());
-        return commonMethods.postResource(body,request);
+        return commonMethods.postResource(body, request);
     }
 
     @RequestMapping(value = "/user/save", method = {RequestMethod.POST})
-    public CommonResult saveUser(HttpServletRequest request,@RequestBody JsonNode body) throws Exception {
+    public CommonResult saveUser(HttpServletRequest request, @RequestBody JsonNode body) throws Exception {
         request.setAttribute("resourceUrl", baseConfig.getPersonalinfo());
-        return commonMethods.postResource(body,request);
+        return commonMethods.postResource(body, request);
     }
 
     @RequestMapping(value = "/user/list", method = {RequestMethod.GET, RequestMethod.POST})

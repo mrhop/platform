@@ -26,6 +26,8 @@ public class BaseConfig {
     private String userlist;
     private String rolelist;
     private String delete;
+    private String info;
+    private String roleoptions;
     private Map<String,Object> mapRules;
 
     public BaseConfig(){
@@ -38,5 +40,13 @@ public class BaseConfig {
             logger.warn("read file error:"+e);
         }
         mapRules.put("tableRules",map==null?new HashMap<>():map);
+        File fileForm = new File(getClass().getClassLoader().getResource("config/formRule.json").getFile());
+        Map<String,Object> mapForm = null;
+        try {
+            mapForm = JacksonUtil.mapper.readValue(fileForm,Map.class);
+        } catch (IOException e) {
+            logger.warn("read file error:"+e);
+        }
+        mapRules.put("formRules",mapForm==null?new HashMap<>():mapForm);
     }
 }

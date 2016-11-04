@@ -28,4 +28,6 @@ public interface UserTableService extends UserDetailsService {
 
     public void delete(Long id);
 
+    public UserTable get(Long id);
+
 }
