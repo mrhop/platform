@@ -1,7 +1,10 @@
 package cn.hopever.platform.oauth2client.web.rest;
 
+import cn.hopever.platform.oauth2client.config.CommonProperties;
 import cn.hopever.platform.oauth2client.config.Oauth2Properties;
 import cn.hopever.platform.oauth2client.web.common.CommonMethods;
+import cn.hopever.platform.oauth2client.web.common.ExposedResourceBundleMessageSource;
+import cn.hopever.platform.oauth2client.web.common.LocaleMessageSource;
 import cn.hopever.platform.utils.security.AesUtil;
 import cn.hopever.platform.utils.security.DesECBUtil;
 import cn.hopever.platform.utils.web.CommonResult;
@@ -16,10 +19,13 @@ import org.springframework.security.oauth2.client.token.grant.password.ResourceO
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Donghui Huo on 2016/9/6.
@@ -41,7 +47,16 @@ public class Oauth2ClientController {
     private Oauth2Properties oauth2Properties;
 
     @Autowired
+    private CommonProperties commonProperties;
+
+    @Autowired
     private OAuth2ClientContext oauth2ClientContext;
+
+    @Autowired
+    private ExposedResourceBundleMessageSource commonResources;
+
+    @Resource
+    private LocaleMessageSource localeMessageSource;
 
     @Autowired
     @Qualifier("authorizationCodeRestTemplate")
@@ -59,7 +74,7 @@ public class Oauth2ClientController {
     private CommonMethods commonMethods;
 
     @RequestMapping(value = "/gettokenbycode", method = RequestMethod.GET)
-    public CommonResult getTokenByCode(HttpServletResponse response) {
+    public CommonResult getTokenByCode(HttpServletRequest request,HttpServletResponse response) {
         CommonResult c = new CommonResult();
         try {
             OAuth2AccessToken oa = authorizationCodeRestTemplate.getAccessToken();
@@ -79,6 +94,40 @@ public class Oauth2ClientController {
         return c;
     }
 
+    @RequestMapping(value = "/initlogin", method = RequestMethod.GET)
+    public CommonResult initLogin(HttpServletRequest request) {
+        CommonResult c = new CommonResult();
+
+        if (request.getSession().getAttribute("clientAccessToken") != null) {
+            //说明已经进行过client的登录，否则进行登录
+            HashMap<String, Object> rule = (HashMap) ((Map) commonProperties.getMapRules().get("formRules")).get("login");
+            List<Map> list = (List<Map>) rule.get("structure");
+            for (Map map : list) {
+                if (map.get("label") != null && map.get("label") instanceof Map) {
+                    map.put("label", localeMessageSource.getMessage(((Map) map.get("label")).get("key").toString(), request));
+                }
+
+                if (map.get("placeholder") != null && map.get("placeholder") instanceof Map) {
+                    map.put("placeholder", localeMessageSource.getMessage(((Map) map.get("placeholder")).get("key").toString(), request));
+                }
+
+                if (map.get("validateRules") != null) {
+                    for (Map mapValidate : (List<Map>) map.get("validateRules")) {
+                        if (mapValidate.get("errorMsg") != null && mapValidate.get("errorMsg") instanceof Map) {
+                            mapValidate.put("errorMsg", localeMessageSource.getMessage(((Map) mapValidate.get("errorMsg")).get("key").toString(), request));
+                        }
+                    }
+                }
+            }
+            c.setResponseData(rule);
+            c.setStatus(CommonResultStatus.SUCCESS.toString());
+        } else {
+            c.setStatus(CommonResultStatus.SERVERFAILURE.toString());
+        }
+        return c;
+    }
+
+
     @RequestMapping(value = "/gettokenbyclient", method = RequestMethod.GET)
     public CommonResult getTokenByClient(HttpServletRequest request) {
         CommonResult c = new CommonResult();
@@ -90,6 +139,7 @@ public class Oauth2ClientController {
             c.setStatus(CommonResultStatus.SUCCESS.toString());
             request.getSession().setAttribute("clientAccessToken", oa.getValue());
         }
+        c.setResponseData(commonResources.getKeyValues("common/messages",request.getLocale()));
         return c;
     }
 

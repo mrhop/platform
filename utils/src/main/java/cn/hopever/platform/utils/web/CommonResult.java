@@ -4,6 +4,7 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Donghui Huo on 2016/9/2.
@@ -35,7 +36,7 @@ public class CommonResult implements Serializable {
 
     private String message;
 
-    private HashMap<String,Object> responseData;
+    private Map<String,Object> responseData;
 
 }
 

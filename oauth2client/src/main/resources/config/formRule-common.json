@@ -1,0 +1,47 @@
+{
+  "login": {
+    "structure": [
+      {
+        "name": "username",
+        "label": {
+          "key": "common.auth.user"
+        },
+        "type": "text",
+        "placeholder": {
+          "key": "common.auth.user.placeholder"
+        },
+        "required": true,
+        "validateRules": [
+          {
+            "name": "REQUIRED_VALIDATE",
+            "errorMsg": {
+              "key": "common.auth.user.errorMsg"
+            }
+          }
+        ]
+      },
+      {
+        "name": "password",
+        "label": {
+          "key": "common.auth.password"
+        },
+        "type": "password",
+        "placeholder": {
+          "key": "common.auth.password"
+        },
+        "required": true,
+        "validateRules": [
+          {
+            "name": "REQUIRED_VALIDATE",
+            "errorMsg": {
+              "key": "common.auth.password.errorMsg"
+            }
+          }
+        ]
+      }
+    ],
+    "submit": {
+      "label": "登录"
+    }
+  }
+}
