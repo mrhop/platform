@@ -139,7 +139,6 @@ public class Oauth2ClientController {
             c.setStatus(CommonResultStatus.SUCCESS.toString());
             request.getSession().setAttribute("clientAccessToken", oa.getValue());
         }
-        c.setResponseData(commonResources.getKeyValues("common/messages",request.getLocale()));
         return c;
     }
 

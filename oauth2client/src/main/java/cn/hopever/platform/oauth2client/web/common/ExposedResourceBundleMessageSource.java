@@ -17,7 +17,7 @@ public class ExposedResourceBundleMessageSource extends ResourceBundleMessageSou
 
     private static final Resource[] NO_RESOURCES = {};
 
-    private String[] basename = {"messages","common/messages"};
+    private String[] basename = {"messages","common/messages/index","common/messages/login","common/messages/error"};
 
     private Charset encoding = Charset.forName("UTF-8");
 

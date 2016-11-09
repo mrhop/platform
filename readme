@@ -83,3 +83,11 @@ deletable
 
 下午开始更新页面的实现和更新的实现，
 然后更新后要返回list页面，如何在调用后手动route是一个问题，cancel直接返回list
+
+1. form reset不好用的问题
+2. form中元素click的触发情况
+5.注意navigate的实现的处理，进行不同的语言导航，并在页面链接处做修改（?lang=***），同时也需要message.properties
+目前做1、2！！！
+最后做5
+
+

@@ -1,6 +1,7 @@
 package cn.hopever.platform.oauth2client.config;
 
 import cn.hopever.platform.oauth2client.web.filter.CommonFilter;
+import cn.hopever.platform.oauth2client.web.interceptor.CommonInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -8,7 +9,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
-import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
 import java.util.Locale;
@@ -22,6 +22,9 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
     @Autowired
     private CommonFilter commonFilter;
 
+    @Autowired
+    private CommonInterceptor commonInterceptor;
+
     @Bean
     public FilterRegistrationBean someFilterRegistration() {
         FilterRegistrationBean registration = new FilterRegistrationBean();
@@ -32,7 +35,6 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         return registration;
     }
 
-
     @Bean
     public LocaleResolver localeResolver() {
         SessionLocaleResolver slr = new SessionLocaleResolver();
@@ -40,16 +42,10 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         return slr;
     }
 
-    @Bean
-    public LocaleChangeInterceptor localeChangeInterceptor() {
-        LocaleChangeInterceptor lci = new LocaleChangeInterceptor();
-        lci.setParamName("lang");
-        return lci;
-    }
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(localeChangeInterceptor());
+        registry.addInterceptor(commonInterceptor).addPathPatterns("/", "/*.html");
     }
 
 }

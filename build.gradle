@@ -61,7 +61,9 @@ subprojects {
             exclude(group: 'org.apache.tomcat.embed')
         }
         provided(group: 'org.springframework.boot', name: 'spring-boot-starter-tomcat')
-
+        provided('org.eclipse.jdt.core.compiler:ecj:4.5.1')
+        provided('org.apache.tomcat.embed:tomcat-embed-jasper:8.5.4')
+        compile('javax.servlet:jstl:1.2')
 
         //REST
         compile ('org.springframework.boot:spring-boot-starter-hateoas:'+springBootVersion)
