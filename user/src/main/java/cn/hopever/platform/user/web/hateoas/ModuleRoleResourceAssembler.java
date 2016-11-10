@@ -1,7 +1,9 @@
 package cn.hopever.platform.user.web.hateoas;
 
+import cn.hopever.platform.user.domain.ClientTable;
 import cn.hopever.platform.user.domain.ModuleRoleTable;
 import cn.hopever.platform.user.domain.ModuleTable;
+import cn.hopever.platform.user.resources.ClientResource;
 import cn.hopever.platform.user.resources.ModuleResource;
 import cn.hopever.platform.user.resources.ModuleRoleResource;
 import org.modelmapper.ModelMapper;
@@ -32,6 +34,7 @@ public class ModuleRoleResourceAssembler extends ResourceAssemblerSupport<Module
             protected void configure() {
                 skip().setModules(null);
                 skip().setUsers(null);
+                skip().setClient(null);
             }
         };
         modelMapper.addMappings(map);
@@ -67,6 +70,13 @@ public class ModuleRoleResourceAssembler extends ResourceAssemblerSupport<Module
             moduleRoleResource = modelMapper.map(moduleRoleTable,ModuleRoleResource.class);
             moduleRoleResource.setInternalId(moduleRoleTable.getId());
             moduleRoleResource.add(entityLinks.linkFor(ModuleRoleResource.class).slash(moduleRoleTable.getId()).withSelfRel());
+        }
+        if (moduleRoleTable.getClient() != null) {
+            ClientTable ct = moduleRoleTable.getClient();
+            ClientResource clientResource = new ClientResource();
+            clientResource.setInternalId(ct.getId());
+            clientResource.setClientId(ct.getClientId());
+            moduleRoleResource.setClient(clientResource);
         }
         return moduleRoleResource;
     }

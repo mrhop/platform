@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @ExposesResourceFor(ClientResource.class)
-@RequestMapping(value = "/client", produces = "application/json")
+@RequestMapping(value = "/hateoas/client", produces = "application/json")
 @CrossOrigin
 public class ClientResourceController {
     Logger logger = LoggerFactory.getLogger(ClientResourceController.class);

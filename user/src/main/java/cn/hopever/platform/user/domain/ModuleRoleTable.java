@@ -15,7 +15,7 @@ import java.util.List;
 @Table(name = "platform_user_module_role")
 @Data
 @EqualsAndHashCode(of={"id"})
-@ToString(exclude = {"modules", "users"})
+@ToString(exclude = {"modules", "users","client"})
 public class ModuleRoleTable implements GrantedAuthority {
 
     @Id
@@ -33,5 +33,12 @@ public class ModuleRoleTable implements GrantedAuthority {
 
     @ManyToMany(mappedBy = "modulesAuthorities")
     private List<UserTable> users;
+
+    @ManyToOne
+    @JoinColumn(name = "client_id", nullable = false)
+    private ClientTable client;
+
+    @Column(name = "name", nullable = false, length = 50, unique = true)
+    private String name;
 
 }

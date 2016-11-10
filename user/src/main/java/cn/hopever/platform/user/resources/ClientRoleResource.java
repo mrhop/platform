@@ -21,6 +21,8 @@ public class ClientRoleResource extends ResourceSupport {
     @NotNull
     private String authority;
 
+    private String name;
+
     private short level;
 
     private List<ClientResource> clients;

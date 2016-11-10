@@ -1,86 +1,135 @@
 {
   "user": {
-    "structure": [{
-      "name": "username",
-      "label": "账号",
-      "type": "text",
-      "placeholder": "账号",
-      "required": true,
-      "validateRules": [{"name": "custom_validate", "validateRegex": "^\\w{4,10}$", "errorMsg": "只能是数字、字母以及下划线，长度在4-10之间"}]
-    }, {
-      "name": "name",
-      "label": "姓名",
-      "type": "text",
-      "placeholder": "姓名",
-      "required": true,
-      "validateRules": [{"name": "custom_validate", "validateRegex": "^.{2,30}$", "errorMsg": "长度在2-30之间"}]
-    }, {
-      "name": "password",
-      "label": "密码",
-      "type": "password",
-      "required": true,
-      "validateRules": [{
-        "name": "custom_validate",
-        "validateRegex": "^(?![a-zA-z]+$)(?!\\d+$)(?![!@#$%^&*]+$)[a-zA-Z\\d!@#$%^&*]{6,15}$",
-        "errorMsg": "至少包含数字，字母以及特殊字符【!@#$%^&*】中任意两种,并在6-15字符之间"
-      }]
-    },{
-      "name": "email",
-      "label": "邮箱",
-      "type": "text",
-      "placeholder": "邮箱",
-      "validateRules": [{
-        "name": "custom_validate",
-        "validateRegex": "^([\\w-]+(\\.[\\w-]+)*@[\\w-]+(\\.[\\w-]+)+)$",
-        "errorMsg": "只能为电子邮件"
-      }]
-    },{
-      "name": "phone",
-      "label": "电话",
-      "type": "text",
-      "placeholder": "电话",
-      "validateRules": [{
-        "name": "custom_validate",
-        "validateRegex": "((\\d{11})|^((\\d{7,8})|(\\d{4}|\\d{3})-(\\d{7,8})|(\\d{4}|\\d{3})-(\\d{7,8})-(\\d{4}|\\d{3}|\\d{2}|\\d{1})|(\\d{7,8})-(\\d{4}|\\d{3}|\\d{2}|\\d{1}))$)",
-        "errorMsg": "只能为固话或者手机"
-      }]
-    }, {
-      "name": "limitedDate",
-      "defaultValue": "2011-11-11",
-      "label": "过期时间",
-      "type": "date",
-      "placeholder": "账号过期时间",
-      "dateFormat": "YYYY-MM-DD"
-    }, {
-      "name": "authorities",
-      "label": "用户权限",
-      "type": "radio",
-      "required": true,
-      "dataType": "number",
-      "validateRules": [{"name": "REQUIRED_VALIDATE", "errorMsg": "不能为空"}]
-    },{
-      "name": "clients",
-      "label": "关联客户端",
-      "type": "checkbox",
-      "available":false,
-      "required": true,
-      "dataType": "number",
-      "validateRules": [{"name": "REQUIRED_VALIDATE", "errorMsg": "不能为空"}]
-    },{
-      "name": "modulesAuthorities",
-      "label": "模块权限",
-      "type": "checkbox",
-      "available":false,
-      "required": true,
-      "dataType": "number",
-      "validateRules": [{"name": "REQUIRED_VALIDATE", "errorMsg": "不能为空"}]
-    },
+    "structure": [
+      {
+        "name": "username",
+        "label": "账号",
+        "type": "text",
+        "placeholder": "账号",
+        "required": true,
+        "validateRules": [
+          {
+            "name": "custom_validate",
+            "validateRegex": "^\\w{4,10}$",
+            "errorMsg": "只能是数字、字母以及下划线，长度在4-10之间"
+          }
+        ]
+      },
+      {
+        "name": "name",
+        "label": "姓名",
+        "type": "text",
+        "placeholder": "姓名",
+        "required": true,
+        "validateRules": [
+          {
+            "name": "custom_validate",
+            "validateRegex": "^.{2,30}$",
+            "errorMsg": "长度在2-30之间"
+          }
+        ]
+      },
+      {
+        "name": "password",
+        "label": "密码",
+        "type": "password",
+        "required": true,
+        "validateRules": [
+          {
+            "name": "custom_validate",
+            "validateRegex": "^(?![a-zA-z]+$)(?!\\d+$)(?![!@#$%^&*]+$)[a-zA-Z\\d!@#$%^&*]{6,15}$",
+            "errorMsg": "至少包含数字，字母以及特殊字符【!@#$%^&*】中任意两种,并在6-15字符之间"
+          }
+        ]
+      },
+      {
+        "name": "email",
+        "label": "邮箱",
+        "type": "text",
+        "placeholder": "邮箱",
+        "validateRules": [
+          {
+            "name": "custom_validate",
+            "validateRegex": "^([\\w-]+(\\.[\\w-]+)*@[\\w-]+(\\.[\\w-]+)+)$",
+            "errorMsg": "只能为电子邮件"
+          }
+        ]
+      },
+      {
+        "name": "phone",
+        "label": "电话",
+        "type": "text",
+        "placeholder": "电话",
+        "validateRules": [
+          {
+            "name": "custom_validate",
+            "validateRegex": "((\\d{11})|^((\\d{7,8})|(\\d{4}|\\d{3})-(\\d{7,8})|(\\d{4}|\\d{3})-(\\d{7,8})-(\\d{4}|\\d{3}|\\d{2}|\\d{1})|(\\d{7,8})-(\\d{4}|\\d{3}|\\d{2}|\\d{1}))$)",
+            "errorMsg": "只能为固话或者手机"
+          }
+        ]
+      },
+      {
+        "name": "limitedDate",
+        "defaultValue": "2011-11-11",
+        "label": "过期时间",
+        "type": "date",
+        "placeholder": "账号过期时间",
+        "dateFormat": "YYYY-MM-DD"
+      },
+      {
+        "name": "authorities",
+        "label": "用户权限",
+        "type": "radio",
+        "required": true,
+        "updatable": true,
+        "dataType": "number",
+        "validateRules": [
+          {
+            "name": "REQUIRED_VALIDATE",
+            "errorMsg": "不能为空"
+          }
+        ]
+      },
+      {
+        "name": "clients",
+        "label": "关联客户端",
+        "type": "checkbox",
+        "updatable": true,
+        "available": false,
+        "required": true,
+        "dataType": "number",
+        "validateRules": [
+          {
+            "name": "REQUIRED_VALIDATE",
+            "errorMsg": "不能为空"
+          }
+        ]
+      },
+      {
+        "name": "modulesAuthorities",
+        "label": "模块权限",
+        "type": "checkbox",
+        "available": false,
+        "required": true,
+        "dataType": "number",
+        "validateRules": [
+          {
+            "name": "REQUIRED_VALIDATE",
+            "errorMsg": "不能为空"
+          }
+        ]
+      },
       {
         "name": "id",
         "type": "hidden",
-        "available":false
-      }],
-    "submit": {"label": "保存"},
-    "reset": {"label": "重置"}
+        "available": false
+      }
+    ],
+    "submit": {
+      "label": "保存"
+    },
+    "reset": {
+      "label": "重置"
+    }
   }
 }

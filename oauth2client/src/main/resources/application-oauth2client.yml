@@ -6,7 +6,7 @@ config:
         secretKey: .hopever #用于加密accesstoken，并返回客户端
         validateUserUri: http://localhost:9091/user/resources/principal/check/ #用于校验用户是否符合该内部客户端
         userUri: http://localhost:9091/user/resources/principal #用于返回登录的用户的基本信息
-        moduleList: http://localhost:9091/user/module/list/
+        moduleList: http://localhost:9091/user/hateoas/module/list/
     common:
         pageSize: 10
 

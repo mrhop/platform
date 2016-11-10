@@ -23,7 +23,7 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
  */
 @RestController
 @ExposesResourceFor(ModuleResource.class)
-@RequestMapping(value = "/module", produces = "application/json")
+@RequestMapping(value = "/hateoas/module", produces = "application/json")
 @CrossOrigin
 public class ModuleResourceController {
     Logger logger = LoggerFactory.getLogger(ModuleResourceController.class);

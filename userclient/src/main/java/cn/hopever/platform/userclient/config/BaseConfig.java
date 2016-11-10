@@ -28,6 +28,7 @@ public class BaseConfig {
     private String delete;
     private String info;
     private String roleoptions;
+    private String clientoptions;
     private Map<String,Object> mapRules;
 
     public BaseConfig(){

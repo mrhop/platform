@@ -31,4 +31,7 @@ public class ClientRoleTable implements GrantedAuthority {
     @ManyToMany(mappedBy = "authorities")
     private List<ClientTable> clients;
 
+    @Column(name = "name", nullable = false, length = 50, unique = true)
+    private String name;
+
 }

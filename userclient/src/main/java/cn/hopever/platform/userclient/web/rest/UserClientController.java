@@ -3,6 +3,7 @@ package cn.hopever.platform.userclient.web.rest;
 import cn.hopever.platform.oauth2client.config.CommonProperties;
 import cn.hopever.platform.oauth2client.web.common.CommonMethods;
 import cn.hopever.platform.userclient.config.BaseConfig;
+import cn.hopever.platform.utils.json.JacksonUtil;
 import cn.hopever.platform.utils.web.CommonResult;
 import cn.hopever.platform.utils.web.CommonResultStatus;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -60,11 +61,11 @@ public class UserClientController {
                             map.put("defaultValue", mapData.get(map.get("name")));
                             // listReturn.add(map);
                         }
-                        if("id".equals(map.get("name"))){
+                        if ("id".equals(map.get("name"))) {
                             map.put("defaultValue", mapData.get("internalId"));
                         }
-                        if("authorities".equals(map.get("name"))){
-                            map.put("defaultValue", (((List<Map>)mapData.get("authorities")).get(0).get("internalId")));
+                        if ("authorities".equals(map.get("name"))) {
+                            map.put("defaultValue", (((List<Map>) mapData.get("authorities")).get(0).get("internalId")));
                         }
                     }
 
@@ -77,7 +78,7 @@ public class UserClientController {
                 CommonResult c1 = commonMethods.getResource(request);
                 if (CommonResultStatus.SUCCESS.toString().equals(c1.getStatus())) {
                     map.put("items", c1.getResponseData().get("data"));
-                }else{
+                } else {
                     map.put("items", new ArrayList());
                 }
                 // listReturn.add(map);
@@ -88,6 +89,42 @@ public class UserClientController {
         c.setResponseData(rule);
         return c;
     }
+
+    @RequestMapping(value = "/user/info/rule/update", method = {RequestMethod.POST})
+    public CommonResult updateUserRule(HttpServletRequest request, @RequestBody JsonNode body) throws Exception {
+        request.setAttribute("resourceUrl", baseConfig.getInfo() + "?id=" + request.getParameter("key"));
+        CommonResult c = new CommonResult();
+        HashMap<String, Object> rule = JacksonUtil.mapper.convertValue(body.get("rule"), HashMap.class);
+        List<Map> list = (List<Map>) rule.get("structure");
+        CommonResult clientCr = null;
+        CommonResult moduleCr = null;
+        for (Map map : list) {
+            if ("authorities".equals(map.get("name")) && "authorities".equals(body.get("updateElement"))) {
+                ObjectNode jsonNode = JacksonUtil.mapper.createObjectNode();
+                request.setAttribute("resourceUrl", baseConfig.getClientoptions());
+                jsonNode.put("userId", request.getParameter("key"));
+                jsonNode.put("roleName", request.getParameter("updateData"));
+                clientCr = commonMethods.postResource(jsonNode, request);
+                break;
+            }
+            //do other
+        }
+        if ("authorities".equals(body.get("updateElement")) && clientCr != null && CommonResultStatus.SUCCESS.toString().equals(clientCr.getStatus()) && clientCr.getResponseData().get("data") != null) {
+            for (Map map : list) {
+                if ("clients".equals(map.get("name"))) {
+                    Map mapItems = (Map) clientCr.getResponseData().get("data");
+                    map.put("items", mapItems.get("clients"));
+                    map.put("defaultValue", mapItems.get("clientsSelected"));
+                    map.put("changed", true);
+                    map.remove("available");
+                }
+                break;
+            }
+        }
+
+    c.setResponseData(rule);
+    return c;
+}
 
     @RequestMapping(value = "/user/update", method = {RequestMethod.POST})
     public CommonResult updateUser(HttpServletRequest request, @RequestBody JsonNode body) throws Exception {

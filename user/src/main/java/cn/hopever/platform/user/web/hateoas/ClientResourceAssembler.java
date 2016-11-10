@@ -2,10 +2,12 @@ package cn.hopever.platform.user.web.hateoas;
 
 import cn.hopever.platform.user.domain.ClientRoleTable;
 import cn.hopever.platform.user.domain.ClientTable;
+import cn.hopever.platform.user.domain.ModuleRoleTable;
 import cn.hopever.platform.user.domain.ModuleTable;
 import cn.hopever.platform.user.resources.ClientResource;
 import cn.hopever.platform.user.resources.ClientRoleResource;
 import cn.hopever.platform.user.resources.ModuleResource;
+import cn.hopever.platform.user.resources.ModuleRoleResource;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +35,7 @@ public class ClientResourceAssembler extends ResourceAssemblerSupport<ClientTabl
             protected void configure() {
                 skip().setAuthorities(null);
                 skip().setModules(null);
+                skip().setModuleRoles(null);
                 skip().setUsers(null);
             }
         };
@@ -62,6 +65,16 @@ public class ClientResourceAssembler extends ResourceAssemblerSupport<ClientTabl
                 sMr.add(mr);
             }
             resource.setModules(sMr);
+        }
+        if (clientTable.getModuleRoles() != null) {
+            ArrayList<ModuleRoleResource> sMr = new ArrayList<>();
+            for (ModuleRoleTable mt : clientTable.getModuleRoles()) {
+                ModuleRoleResource mr = new ModuleRoleResource();
+                mr.setInternalId(mt.getId());
+                mr.setName(mt.getName());
+                sMr.add(mr);
+            }
+            resource.setModuleRoles(sMr);
         }
         return resource;
     }

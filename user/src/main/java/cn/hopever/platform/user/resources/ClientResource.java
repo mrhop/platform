@@ -49,6 +49,8 @@ public class ClientResource extends ResourceSupport {
 
     private List<ModuleResource> modules;
 
+    private List<ModuleRoleResource> moduleRoles;
+
     private List<UserResource> users;
 
 }

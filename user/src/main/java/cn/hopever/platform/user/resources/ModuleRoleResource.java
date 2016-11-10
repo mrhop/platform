@@ -21,9 +21,13 @@ public class ModuleRoleResource extends ResourceSupport {
     @NotNull
     private String authority;
 
+    private String name;
+
     private short level;
 
     private List<ModuleResource> modules;
+
+    private ClientResource client;
 
     private List<UserResource> users;
 

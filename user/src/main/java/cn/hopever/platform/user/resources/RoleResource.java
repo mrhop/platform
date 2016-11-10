@@ -11,7 +11,7 @@ import java.util.List;
  * Created by Donghui Huo on 2016/8/31.
  */
 @Data
-@EqualsAndHashCode(callSuper=false)
+@EqualsAndHashCode(callSuper = false)
 //获取角色的一些信息并进行处理，
 public class RoleResource extends ResourceSupport {
 
@@ -20,6 +20,8 @@ public class RoleResource extends ResourceSupport {
 
     @NotNull
     private String authority;
+
+    private String name;
 
     private short level;
 
