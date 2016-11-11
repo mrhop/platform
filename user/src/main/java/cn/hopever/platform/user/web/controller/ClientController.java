@@ -1,7 +1,9 @@
 package cn.hopever.platform.user.web.controller;
 
 import cn.hopever.platform.user.domain.ClientTable;
+import cn.hopever.platform.user.domain.RoleTable;
 import cn.hopever.platform.user.service.ClientTableService;
+import cn.hopever.platform.user.service.RoleTableService;
 import cn.hopever.platform.user.web.hateoas.ClientResourceAssembler;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.slf4j.Logger;
@@ -28,22 +30,27 @@ public class ClientController {
     private ClientTableService clientTableService;
 
     @Autowired
+    private RoleTableService roleTableService;
+
+    @Autowired
     private ClientResourceAssembler clientResourceAssembler;
 
 
     @PreAuthorize("#oauth2.hasScope('internal_client') and ( hasRole('ROLE_super_admin') or hasRole('ROLE_admin'))")
     @RequestMapping(value = "/list/options", method = {RequestMethod.POST})
-    public Map getList(@RequestBody JsonNode body, Principal principal) {
+    public Map getListOptions(@RequestBody JsonNode body, Principal principal) {
         Map mapReturn = null;
         List listOptions = null;
         List listOptionsSelected = null;
         String authority = ((OAuth2Authentication) principal).getAuthorities().iterator().next().getAuthority();
-        String roleName = body.get("roleName").asText();
+        Long roleId = body.get("roleId").asLong();
+        RoleTable rt = roleTableService.get(roleId);
+        String roleName =rt!=null?rt.getAuthority(): null;
         Long userId = body.get("userId").asLong();
         Iterable<ClientTable> list = null;
         Iterable<ClientTable> listSelected = null;
         //然后根据roleName
-        if (roleName.equals("ROLE_admin") || roleName.equals("internal_client")) {
+        if ("ROLE_admin".equals(roleName) || "ROLE_common_user".equals(roleName)) {
             //do the get
             if (authority.equals("ROLE_super_admin")) {
                 //get all client

@@ -88,6 +88,13 @@ deletable
 2. form中元素click的触发情况
 5.注意navigate的实现的处理，进行不同的语言导航，并在页面链接处做修改（?lang=***），同时也需要message.properties
 目前做1、2！！！
+1.reset ok, but 时间以及时间rang的初始化不对
+2.这个是个大工程，使用统一的回调 rule的设计方式，也给出一个click event的function，用来判断不同的点击，给出不同的响应（当然，这个放在前台）
 最后做5
+
+
+目前差回调的数据，回调数据和初始化数据存在问题一会实现，但是整个流程已经走通，然后就是5的实现
+
+普通用户的初始化的clients以及role更新时的clients
 
 

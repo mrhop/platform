@@ -4,8 +4,7 @@
       {
         "className": "td-id",
         "title": "#",
-        "value": "serialNum",
-        "sort": "asc"
+        "value": "serialNum"
       },
       {
         "title": "角色名",

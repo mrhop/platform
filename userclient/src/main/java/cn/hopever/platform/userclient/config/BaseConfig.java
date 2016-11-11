@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.util.SerializationUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -49,5 +50,16 @@ public class BaseConfig {
             logger.warn("read file error:"+e);
         }
         mapRules.put("formRules",mapForm==null?new HashMap<>():mapForm);
+    }
+
+    public  Map<String,Object> getTableRule(String key){
+        Map rule =  (HashMap) ((Map) this.mapRules.get("tableRules")).get(key);
+        Map ruleReturn =(Map) SerializationUtils.deserialize(SerializationUtils.serialize(rule));
+        return ruleReturn;
+    }
+    public  Map<String,Object> getFormRule(String key){
+        Map rule =  (HashMap) ((Map) this.mapRules.get("formRules")).get(key);
+        Map ruleReturn =(Map) SerializationUtils.deserialize(SerializationUtils.serialize(rule));
+        return ruleReturn;
     }
 }

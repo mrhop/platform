@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -48,8 +47,10 @@ public class UserClientController {
     public CommonResult getUser(HttpServletRequest request) throws Exception {
         request.setAttribute("resourceUrl", baseConfig.getInfo() + "?id=" + request.getParameter("key"));
         CommonResult c = commonMethods.getResource(request);
-        HashMap<String, Object> rule = (HashMap) ((Map) baseConfig.getMapRules().get("formRules")).get("user");
+        Map<String, Object> rule =baseConfig.getFormRule("user");
         List<Map> list = (List<Map>) rule.get("structure");
+        Long roleSelected = null;
+        List clientsSelected = null;
 
         if (CommonResultStatus.SUCCESS.toString().equals(c.getStatus())) {
             if (c.getResponseData() != null) {
@@ -65,10 +66,21 @@ public class UserClientController {
                             map.put("defaultValue", mapData.get("internalId"));
                         }
                         if ("authorities".equals(map.get("name"))) {
-                            map.put("defaultValue", (((List<Map>) mapData.get("authorities")).get(0).get("internalId")));
+                            roleSelected = Long.valueOf(((List<Map>) mapData.get("authorities")).get(0).get("internalId").toString());
+                            map.put("defaultValue", roleSelected);
+                        }
+                        if ("clients".equals(map.get("name"))) {
+                            if( mapData.get("clients")!=null){
+                                List<Map> listClients  =  (List<Map>) mapData.get("clients");
+                                clientsSelected = new ArrayList<>();
+                                for(Map client:listClients){
+                                    clientsSelected.add(client.get("internalId"));
+                                }
+                                map.put("defaultValue", clientsSelected);
+                            }
+
                         }
                     }
-
                 }
             }
         }
@@ -81,8 +93,20 @@ public class UserClientController {
                 } else {
                     map.put("items", new ArrayList());
                 }
-                // listReturn.add(map);
-                break;
+            }
+            if ("clients".equals(map.get("name"))) {
+                ObjectNode jsonNode = JacksonUtil.mapper.createObjectNode();
+                request.setAttribute("resourceUrl", baseConfig.getClientoptions());
+                jsonNode.put("userId", request.getParameter("key"));
+                jsonNode.put("roleId", roleSelected);
+                CommonResult c2 = commonMethods.postResource(jsonNode, request);
+                if (CommonResultStatus.SUCCESS.toString().equals(c2.getStatus()) && c2.getResponseData().get("data") != null) {
+                    Map mapItems = (Map) c2.getResponseData().get("data");
+                    map.put("items", mapItems.get("clients"));
+                    map.remove("available");
+                } else {
+                    map.put("items", new ArrayList());
+                }
             }
         }
 
@@ -92,33 +116,39 @@ public class UserClientController {
 
     @RequestMapping(value = "/user/info/rule/update", method = {RequestMethod.POST})
     public CommonResult updateUserRule(HttpServletRequest request, @RequestBody JsonNode body) throws Exception {
-        request.setAttribute("resourceUrl", baseConfig.getInfo() + "?id=" + request.getParameter("key"));
         CommonResult c = new CommonResult();
-        HashMap<String, Object> rule = JacksonUtil.mapper.convertValue(body.get("rule"), HashMap.class);
+        Map<String, Object> rule = JacksonUtil.mapper.convertValue(body.get("rule"),Map.class);
         List<Map> list = (List<Map>) rule.get("structure");
         CommonResult clientCr = null;
         CommonResult moduleCr = null;
         for (Map map : list) {
-            if ("authorities".equals(map.get("name")) && "authorities".equals(body.get("updateElement"))) {
+            map.remove("changed");
+            if ("authorities".equals(map.get("name")) && "authorities".equals(body.get("updateElement").asText())) {
                 ObjectNode jsonNode = JacksonUtil.mapper.createObjectNode();
                 request.setAttribute("resourceUrl", baseConfig.getClientoptions());
                 jsonNode.put("userId", request.getParameter("key"));
-                jsonNode.put("roleName", request.getParameter("updateData"));
+                jsonNode.put("roleId", body.get("updateData").asLong());
                 clientCr = commonMethods.postResource(jsonNode, request);
                 break;
             }
             //do other
         }
-        if ("authorities".equals(body.get("updateElement")) && clientCr != null && CommonResultStatus.SUCCESS.toString().equals(clientCr.getStatus()) && clientCr.getResponseData().get("data") != null) {
+        if ("authorities".equals(body.get("updateElement").textValue()) ) {
             for (Map map : list) {
                 if ("clients".equals(map.get("name"))) {
-                    Map mapItems = (Map) clientCr.getResponseData().get("data");
-                    map.put("items", mapItems.get("clients"));
-                    map.put("defaultValue", mapItems.get("clientsSelected"));
+                    if( clientCr != null && CommonResultStatus.SUCCESS.toString().equals(clientCr.getStatus()) && clientCr.getResponseData().get("data") != null){
+                        Map mapItems = (Map) clientCr.getResponseData().get("data");
+                        map.put("items", mapItems.get("clients"));
+                        map.put("defaultValue", mapItems.get("clientsSelected"));
+                        map.remove("available");
+                    }else{
+                        map.remove("items");
+                        map.remove("defaultValue");
+                        map.put("available",false);
+                    }
                     map.put("changed", true);
-                    map.remove("available");
+                    break;
                 }
-                break;
             }
         }
 
@@ -167,7 +197,7 @@ public class UserClientController {
                     c.getResponseData().put("totalCount", 0);
                 }
                 if (body.get("init") != null && !body.get("init").isNull() && body.get("init").asBoolean()) {
-                    c.getResponseData().put("rules", ((Map) baseConfig.getMapRules().get("tableRules")).get("userList"));
+                    c.getResponseData().put("rules", baseConfig.getTableRule("userList"));
                     c.getResponseData().put("additionalFeature", ((Map) baseConfig.getMapRules().get("tableRules")).get("userListAdditionalFeature"));
                 }
             }
@@ -187,7 +217,7 @@ public class UserClientController {
                     c.getResponseData().put("totalCount", 0);
                 }
                 if (body.get("init") != null && body.get("init").asBoolean()) {
-                    c.getResponseData().put("rules", ((Map) baseConfig.getMapRules().get("tableRules")).get("roleList"));
+                    c.getResponseData().put("rules", baseConfig.getTableRule("roleList"));
                 }
             }
         }
