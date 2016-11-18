@@ -47,6 +47,16 @@ public class ModuleRoleTableServiceImpl implements ModuleRoleTableService {
     }
 
     @Override
+    public List<ModuleRoleTable> getByIds(List<Object> ids) {
+        List<ModuleRoleTable> list = new ArrayList<>();
+        for (Object id : ids) {
+            ModuleRoleTable moduleRoleTable = moduleRoleTableRepository.findOne(Long.parseLong(id.toString()));
+            list.add(moduleRoleTable);
+        }
+        return list;
+    }
+
+    @Override
     public List<ModuleRoleTable> getByUserId(Long userId) {
         UserTable user = userTableRepository.findOne(userId);
         return user.getModulesAuthorities();

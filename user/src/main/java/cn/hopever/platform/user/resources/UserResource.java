@@ -25,6 +25,8 @@ public class UserResource extends ResourceSupport {
     @NotNull
     private String username;
 
+    private String name;
+
     private String password;
 
     private boolean accountNonLocked = false;

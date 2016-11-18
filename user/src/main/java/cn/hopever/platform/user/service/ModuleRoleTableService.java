@@ -9,5 +9,6 @@ import java.util.List;
  */
 public interface ModuleRoleTableService {
     public List<ModuleRoleTable> getByClients(List<Object> clientIds);
+    public List<ModuleRoleTable> getByIds(List<Object> ids);
     public List<ModuleRoleTable> getByUserId(Long userId);
 }

@@ -48,7 +48,7 @@ public class UserClientController {
     public CommonResult getUser(HttpServletRequest request) throws Exception {
         request.setAttribute("resourceUrl", baseConfig.getInfo() + "?id=" + request.getParameter("key"));
         CommonResult c = commonMethods.getResource(request);
-        Map<String, Object> rule = baseConfig.getFormRule("user");
+        Map<String, Object> rule = baseConfig.getFormRule("userupdate");
         List<Map> list = (List<Map>) rule.get("structure");
         Long roleSelected = null;
         List clientsSelected = null;
@@ -238,7 +238,7 @@ public class UserClientController {
 
     @RequestMapping(value = "/user/update", method = {RequestMethod.POST})
     public CommonResult updateUser(HttpServletRequest request, @RequestBody JsonNode body) throws Exception {
-        request.setAttribute("resourceUrl", baseConfig.getPersonalinfo());
+        request.setAttribute("resourceUrl", baseConfig.getUpdate());
         return commonMethods.postResource(body, request);
     }
 

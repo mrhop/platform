@@ -7,8 +7,12 @@
         "value": "serialNum"
       },
       {
-        "title": "角色名",
+        "title": "角色code",
         "value": "authority"
+      },
+      {
+        "title": "角色名",
+        "value": "name"
       },
       {
         "title": "等级",
@@ -18,7 +22,7 @@
     "tfoot": [
       {
         "className": "td-foot",
-        "colSpan": 3,
+        "colSpan": 4,
         "title": "内部基础角色"
       }
     ]
@@ -31,8 +35,14 @@
         "value": "serialNum"
       },
       {
-        "title": "用户名",
+        "title": "用户账号",
         "value": "username",
+        "filter": true,
+        "editType": "text"
+      },
+      {
+        "title": "用户名",
+        "value": "name",
         "filter": true,
         "editType": "text"
       },
@@ -65,7 +75,7 @@
     "tfoot": [
       {
         "className": "td-foot",
-        "colSpan": 8,
+        "colSpan": 9,
         "title": "用户列表基础信息"
       }
     ]

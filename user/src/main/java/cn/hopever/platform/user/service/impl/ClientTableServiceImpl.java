@@ -57,6 +57,15 @@ public class ClientTableServiceImpl implements ClientTableService {
         return clientTableRepository.findByUsersIn(list);
     }
 
+    @Override
+    public List<ClientTable> getByIds(List<Object> ids) {
+        List<ClientTable> list = new ArrayList<>();
+        for(Object id: ids){
+            list.add(clientTableRepository.findOne(Long.parseLong(id.toString())));
+        }
+        return list;
+    }
+
 
     @Override
     public ClientDetails loadClientByClientId(String clientId) throws ClientRegistrationException {

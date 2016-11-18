@@ -21,5 +21,6 @@ public interface ClientTableService extends ClientDetailsService {
     public Iterable<ClientTable> getAll();
     public List<ClientTable> getByUserName(String userName);
     public List<ClientTable> getByUserId(Long userId);
+    public List<ClientTable> getByIds(List<Object> ids);
 
 }

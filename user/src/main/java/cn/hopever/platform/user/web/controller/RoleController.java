@@ -40,6 +40,7 @@ public class RoleController {
                 List<Object> listTmp = new ArrayList<>();
                 listTmp.add("");
                 listTmp.add(rt.getAuthority());
+                listTmp.add(rt.getName());
                 listTmp.add(rt.getLevel());
                 mapTemp.put("value", listTmp);
                 listReturn.add(mapTemp);
