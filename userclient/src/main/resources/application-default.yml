@@ -19,3 +19,4 @@ config:
         info: http://localhost:9091/user/user/info
         roleoptions: http://localhost:9091/user/role/options
         clientoptions: http://localhost:9091/user/client/list/options
+        moduleroleoptions: http://localhost:9091/user/modulerole/list/options

@@ -30,6 +30,7 @@ public class BaseConfig {
     private String info;
     private String roleoptions;
     private String clientoptions;
+    private String moduleroleoptions;
     private Map<String,Object> mapRules;
 
     public BaseConfig(){
