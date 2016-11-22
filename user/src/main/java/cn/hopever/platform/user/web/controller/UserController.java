@@ -132,7 +132,7 @@ public class UserController {
             user.setModulesAuthorities(null);
         }
         if(body.get("data").get("limitedDate")!=null&&!body.get("data").get("limitedDate").isNull()){
-            user.setLimitedDate(new Date());
+            user.setLimitedDate(new Date(body.get("data").get("limitedDate").asLong()));
         }else{
             user.setLimitedDate(null);
         }

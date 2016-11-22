@@ -117,7 +117,12 @@
     },
     "reset": {
       "label": "重置"
-    }
+    },
+    "actions": [{
+      "extraClassName":"btn-default",
+      "action":"backup",
+      "label": "返回"
+    }]
   },
   "useradd": {
     "structure": [
