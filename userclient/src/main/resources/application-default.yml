@@ -21,3 +21,4 @@ config:
         roleoptions: http://localhost:9091/user/role/options
         clientoptions: http://localhost:9091/user/client/list/options
         moduleroleoptions: http://localhost:9091/user/modulerole/list/options
+        save: http://localhost:9091/user/user/save

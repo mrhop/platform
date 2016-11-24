@@ -157,12 +157,12 @@ public class UserClientController {
                         Map mapItems = (Map) clientCr.getResponseData().get("data");
                         map.put("items", mapItems.get("clients"));
                         map.put("defaultValue", mapItems.get("clientsSelected"));
-                        if(mapItems.get("clientsSelected")!=null){
+                        if (mapItems.get("clientsSelected") != null) {
                             ObjectNode jsonNode = JacksonUtil.mapper.createObjectNode();
                             request.setAttribute("resourceUrl", baseConfig.getModuleroleoptions());
                             jsonNode.put("userId", request.getParameter("key"));
                             jsonNode.put("roleId", body.get("updateData").asLong());
-                            jsonNode.set("clientIds", JacksonUtil.mapper.convertValue(mapItems.get("clientsSelected"),ArrayNode.class));
+                            jsonNode.set("clientIds", JacksonUtil.mapper.convertValue(mapItems.get("clientsSelected"), ArrayNode.class));
                             moduleRoleCr = commonMethods.postResource(jsonNode, request);
                         }
                         map.remove("available");
@@ -175,13 +175,13 @@ public class UserClientController {
                     map.put("changed", true);
                 }
                 if ("modulesAuthorities".equals(map.get("name"))) {
-                    if (moduleRoleCr != null && CommonResultStatus.SUCCESS.toString().equals(moduleRoleCr.getStatus()) && moduleRoleCr.getResponseData().get("data")!=null) {
+                    if (moduleRoleCr != null && CommonResultStatus.SUCCESS.toString().equals(moduleRoleCr.getStatus()) && moduleRoleCr.getResponseData().get("data") != null) {
                         Map mapItems = (Map) moduleRoleCr.getResponseData().get("data");
                         if (mapItems.get("moduleRoles") != null) {
                             map.put("items", mapItems.get("moduleRoles"));
                             map.put("defaultValue", mapItems.get("moduleRolesSelected"));
                             map.remove("available");
-                        }else {
+                        } else {
                             map.remove("items");
                             map.remove("defaultValue");
                             map.put("available", false);
@@ -200,10 +200,10 @@ public class UserClientController {
             ObjectNode jsonNode = JacksonUtil.mapper.createObjectNode();
             for (Map map : list) {
                 if ("authorities".equals(map.get("name"))) {
-                    jsonNode.put("roleId", (Integer)map.get("defaultValue"));
+                    jsonNode.put("roleId", (Integer) map.get("defaultValue"));
                 }
                 if ("clients".equals(map.get("name"))) {
-                    if(body.get("updateData")!=null&&!body.get("updateData").isNull()){
+                    if (body.get("updateData") != null && !body.get("updateData").isNull()) {
                         request.setAttribute("resourceUrl", baseConfig.getModuleroleoptions());
                         jsonNode.put("userId", request.getParameter("key"));
                         jsonNode.set("clientIds", body.get("updateData"));
@@ -217,7 +217,7 @@ public class UserClientController {
                             map.put("items", mapItems.get("moduleRoles"));
                             map.put("defaultValue", mapItems.get("moduleRolesSelected"));
                             map.remove("available");
-                        }else {
+                        } else {
                             map.remove("items");
                             map.remove("defaultValue");
                             map.put("available", false);
@@ -242,16 +242,112 @@ public class UserClientController {
         return commonMethods.postResource(body, request);
     }
 
-    @RequestMapping(value = "/user/add", method = {RequestMethod.POST})
-    public CommonResult addUser(HttpServletRequest request, @RequestBody JsonNode body) throws Exception {
-        request.setAttribute("resourceUrl", baseConfig.getPersonalinfo());
-        return commonMethods.postResource(body, request);
+    @RequestMapping(value = "/user/add", method = {RequestMethod.GET})
+    public CommonResult addUser(HttpServletRequest request) throws Exception {
+        CommonResult c = new CommonResult();
+        Map<String, Object> rule = baseConfig.getFormRule("useradd");
+        List<Map> list = (List<Map>) rule.get("structure");
+        for (Map map : list) {
+            if ("authorities".equals(map.get("name"))) {
+                request.setAttribute("resourceUrl", baseConfig.getRoleoptions());
+                CommonResult c1 = commonMethods.getResource(request);
+                if (CommonResultStatus.SUCCESS.toString().equals(c1.getStatus())) {
+                    map.put("items", c1.getResponseData().get("data"));
+                } else {
+                    map.put("items", new ArrayList());
+                }
+            }
+        }
+        c.setResponseData(rule);
+        c.setStatus(CommonResultStatus.SUCCESS.toString());
+        return c;
     }
 
     @RequestMapping(value = "/user/save", method = {RequestMethod.POST})
     public CommonResult saveUser(HttpServletRequest request, @RequestBody JsonNode body) throws Exception {
-        request.setAttribute("resourceUrl", baseConfig.getPersonalinfo());
+        request.setAttribute("resourceUrl", baseConfig.getSave());
         return commonMethods.postResource(body, request);
+    }
+
+    @RequestMapping(value = "/user/add/rule/update", method = {RequestMethod.POST})
+    public CommonResult updateAddUserRule(HttpServletRequest request, @RequestBody JsonNode body) throws Exception {
+        CommonResult c = new CommonResult();
+        Map<String, Object> rule = JacksonUtil.mapper.convertValue(body.get("rule"), Map.class);
+        List<Map> list = (List<Map>) rule.get("structure");
+        CommonResult clientCr = null;
+        CommonResult moduleRoleCr = null;
+        for (Map map : list) {
+            map.remove("changed");
+            if ("authorities".equals(map.get("name")) && "authorities".equals(body.get("updateElement").asText())) {
+                ObjectNode jsonNode = JacksonUtil.mapper.createObjectNode();
+                request.setAttribute("resourceUrl", baseConfig.getClientoptions());
+                jsonNode.put("roleId", body.get("updateData").asLong());
+                clientCr = commonMethods.postResource(jsonNode, request);
+                break;
+            }
+            //do other
+        }
+        if ("authorities".equals(body.get("updateElement").textValue())) {
+            for (Map map : list) {
+                if ("clients".equals(map.get("name"))) {
+                    if (clientCr != null && CommonResultStatus.SUCCESS.toString().equals(clientCr.getStatus()) && clientCr.getResponseData().get("data") != null) {
+                        Map mapItems = (Map) clientCr.getResponseData().get("data");
+                        map.put("items", mapItems.get("clients"));
+                        map.remove("defaultValue");
+                        map.remove("available");
+                    } else {
+                        map.remove("items");
+                        map.remove("defaultValue");
+                        map.put("available", false);
+                    }
+                    map.put("changed", true);
+                }
+
+                if ("modulesAuthorities".equals(map.get("name"))) {
+                    map.remove("items");
+                    map.remove("defaultValue");
+                    map.put("available", false);
+                    map.put("changed", true);
+                    break;
+                }
+            }
+        }
+        if ("clients".equals(body.get("updateElement").textValue())) {
+            ObjectNode jsonNode = JacksonUtil.mapper.createObjectNode();
+            for (Map map : list) {
+                if ("authorities".equals(map.get("name"))) {
+                    jsonNode.put("roleId", (Integer) map.get("defaultValue"));
+                }
+                if ("clients".equals(map.get("name"))) {
+                    if (body.get("updateData") != null && !body.get("updateData").isNull()) {
+                        request.setAttribute("resourceUrl", baseConfig.getModuleroleoptions());
+                        jsonNode.set("clientIds", body.get("updateData"));
+                        moduleRoleCr = commonMethods.postResource(jsonNode, request);
+                    }
+                }
+                if ("modulesAuthorities".equals(map.get("name"))) {
+                    if (moduleRoleCr != null && CommonResultStatus.SUCCESS.toString().equals(moduleRoleCr.getStatus()) && moduleRoleCr.getResponseData().get("data") != null) {
+                        Map mapItems = (Map) moduleRoleCr.getResponseData().get("data");
+                        if (mapItems.get("moduleRoles") != null) {
+                            map.put("items", mapItems.get("moduleRoles"));
+                            map.remove("available");
+                        } else {
+                            map.remove("items");
+                            map.remove("defaultValue");
+                            map.put("available", false);
+                        }
+                    } else {
+                        map.remove("items");
+                        map.remove("defaultValue");
+                        map.put("available", false);
+                    }
+                    map.put("changed", true);
+                    break;
+                }
+            }
+        }
+        c.setResponseData(rule);
+        return c;
     }
 
     @RequestMapping(value = "/user/list", method = {RequestMethod.GET, RequestMethod.POST})

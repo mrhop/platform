@@ -45,8 +45,11 @@ public class ClientController {
         String authority = ((OAuth2Authentication) principal).getAuthorities().iterator().next().getAuthority();
         Long roleId = body.get("roleId").asLong();
         RoleTable rt = roleTableService.get(roleId);
-        String roleName =rt!=null?rt.getAuthority(): null;
-        Long userId = body.get("userId").asLong();
+        String roleName = rt != null ? rt.getAuthority() : null;
+        Long userId = null;
+        if (body.get("userId") != null && !body.get("userId").isNull()) {
+            userId = body.get("userId").asLong();
+        }
         Iterable<ClientTable> list = null;
         Iterable<ClientTable> listSelected = null;
         //然后根据roleName
@@ -58,7 +61,9 @@ public class ClientController {
             } else {
                 list = clientTableService.getByUserName(principal.getName());
             }
-            listSelected = clientTableService.getByUserId(userId);
+            if (userId != null) {
+                listSelected = clientTableService.getByUserId(userId);
+            }
         }
         if (list != null && list.iterator().hasNext()) {
             listOptions = new ArrayList<>();
@@ -73,13 +78,13 @@ public class ClientController {
         if (listSelected != null && listSelected.iterator().hasNext()) {
             listOptionsSelected = new ArrayList<>();
             for (ClientTable ct : listSelected) {
-                listOptionsSelected.add( ct.getId());
+                listOptionsSelected.add(ct.getId());
             }
         }
-        if(listOptions!=null){
+        if (listOptions != null) {
             mapReturn = new HashMap<>();
-            mapReturn.put("clients",listOptions);
-            mapReturn.put("clientsSelected",listOptionsSelected);
+            mapReturn.put("clients", listOptions);
+            mapReturn.put("clientsSelected", listOptionsSelected);
         }
         return mapReturn;
     }

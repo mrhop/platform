@@ -55,18 +55,24 @@ public class ModuleRoleController {
                     listOptions.add(mapOption);
                 }
             }
-            Long userId = body.get("userId").asLong();
-            List<ModuleRoleTable> listSelected = moduleRoleTableService.getByUserId(userId);
-            if(listSelected!=null&&listSelected.size()>0){
-                listOptionsSelected= new ArrayList<>();
+            Long userId = null;
+            if (body.get("userId") != null && !body.get("userId").isNull()) {
+                userId = body.get("userId").asLong();
+            }
+            List<ModuleRoleTable> listSelected = null;
+            if (userId != null) {
+                listSelected = moduleRoleTableService.getByUserId(userId);
+            }
+            if (listSelected != null && listSelected.size() > 0) {
+                listOptionsSelected = new ArrayList<>();
                 for (ModuleRoleTable mrt : listSelected) {
-                    listOptionsSelected.add( mrt.getId());
+                    listOptionsSelected.add(mrt.getId());
                 }
             }
-            if(listOptions!=null){
+            if (listOptions != null) {
                 mapReturn = new HashMap<>();
-                mapReturn.put("moduleRoles",listOptions);
-                mapReturn.put("moduleRolesSelected",listOptionsSelected);
+                mapReturn.put("moduleRoles", listOptions);
+                mapReturn.put("moduleRolesSelected", listOptionsSelected);
             }
         }
         return mapReturn;

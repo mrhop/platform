@@ -19,6 +19,9 @@ public interface UserTableService extends UserDetailsService {
 
     public UserTable getUserByUsername(String username);
 
+    public UserTable getUserByEmail(String email);
+    public UserTable getUserByPhone(String phone);
+
     public Iterable<UserTable> getList();
 
     public Page<UserTable> getListWithOutSelf(String username, Pageable pageable, Map<String, Object> filterMap);

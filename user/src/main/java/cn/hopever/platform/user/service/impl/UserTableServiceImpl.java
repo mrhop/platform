@@ -62,6 +62,16 @@ public class UserTableServiceImpl implements UserTableService {
     }
 
     @Override
+    public UserTable getUserByEmail(String email) {
+        return userTableRepository.findOneByEmail(email);
+    }
+
+    @Override
+    public UserTable getUserByPhone(String phone) {
+        return userTableRepository.findOneByPhone(phone);
+    }
+
+    @Override
     public Iterable<UserTable> getList() {
         return userTableRepository.findAll();
     }
@@ -90,7 +100,7 @@ public class UserTableServiceImpl implements UserTableService {
 
     @Override
     public void delete(Long id) {
-        this.userTableRepository.updateCreateUser(null,this.userTableRepository.findOne(id));
+        this.userTableRepository.updateCreateUser(null, this.userTableRepository.findOne(id));
         this.userTableRepository.delete(id);
     }
 
