@@ -242,6 +242,12 @@ public class UserClientController {
         return commonMethods.postResource(body, request);
     }
 
+    @RequestMapping(value = "/user/personal/update", method = {RequestMethod.POST})
+    public CommonResult updateUserPersonal(HttpServletRequest request, @RequestBody JsonNode body) throws Exception {
+        request.setAttribute("resourceUrl", baseConfig.getUpdatepersonal());
+        return commonMethods.postResource(body, request);
+    }
+
     @RequestMapping(value = "/user/add", method = {RequestMethod.GET})
     public CommonResult addUser(HttpServletRequest request) throws Exception {
         CommonResult c = new CommonResult();
@@ -397,6 +403,64 @@ public class UserClientController {
                 }
             }
         }
+        return c;
+    }
+
+    @RequestMapping(value = "/user/personal/info", method = {RequestMethod.GET})
+    public CommonResult getUserPersonalInfo(HttpServletRequest request) throws Exception {
+        request.setAttribute("resourceUrl", baseConfig.getPersonalinfo());
+        CommonResult c = commonMethods.getResource(request);
+        Map<String, Object> rule = baseConfig.getFormRule("userpersonalinfo");
+        List<Map> list = (List<Map>) rule.get("structure");
+
+        if (CommonResultStatus.SUCCESS.toString().equals(c.getStatus())) {
+            if (c.getResponseData() != null) {
+                if (c.getResponseData().get("data") != null) {
+                    Map<String, Object> mapData = (Map) c.getResponseData().get("data");
+                    // List<Map> listReturn = new ArrayList<>();
+                    for (Map map : list) {
+                        if (mapData.get(map.get("name")) != null) {
+                            map.put("defaultValue", mapData.get(map.get("name")));
+                            // listReturn.add(map);
+                        }
+                        if ("id".equals(map.get("name"))) {
+                            map.put("defaultValue", mapData.get("internalId"));
+                        }
+                        if ("authorities".equals(map.get("name"))) {
+                            String roleSelected = ((List<Map>) mapData.get("authorities")).get(0).get("name").toString();
+                            map.put("defaultValue", roleSelected);
+                        }
+                        if ("clients".equals(map.get("name"))) {
+                            if (mapData.get("clients") != null) {
+                                List<Map> listClients = (List<Map>) mapData.get("clients");
+                                StringBuilder clientsSelected = new StringBuilder("");
+                                for (int i = 0; i < listClients.size(); i++) {
+                                    clientsSelected.append(listClients.get(i).get("clientName"));
+                                    if (i < listClients.size() - 1) {
+                                        clientsSelected.append(",");
+                                    }
+                                }
+                                map.put("defaultValue", clientsSelected);
+                            }
+                        }
+                        if ("modulesAuthorities".equals(map.get("name"))){
+                            if (mapData.get("modulesAuthorities") != null) {
+                                List<Map> listModulesAuthorities = (List<Map>) mapData.get("modulesAuthorities");
+                                StringBuilder modulesAuthoritiesSelected = new StringBuilder("");
+                                for (int i = 0; i < listModulesAuthorities.size(); i++) {
+                                    modulesAuthoritiesSelected.append(listModulesAuthorities.get(i).get("name"));
+                                    if (i < listModulesAuthorities.size() - 1) {
+                                        modulesAuthoritiesSelected.append(",");
+                                    }
+                                }
+                                map.put("defaultValue", modulesAuthoritiesSelected);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        c.setResponseData(rule);
         return c;
     }
 }

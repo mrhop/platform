@@ -25,6 +25,8 @@ public class ClientResource extends ResourceSupport {
     @NotNull
     private String clientId;
 
+    private String clientName;
+
     private String clientSecret;
 
     private boolean secretRequired = true;

@@ -55,14 +55,6 @@
         "value": "phone"
       },
       {
-        "title": "已激活",
-        "value": "enabled"
-      },
-      {
-        "title": "有效期内",
-        "value": "accountNonExpired"
-      },
-      {
         "title": "创建人",
         "value": "createUser"
       },
@@ -70,6 +62,14 @@
         "title": "创建时间",
         "value": "createdDate",
         "sortable": "true"
+      },
+      {
+        "title": "已激活",
+        "value": "enabled"
+      },
+      {
+        "title": "有效期内",
+        "value": "accountNonExpired"
       }
     ],
     "tfoot": [

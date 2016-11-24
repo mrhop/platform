@@ -29,6 +29,7 @@ public class BaseConfig {
     private String delete;
     private String info;
     private String update;
+    private String updatepersonal;
     private String roleoptions;
     private String clientoptions;
     private String moduleroleoptions;

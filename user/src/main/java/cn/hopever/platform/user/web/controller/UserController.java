@@ -78,10 +78,10 @@ public class UserController {
                 listTmp.add(ut.getName());
                 listTmp.add(ut.getEmail());
                 listTmp.add(ut.getPhone());
+                listTmp.add(ut.getCreateUser() != null ? ut.getCreateUser().getUsername() : "");
+                listTmp.add(ut.getCreatedDate() != null ? DateFormat.sdfDate.format(ut.getCreatedDate()) : "");
                 listTmp.add(ut.isEnabled() ? "Y" : "N");
                 listTmp.add(ut.isAccountNonExpired() ? "Y" : "N");
-                listTmp.add(ut.getCreateUser() != null ? ut.getCreateUser().getUsername() : "");
-                listTmp.add(ut.getCreatedDate() != null ? DateFormat.sdf.format(ut.getCreatedDate()) : "");
                 mapTemp.put("value", listTmp);
                 listReturn.add(mapTemp);
             }
@@ -111,6 +111,52 @@ public class UserController {
         UserTable ut = this.userTableService.get(id);
         return JacksonUtil.mapper.convertValue(userTableAssembler.toResource(ut), Map.class);
     }
+
+    @PreAuthorize("#oauth2.hasScope('user_admin_client')")
+    @RequestMapping(value = {"/",""}, method = {RequestMethod.GET})
+    public Map info(Principal principal) {
+        //返回user是无法解析的，要使用对象解析为map 的形式
+        UserTable ut = this.userTableService.getUserByUsername(principal.getName());
+        return JacksonUtil.mapper.convertValue(userTableAssembler.toResource(ut), Map.class);
+    }
+
+    @PreAuthorize("#oauth2.hasScope('user_admin_client')")
+    @RequestMapping(value = "/personal/update", method = {RequestMethod.POST})
+    public Map updatePersonalUser(@RequestBody JsonNode body, Principal principal) {
+        Map map = JacksonUtil.mapper.convertValue(body.get("data"),Map.class);
+        UserTable user=this.userTableService.get( Long.valueOf(map.get("id").toString()));
+        if(body.get("data").get("email")!=null&&!body.get("data").get("email").isNull()){
+            UserTable ut = this.userTableService.getUserByEmail(body.get("data").get("email").asText());
+            if(ut!=null&&!Long.valueOf(map.get("id").toString()).equals(ut.getId())){
+                Map mapReturn = new HashMap<>();
+                mapReturn.put("message","用户Email已存在");
+                return mapReturn;
+            }
+            user.setEmail(body.get("data").get("email").asText());
+        }else{
+            user.setEmail(null);
+        }
+
+        if(body.get("data").get("phone")!=null&&!body.get("data").get("phone").isNull()){
+            UserTable ut = this.userTableService.getUserByPhone(body.get("data").get("phone").asText());
+            if(ut!=null&&!Long.valueOf(map.get("id").toString()).equals(ut.getId())){
+                Map mapReturn = new HashMap<>();
+                mapReturn.put("message","用户电话号码已存在");
+                return mapReturn;
+            }
+            user.setPhone(body.get("data").get("phone").asText());
+        }else{
+            user.setPhone(null);
+        }
+        if(body.get("data").get("name")!=null&&!body.get("data").get("name").isNull()){
+            user.setName(body.get("data").get("name").asText());
+        }else{
+            user.setName(null);
+        }
+        userTableService.save(user);
+        return null;
+    }
+
 
     @PreAuthorize("#oauth2.hasScope('user_admin_client') and ( hasRole('ROLE_super_admin') or hasRole('ROLE_admin'))")
     @RequestMapping(value = "/update", method = {RequestMethod.POST})
@@ -232,6 +278,8 @@ public class UserController {
         }else{
             user.setName(null);
         }
+        user.setCreatedDate(new Date());
+        user.setCreateUser(this.userTableService.getUserByUsername(principal.getName()));
         userTableService.save(user);
         return null;
     }

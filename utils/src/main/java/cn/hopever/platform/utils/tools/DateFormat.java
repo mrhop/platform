@@ -7,4 +7,5 @@ import java.text.SimpleDateFormat;
  */
 public class DateFormat {
     public static SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+    public static SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy/MM/dd");
 }

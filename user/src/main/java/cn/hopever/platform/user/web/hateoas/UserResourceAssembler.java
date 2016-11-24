@@ -55,6 +55,7 @@ public class UserResourceAssembler extends ResourceAssemblerSupport<UserTable, U
                 ClientResource clientResource = new ClientResource();
                 clientResource.setInternalId(ct.getId());
                 clientResource.setClientId(ct.getClientId());
+                clientResource.setClientName(ct.getClientName());
                 setCr.add(clientResource);
             }
             resource.setClients(setCr);
@@ -66,6 +67,7 @@ public class UserResourceAssembler extends ResourceAssemblerSupport<UserTable, U
                 RoleResource roleResource = new RoleResource();
                 roleResource.setInternalId(rt.getId());
                 roleResource.setAuthority(rt.getAuthority());
+                roleResource.setName(rt.getName());
                 setRr.add(roleResource);
             }
             resource.setAuthorities(setRr);
@@ -77,6 +79,7 @@ public class UserResourceAssembler extends ResourceAssemblerSupport<UserTable, U
                 ModuleRoleResource moduleRoleResource = new ModuleRoleResource();
                 moduleRoleResource.setInternalId(mrt.getId());
                 moduleRoleResource.setAuthority(mrt.getAuthority());
+                moduleRoleResource.setName(mrt.getName());
                 setMrr.add(moduleRoleResource);
             }
             resource.setModulesAuthorities(setMrr);

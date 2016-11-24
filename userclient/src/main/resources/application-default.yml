@@ -18,6 +18,7 @@ config:
         delete: http://localhost:9091/user/user/delete
         info: http://localhost:9091/user/user/info
         update: http://localhost:9091/user/user/update
+        updatepersonal: http://localhost:9091/user/user/personal/update
         roleoptions: http://localhost:9091/user/role/options
         clientoptions: http://localhost:9091/user/client/list/options
         moduleroleoptions: http://localhost:9091/user/modulerole/list/options

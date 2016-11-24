@@ -52,6 +52,7 @@ public class ClientResourceAssembler extends ResourceAssemblerSupport<ClientTabl
                 ClientRoleResource crr = new ClientRoleResource();
                 crr.setInternalId(crt.getId());
                 crr.setAuthority(crt.getAuthority());
+                crr.setName(crt.getName());
                 sCrr.add(crr);
             }
             resource.setAuthorities(sCrr);

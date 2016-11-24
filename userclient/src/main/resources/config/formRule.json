@@ -260,5 +260,104 @@
     "reset": {
       "label": "重置"
     }
+  },
+  "userpersonalinfo": {
+    "structure": [
+      {
+        "name": "username",
+        "label": "账号",
+        "type": "text",
+        "placeholder": "账号",
+        "required": true,
+        "readonly":true,
+        "validateRules": [
+          {
+            "name": "custom_validate",
+            "validateRegex": "^\\w{4,10}$",
+            "errorMsg": "只能是数字、字母以及下划线，长度在4-10之间"
+          }
+        ]
+      },
+      {
+        "name": "name",
+        "label": "姓名",
+        "type": "text",
+        "placeholder": "姓名",
+        "required": true,
+        "validateRules": [
+          {
+            "name": "custom_validate",
+            "validateRegex": "^.{2,30}$",
+            "errorMsg": "长度在2-30之间"
+          }
+        ]
+      },
+      {
+        "name": "email",
+        "label": "邮箱",
+        "type": "text",
+        "placeholder": "邮箱",
+        "required": true,
+        "validateRules": [
+          {
+            "name": "custom_validate",
+            "validateRegex": "^([\\w-]+(\\.[\\w-]+)*@[\\w-]+(\\.[\\w-]+)+)$",
+            "errorMsg": "只能为电子邮件"
+          }
+        ]
+      },
+      {
+        "name": "phone",
+        "label": "电话",
+        "type": "text",
+        "placeholder": "电话",
+        "required": true,
+        "validateRules": [
+          {
+            "name": "custom_validate",
+            "validateRegex": "((\\d{11})|^((\\d{7,8})|(\\d{4}|\\d{3})-(\\d{7,8})|(\\d{4}|\\d{3})-(\\d{7,8})-(\\d{4}|\\d{3}|\\d{2}|\\d{1})|(\\d{7,8})-(\\d{4}|\\d{3}|\\d{2}|\\d{1}))$)",
+            "errorMsg": "只能为固话或者手机"
+          }
+        ]
+      },
+      {
+        "name": "limitedDate",
+        "label": "过期时间",
+        "readonly":true,
+        "type": "text"
+      },
+      {
+        "name": "authorities",
+        "label": "用户权限",
+        "type": "text",
+        "readonly":true
+      },
+      {
+        "name": "clients",
+        "label": "关联客户端",
+        "type": "text",
+        "available": false,
+        "readonly":true
+      },
+      {
+        "name": "modulesAuthorities",
+        "label": "模块权限",
+        "type": "text",
+        "available": false,
+        "required": true,
+        "readonly":true
+      },
+      {
+        "name": "id",
+        "type": "hidden",
+        "available": false
+      }
+    ],
+    "submit": {
+      "label": "保存"
+    },
+    "reset": {
+      "label": "重置"
+    }
   }
 }
