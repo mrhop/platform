@@ -12,9 +12,11 @@ import cn.hopever.platform.utils.web.CommonResultStatus;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.oauth2.client.DefaultOAuth2ClientContext;
 import org.springframework.security.oauth2.client.OAuth2ClientContext;
 import org.springframework.security.oauth2.client.OAuth2RestOperations;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
+import org.springframework.security.oauth2.client.token.DefaultAccessTokenRequest;
 import org.springframework.security.oauth2.client.token.grant.password.ResourceOwnerPasswordResourceDetails;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.web.bind.annotation.*;
@@ -202,7 +204,7 @@ public class Oauth2ClientController {
         resource.setUsername(username);
         resource.setPassword(password);
         resource.setScope(oauth2Properties.getClientScopes());
-        return new OAuth2RestTemplate(resource, passwordOAuth2ClientContext);
+        return new OAuth2RestTemplate(resource,  new DefaultOAuth2ClientContext(new DefaultAccessTokenRequest()));
     }
 
 }

@@ -1,5 +1,7 @@
 package cn.hopever.platform.user.web.rest;
 
+import cn.hopever.platform.user.domain.ClientTable;
+import cn.hopever.platform.user.domain.UserTable;
 import cn.hopever.platform.user.service.UserTableService;
 import cn.hopever.platform.utils.web.CommonResult;
 import cn.hopever.platform.utils.web.CommonResultStatus;
@@ -48,6 +50,16 @@ public class PrincipalController {
         String authority = ((OAuth2Authentication) principal).getAuthorities().iterator().next().getAuthority();
         if ("ROLE_super_admin".equals(authority)) {
             map.put("available", true);
+        }else{
+            UserTable ut = userTableService.getUserByUsername(principal.getName());
+            if(ut.getClients()!=null){
+                for(ClientTable ct:ut.getClients()){
+                    if(ct.getClientId().equals(clientId)){
+                        map.put("available", true);
+                        break;
+                    }
+                }
+            }
         }
         //else if(){
         //执行clientId与user包含的client进行比对，如果包含则返回true

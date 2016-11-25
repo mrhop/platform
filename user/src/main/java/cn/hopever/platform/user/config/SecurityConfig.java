@@ -17,6 +17,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 
+import java.io.UnsupportedEncodingException;
+import java.security.SecureRandom;
+
 /**
  * Created by Donghui Huo on 2016/9/5.
  */
@@ -25,6 +28,9 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @EnableResourceServer
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    private BaseConfig baseConfig;
 
     public static Logger logger = LoggerFactory.getLogger(SecurityConfig.class);
 
@@ -35,7 +41,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+        PasswordEncoder pe = null;
+        try {
+            pe = new BCryptPasswordEncoder(4, new SecureRandom(baseConfig.getPasswordRandom().getBytes("UTF-8")));
+        } catch (UnsupportedEncodingException e) {
+            pe = new BCryptPasswordEncoder(4, new SecureRandom(baseConfig.getPasswordRandom().getBytes()));
+        }
+        return pe;
     }
 
     @Bean
@@ -71,7 +83,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .httpBasic().disable()
                 .anonymous().disable()
                 .authorizeRequests()
-               // .antMatchers("/role/**","/module/**").permitAll()
+                // .antMatchers("/role/**","/module/**").permitAll()
                 .anyRequest().authenticated();
     }
+//    public static void main(String args[]){
+//        try {
+//            PasswordEncoder pe = new BCryptPasswordEncoder(4, new SecureRandom("hopever".getBytes("UTF-8")));
+//            PasswordEncoder pe1 = new BCryptPasswordEncoder(4, new SecureRandom("hopever".getBytes("UTF-8")));
+//            System.out.println(pe1.matches("admin@","$2a$04$D1cv4KmBEGHGGQFZG/UXf.Tu/yauxK1rJwahfvPgxC4XGvZCUsW96"));
+//        } catch (UnsupportedEncodingException e) {
+//            e.printStackTrace();
+//        }
+//
+//    }
 }

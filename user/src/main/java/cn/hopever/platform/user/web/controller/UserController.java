@@ -16,7 +16,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,11 +37,8 @@ public class UserController {
     private ClientTableService clientTableService;
     @Autowired
     private ModuleRoleTableService moduleRoleTableService;
-
     @Autowired
     private UserResourceAssembler userTableAssembler;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
 
 
     @PreAuthorize("#oauth2.hasScope('user_admin_client') and ( hasRole('ROLE_super_admin') or hasRole('ROLE_admin'))")
@@ -148,7 +144,7 @@ public class UserController {
             user.setName(body.get("data").get("name").asText());
         }
         if(body.get("data").get("password")!=null&&!body.get("data").get("password").isNull()){
-            user.setPassword(passwordEncoder.encode(body.get("data").get("password").asText()));
+            user.setPassword(body.get("data").get("password").asText());
         }
         userTableService.save(user);
         return null;
@@ -211,7 +207,7 @@ public class UserController {
             user.setName(null);
         }
         if(body.get("data").get("password")!=null&&!body.get("data").get("password").isNull()){
-            user.setPassword(passwordEncoder.encode(body.get("data").get("password").asText()));
+            user.setPassword(body.get("data").get("password").asText());
         }
         userTableService.save(user);
         return null;
@@ -250,7 +246,7 @@ public class UserController {
         }
 
         user.setUsername(body.get("data").get("username").asText());
-        user.setPassword(passwordEncoder.encode(body.get("data").get("password").asText()));
+        user.setPassword(body.get("data").get("password").asText());
         if(body.get("data").get("authorities")!=null&&!body.get("data").get("authorities").isNull()){
             List list = new ArrayList<>();
             list.add(roleTableService.get(body.get("data").get("authorities").asLong()));
