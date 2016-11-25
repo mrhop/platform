@@ -133,8 +133,6 @@ public class UserController {
                 return mapReturn;
             }
             user.setEmail(body.get("data").get("email").asText());
-        }else{
-            user.setEmail(null);
         }
 
         if(body.get("data").get("phone")!=null&&!body.get("data").get("phone").isNull()){
@@ -145,13 +143,12 @@ public class UserController {
                 return mapReturn;
             }
             user.setPhone(body.get("data").get("phone").asText());
-        }else{
-            user.setPhone(null);
         }
         if(body.get("data").get("name")!=null&&!body.get("data").get("name").isNull()){
             user.setName(body.get("data").get("name").asText());
-        }else{
-            user.setName(null);
+        }
+        if(body.get("data").get("password")!=null&&!body.get("data").get("password").isNull()){
+            user.setPassword(passwordEncoder.encode(body.get("data").get("password").asText()));
         }
         userTableService.save(user);
         return null;
@@ -212,6 +209,9 @@ public class UserController {
             user.setName(body.get("data").get("name").asText());
         }else{
             user.setName(null);
+        }
+        if(body.get("data").get("password")!=null&&!body.get("data").get("password").isNull()){
+            user.setPassword(passwordEncoder.encode(body.get("data").get("password").asText()));
         }
         userTableService.save(user);
         return null;

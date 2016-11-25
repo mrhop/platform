@@ -7,14 +7,7 @@
         "type": "text",
         "placeholder": "账号",
         "required": true,
-        "readonly":true,
-        "validateRules": [
-          {
-            "name": "custom_validate",
-            "validateRegex": "^\\w{4,10}$",
-            "errorMsg": "只能是数字、字母以及下划线，长度在4-10之间"
-          }
-        ]
+        "readonly": true
       },
       {
         "name": "name",
@@ -27,6 +20,19 @@
             "name": "custom_validate",
             "validateRegex": "^.{2,30}$",
             "errorMsg": "长度在2-30之间"
+          }
+        ]
+      },
+      {
+        "name": "password",
+        "label": "密码",
+        "type": "password",
+        "placeholder": "密码",
+        "validateRules": [
+          {
+            "name": "custom_validate",
+            "validateRegex": "^(?![a-zA-Z]+$)(?!\\d+$)(?![!@#$%^&*]+$)[a-zA-Z\\d!@#$%^&*]{6,15}$",
+            "errorMsg": "至少包含数字，字母以及特殊字符【!@#$%^&*】中任意两种,并在6-15字符之间"
           }
         ]
       },
@@ -120,11 +126,13 @@
     "reset": {
       "label": "重置"
     },
-    "actions": [{
-      "extraClassName":"btn-default",
-      "action":"backup",
-      "label": "返回"
-    }]
+    "actions": [
+      {
+        "extraClassName": "btn-default",
+        "action": "backup",
+        "label": "返回"
+      }
+    ]
   },
   "useradd": {
     "structure": [
@@ -137,8 +145,8 @@
         "validateRules": [
           {
             "name": "custom_validate",
-            "validateRegex": "^\\w{4,10}$",
-            "errorMsg": "只能是数字、字母以及下划线，长度在4-10之间"
+            "validateRegex": "^(?![a-zA-Z]+$)(?!\\d+$)(?![_]+$)[a-zA-Z\\d_]{4,10}$",
+            "errorMsg": "至少包含数字，字母以及_中任意两种,并在6-15字符之间"
           }
         ]
       },
@@ -165,7 +173,7 @@
         "validateRules": [
           {
             "name": "custom_validate",
-            "validateRegex": "^(?![a-zA-z]+$)(?!\\d+$)(?![!@#$%^&*]+$)[a-zA-Z\\d!@#$%^&*]{6,15}$",
+            "validateRegex": "^(?![a-zA-Z]+$)(?!\\d+$)(?![!@#$%^&*]+$)[a-zA-Z\\d!@#$%^&*]{6,15}$",
             "errorMsg": "至少包含数字，字母以及特殊字符【!@#$%^&*】中任意两种,并在6-15字符之间"
           }
         ]
@@ -269,14 +277,7 @@
         "type": "text",
         "placeholder": "账号",
         "required": true,
-        "readonly":true,
-        "validateRules": [
-          {
-            "name": "custom_validate",
-            "validateRegex": "^\\w{4,10}$",
-            "errorMsg": "只能是数字、字母以及下划线，长度在4-10之间"
-          }
-        ]
+        "readonly": true
       },
       {
         "name": "name",
@@ -289,6 +290,19 @@
             "name": "custom_validate",
             "validateRegex": "^.{2,30}$",
             "errorMsg": "长度在2-30之间"
+          }
+        ]
+      },
+      {
+        "name": "password",
+        "label": "密码",
+        "type": "password",
+        "placeholder": "密码",
+        "validateRules": [
+          {
+            "name": "custom_validate",
+            "validateRegex": "^(?![a-zA-Z]+$)(?!\\d+$)(?![!@#$%^&*]+$)[a-zA-Z\\d!@#$%^&*]{6,15}$",
+            "errorMsg": "至少包含数字，字母以及特殊字符【!@#$%^&*】中任意两种,并在6-15字符之间"
           }
         ]
       },
@@ -323,21 +337,21 @@
       {
         "name": "limitedDate",
         "label": "过期时间",
-        "readonly":true,
+        "readonly": true,
         "type": "text"
       },
       {
         "name": "authorities",
         "label": "用户权限",
         "type": "text",
-        "readonly":true
+        "readonly": true
       },
       {
         "name": "clients",
         "label": "关联客户端",
         "type": "text",
         "available": false,
-        "readonly":true
+        "readonly": true
       },
       {
         "name": "modulesAuthorities",
@@ -345,7 +359,7 @@
         "type": "text",
         "available": false,
         "required": true,
-        "readonly":true
+        "readonly": true
       },
       {
         "name": "id",

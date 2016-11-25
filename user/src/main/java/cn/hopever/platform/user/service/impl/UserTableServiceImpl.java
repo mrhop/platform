@@ -43,6 +43,12 @@ public class UserTableServiceImpl implements UserTableService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserTable user = userTableRepository.findOneByUsername(username);
+        if(user==null){
+            user = userTableRepository.findOneByPhone(username);
+        }
+        if(user==null){
+            user = userTableRepository.findOneByEmail(username);
+        }
         if (user == null) {
             throw new UsernameNotFoundException("username " + username
                     + " not found");
@@ -58,7 +64,8 @@ public class UserTableServiceImpl implements UserTableService {
 
     @Override
     public UserTable getUserByUsername(String username) {
-        return userTableRepository.findOneByUsername(username);
+        UserTable ut = userTableRepository.findOneByUsername(username);
+        return ut;
     }
 
     @Override
