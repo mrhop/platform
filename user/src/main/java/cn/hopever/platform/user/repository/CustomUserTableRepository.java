@@ -14,5 +14,5 @@ import java.util.Map;
  */
 public interface CustomUserTableRepository {
     public Page<UserTable> findByUsernameNotAndFilters(String username, Map<String, Object> mapFilter, Pageable pageable);
-    public Page<UserTable> findByCreateUserAndAuthoritiesInAndClientsInAndFilters(UserTable userTable, Collection<RoleTable> authorities, Collection<ClientTable> clients, Map<String, Object> mapFilter, Pageable pageable);
+    public Page<UserTable> findByCreateUserAndAuthoritiesInAndClientsInAndFilters(UserTable userTable, Collection<RoleTable> authorities1,Collection<RoleTable> authorities2, Collection<ClientTable> clients, Map<String, Object> mapFilter, Pageable pageable);
 }

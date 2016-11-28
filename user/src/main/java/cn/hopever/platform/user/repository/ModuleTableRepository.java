@@ -14,12 +14,12 @@ import java.util.List;
  */
 public interface ModuleTableRepository extends PagingAndSortingRepository<ModuleTable, Long> {
     public ModuleTable findOneByModuleName(String moduleName);
-    public List<ModuleTable> findByModuleNameLike(String moduleName, Pageable pageable);
+    public List<ModuleTable> findDistinctByModuleNameLike(String moduleName, Pageable pageable);
 
     //如果是common-user，要根据user，然后指向到module-role，然后根据这个获取到的modulelist，然后根据modulelist中包含的modulerole，进行处理并过滤，然后返回，并筛出二级的包含，并写入到父module中
-    public List<ModuleTable> findByParentAndClient(ModuleTable parent,ClientTable client);
-    public List<ModuleTable> findByParentAndClientAndModuleName(ModuleTable parent,ClientTable client,String moduleName);
-    public List<ModuleTable> findByParentAndClientAndModuleNameLike(ModuleTable parent,ClientTable client,String moduleName);
-    public List<ModuleTable> findByParentAndClientAndAuthoritiesIn(ModuleTable parent, ClientTable client, Collection<ModuleRoleTable> authorities);
+    public List<ModuleTable> findDistinctByParentAndClient(ModuleTable parent,ClientTable client);
+    public List<ModuleTable> findDistinctByParentAndClientAndModuleName(ModuleTable parent,ClientTable client,String moduleName);
+    public List<ModuleTable> findDistinctByParentAndClientAndModuleNameLike(ModuleTable parent,ClientTable client,String moduleName);
+    public List<ModuleTable> findDistinctByParentAndClientAndAuthoritiesIn(ModuleTable parent, ClientTable client, Collection<ModuleRoleTable> authorities);
 
 }

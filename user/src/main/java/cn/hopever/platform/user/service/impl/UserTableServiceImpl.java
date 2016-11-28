@@ -43,10 +43,10 @@ public class UserTableServiceImpl implements UserTableService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserTable user = userTableRepository.findOneByUsername(username);
-        if(user==null){
+        if (user == null) {
             user = userTableRepository.findOneByPhone(username);
         }
-        if(user==null){
+        if (user == null) {
             user = userTableRepository.findOneByEmail(username);
         }
         if (user == null) {
@@ -95,14 +95,11 @@ public class UserTableServiceImpl implements UserTableService {
     @Override
     public Page<UserTable> getSubList(String username, Pageable pageable, Map<String, Object> filterMap) {
         UserTable ut = userTableRepository.findOneByUsername(username);
-        List<RoleTable> list = new ArrayList<>();
-        list.add(roleTableRepository.findOneByAuthority("ROLE_admin"));
-        list.add(roleTableRepository.findOneByAuthority("ROLE_common_user"));
-        if (filterMap == null) {
-            return userTableRepository.findByCreateUserAndAuthoritiesInAndClientsIn(ut, list, ut.getClients(), pageable);
-        } else {
-            return customUserTableRepository.findByCreateUserAndAuthoritiesInAndClientsInAndFilters(ut, list, ut.getClients(), filterMap, pageable);
-        }
+        List<RoleTable> list1 = new ArrayList<>();
+        List<RoleTable> list2 = new ArrayList<>();
+        list1.add(roleTableRepository.findOneByAuthority("ROLE_admin"));
+        list2.add(roleTableRepository.findOneByAuthority("ROLE_common_user"));
+        return customUserTableRepository.findByCreateUserAndAuthoritiesInAndClientsInAndFilters(ut, list1,list2, ut.getClients(), filterMap, pageable);
     }
 
     @Override

@@ -20,12 +20,9 @@ public interface UserTableRepository extends PagingAndSortingRepository<UserTabl
     public UserTable findOneByEmail(String email);
     public UserTable findOneByPhone(String phone);
     public List<UserTable> findByUsernameLike(String username, Pageable pageable);
-    public Page<UserTable> findByAuthoritiesInAndClientsIn(Collection<RoleTable> authorities, Collection<ClientTable> clients, Pageable pageable);
+    public Page<UserTable> findDistinctByAuthoritiesInAndClientsIn(Collection<RoleTable> authorities, Collection<ClientTable> clients, Pageable pageable);
     public Page<UserTable> findByUsernameNot(String username,Pageable pageable);
-
-    public Page<UserTable> findByCreateUserAndAuthoritiesInAndClientsIn(UserTable userTable,Collection<RoleTable> authorities, Collection<ClientTable> clients, Pageable pageable);
-
-
+    public Page<UserTable> findDistinctByCreateUserAndAuthoritiesInAndClientsIn(UserTable userTable,Collection<RoleTable> authorities, Collection<ClientTable> clients, Pageable pageable);
     @Modifying
     @Query("update UserTable u set u.createUser = ?1 where u.createUser = ?2")
     int updateCreateUser(UserTable userTable, UserTable userTablePrev);

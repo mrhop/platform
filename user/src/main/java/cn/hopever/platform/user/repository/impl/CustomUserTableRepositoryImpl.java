@@ -27,7 +27,7 @@ public class CustomUserTableRepositoryImpl extends SimpleJpaRepository<UserTable
 
     private final EntityManager entityManager;
 
-    public CustomUserTableRepositoryImpl( EntityManager entityManager) {
+    public CustomUserTableRepositoryImpl(EntityManager entityManager) {
         super(JpaEntityInformationSupport.getEntityInformation(UserTable.class, entityManager), entityManager);
         this.entityManager = entityManager;
     }
@@ -42,10 +42,10 @@ public class CustomUserTableRepositoryImpl extends SimpleJpaRepository<UserTable
 
     private Specification<UserTable> filterConditions1(String username, Map<String, Object> mapFilter) {
         return new Specification<UserTable>() {
-
             public Predicate toPredicate(Root<UserTable> root, CriteriaQuery<?> query,
                                          CriteriaBuilder builder) {
-                Predicate predicateReturn = builder.notEqual(root.get("username"),username);
+                Predicate predicateReturn = builder.notEqual(root.get("username"), username);
+                query.distinct(true);
                 if (mapFilter != null) {
                     for (String key : mapFilter.keySet()) {
                         if (mapFilter.get(key) != null) {
@@ -60,21 +60,27 @@ public class CustomUserTableRepositoryImpl extends SimpleJpaRepository<UserTable
 
 
     @Override
-    public Page<UserTable> findByCreateUserAndAuthoritiesInAndClientsInAndFilters(UserTable userTable, Collection<RoleTable> authorities, Collection<ClientTable> clients, Map<String, Object> mapFilter, Pageable pageable) {
-        return super.findAll(filterConditions2(userTable,authorities,clients, mapFilter), pageable);
+    public Page<UserTable> findByCreateUserAndAuthoritiesInAndClientsInAndFilters(UserTable userTable, Collection<RoleTable> authorities1, Collection<RoleTable> authorities2, Collection<ClientTable> clients, Map<String, Object> mapFilter, Pageable pageable) {
+        return super.findAll(filterConditions2(userTable, authorities1, authorities2, clients, mapFilter), pageable);
     }
-    private Specification<UserTable> filterConditions2(UserTable userTable, Collection<RoleTable> authorities, Collection<ClientTable> clients, Map<String, Object> mapFilter) {
-        return new Specification<UserTable>() {
 
+    private Specification<UserTable> filterConditions2(UserTable userTable, Collection<RoleTable> authorities1, Collection<RoleTable> authorities2, Collection<ClientTable> clients, Map<String, Object> mapFilter) {
+        return new Specification<UserTable>() {
             public Predicate toPredicate(Root<UserTable> root, CriteriaQuery<?> query,
                                          CriteriaBuilder builder) {
-                Predicate predicateReturn = builder.and( builder.notEqual(root.get("createUser"),userTable),root.get("clients").in(clients),root.get("authorities").in(authorities));
-                if (mapFilter != null) {
+                Predicate predicateReturn = null;
+                query.distinct(true);
+                if (mapFilter != null && mapFilter.size() > 0) {
                     for (String key : mapFilter.keySet()) {
                         if (mapFilter.get(key) != null) {
                             predicateReturn = builder.and(predicateReturn, builder.like(root.get(key), "%" + mapFilter.get(key) + "%"));
                         }
                     }
+                }
+                if (predicateReturn == null) {
+                    predicateReturn = builder.and(builder.or(builder.and(builder.equal(root.get("createUser"), userTable), root.join("authorities").in(authorities1)), root.join("authorities").in(authorities2)), root.join("clients").in(clients));
+                } else {
+                    predicateReturn = builder.and(predicateReturn, builder.or(root.join("authorities").in(authorities1), builder.and(builder.equal(root.get("createUser"), userTable), root.join("authorities").in(authorities2))), root.join("clients").in(clients));
                 }
                 return predicateReturn;
             }
