@@ -46,6 +46,15 @@ public class ModuleRoleController {
         String authority = roleTable.getAuthority();
         if ("ROLE_common_user".equals(authority)) {
             List<ModuleRoleTable> list = moduleRoleTableService.getByClients(JacksonUtil.mapper.convertValue(body.get("clientIds"), List.class));
+            Long userId = null;
+            if (body.get("userId") != null && !body.get("userId").isNull()) {
+                userId = body.get("userId").asLong();
+            }
+            List<ModuleRoleTable> listSelected = null;
+            List<ModuleRoleTable> listSelectedUpdate = new ArrayList<>();
+            if (userId != null) {
+                listSelected = moduleRoleTableService.getByUserId(userId);
+            }
             if (list.size() > 0) {
                 listOptions = new ArrayList<>();
                 for (ModuleRoleTable mrt : list) {
@@ -53,19 +62,15 @@ public class ModuleRoleController {
                     mapOption.put("label", mrt.getName());
                     mapOption.put("value", mrt.getId());
                     listOptions.add(mapOption);
+                    if(listSelected!=null&&listSelected.contains(mrt)){
+                        listSelectedUpdate.add(mrt);
+                    }
                 }
             }
-            Long userId = null;
-            if (body.get("userId") != null && !body.get("userId").isNull()) {
-                userId = body.get("userId").asLong();
-            }
-            List<ModuleRoleTable> listSelected = null;
-            if (userId != null) {
-                listSelected = moduleRoleTableService.getByUserId(userId);
-            }
-            if (listSelected != null && listSelected.size() > 0) {
+
+            if (listSelectedUpdate.size() > 0) {
                 listOptionsSelected = new ArrayList<>();
-                for (ModuleRoleTable mrt : listSelected) {
+                for (ModuleRoleTable mrt : listSelectedUpdate) {
                     listOptionsSelected.add(mrt.getId());
                 }
             }

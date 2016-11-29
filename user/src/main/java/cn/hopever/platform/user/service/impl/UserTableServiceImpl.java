@@ -1,5 +1,6 @@
 package cn.hopever.platform.user.service.impl;
 
+import cn.hopever.platform.user.domain.ClientTable;
 import cn.hopever.platform.user.domain.RoleTable;
 import cn.hopever.platform.user.domain.UserTable;
 import cn.hopever.platform.user.repository.CustomUserTableRepository;
@@ -13,7 +14,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,8 +30,6 @@ public class UserTableServiceImpl implements UserTableService {
 
     Logger logger = LoggerFactory.getLogger(UserTableServiceImpl.class);
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
     @Autowired
     private UserTableRepository userTableRepository;
     @Autowired
@@ -58,7 +56,6 @@ public class UserTableServiceImpl implements UserTableService {
 
     @Override
     public UserTable save(UserTable user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userTableRepository.save(user);
     }
 
@@ -99,7 +96,19 @@ public class UserTableServiceImpl implements UserTableService {
         List<RoleTable> list2 = new ArrayList<>();
         list1.add(roleTableRepository.findOneByAuthority("ROLE_admin"));
         list2.add(roleTableRepository.findOneByAuthority("ROLE_common_user"));
-        return customUserTableRepository.findByCreateUserAndAuthoritiesInAndClientsInAndFilters(ut, list1,list2, ut.getClients(), filterMap, pageable);
+        List listUpdate = new ArrayList<>();
+        List<ClientTable> list = ut.getClients();
+        if(list!=null){
+            for (ClientTable ct : list) {
+                if (!"user_admin_client".equals(ct.getClientId())) {
+                    listUpdate.add(ct);
+                }
+            }
+        }
+        if(listUpdate!=null&&listUpdate.size()>0){
+            return customUserTableRepository.findByCreateUserAndAuthoritiesInAndClientsInAndFilters(ut, list1, list2, listUpdate, filterMap, pageable);
+        }
+        return null;
     }
 
     @Override

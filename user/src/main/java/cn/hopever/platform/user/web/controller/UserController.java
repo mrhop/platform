@@ -1,5 +1,7 @@
 package cn.hopever.platform.user.web.controller;
 
+import cn.hopever.platform.user.domain.ClientTable;
+import cn.hopever.platform.user.domain.ModuleRoleTable;
 import cn.hopever.platform.user.domain.UserTable;
 import cn.hopever.platform.user.service.ClientTableService;
 import cn.hopever.platform.user.service.ModuleRoleTableService;
@@ -16,6 +18,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,6 +42,9 @@ public class UserController {
     private ModuleRoleTableService moduleRoleTableService;
     @Autowired
     private UserResourceAssembler userTableAssembler;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
 
     @PreAuthorize("#oauth2.hasScope('user_admin_client') and ( hasRole('ROLE_super_admin') or hasRole('ROLE_admin'))")
@@ -144,7 +150,7 @@ public class UserController {
             user.setName(body.get("data").get("name").asText());
         }
         if(body.get("data").get("password")!=null&&!body.get("data").get("password").isNull()){
-            user.setPassword(body.get("data").get("password").asText());
+            user.setPassword(passwordEncoder.encode(body.get("data").get("password").asText()));
         }
         userTableService.save(user);
         return null;
@@ -155,7 +161,8 @@ public class UserController {
     @RequestMapping(value = "/update", method = {RequestMethod.POST})
     public Map updateUser(@RequestBody JsonNode body, Principal principal) {
         Map map = JacksonUtil.mapper.convertValue(body.get("data"),Map.class);
-        UserTable user=this.userTableService.get( Long.valueOf(map.get("id").toString()));
+        UserTable userController=userTableService.getUserByUsername(principal.getName());
+        UserTable user=userTableService.get( Long.valueOf(map.get("id").toString()));
         if(body.get("data").get("email")!=null&&!body.get("data").get("email").isNull()){
             UserTable ut = this.userTableService.getUserByEmail(body.get("data").get("email").asText());
             if(ut!=null&&!Long.valueOf(map.get("id").toString()).equals(ut.getId())){
@@ -186,16 +193,36 @@ public class UserController {
         }else {
             user.setAuthorities(null);
         }
+        List listPartClients = new ArrayList<>();
+        listPartClients.add(clientTableService.loadClientByClientId("user_admin_client"));
+        if(user.getClients()!=null){
+            for(ClientTable ct:user.getClients()){
+                if(userController.getClients()!=null&&!userController.getClients().contains(ct)){
+                    listPartClients.add(ct);
+                }
+            }
+        }
         if(body.get("data").get("clients")!=null&&!body.get("data").get("clients").isNull()){
-            user.setClients(clientTableService.getByIds(JacksonUtil.mapper.convertValue(body.get("data").get("clients"),List.class)));
-        }else {
-            user.setClients(null);
+            listPartClients.addAll(clientTableService.getByIds(JacksonUtil.mapper.convertValue(body.get("data").get("clients"),List.class)));
+        }
+        user.setClients(listPartClients);
+
+        List<ModuleRoleTable> listPartModileRoles =user.getModulesAuthorities();
+        if(userController.getClients()!=null&&listPartModileRoles!=null&&listPartModileRoles.size()>0){
+            for(ClientTable ct:userController.getClients()){
+                List<ModuleRoleTable> moduleRoles = ct.getModuleRoles();
+                if(moduleRoles!=null){
+                    for(ModuleRoleTable mr :moduleRoles){
+                        listPartModileRoles.remove(mr);
+                    }
+                }
+
+            }
         }
         if(body.get("data").get("modulesAuthorities")!=null&&!body.get("data").get("modulesAuthorities").isNull()){
-            user.setModulesAuthorities(moduleRoleTableService.getByIds(JacksonUtil.mapper.convertValue(body.get("data").get("modulesAuthorities"),List.class)));
-        }else {
-            user.setModulesAuthorities(null);
+            listPartModileRoles.addAll(moduleRoleTableService.getByIds(JacksonUtil.mapper.convertValue(body.get("data").get("modulesAuthorities"),List.class)));
         }
+        user.setModulesAuthorities(listPartModileRoles);
         if(body.get("data").get("limitedDate")!=null&&!body.get("data").get("limitedDate").isNull()){
             user.setLimitedDate(new Date(body.get("data").get("limitedDate").asLong()));
         }else{
@@ -207,7 +234,7 @@ public class UserController {
             user.setName(null);
         }
         if(body.get("data").get("password")!=null&&!body.get("data").get("password").isNull()){
-            user.setPassword(body.get("data").get("password").asText());
+            user.setPassword(passwordEncoder.encode(body.get("data").get("password").asText()));
         }
         userTableService.save(user);
         return null;
@@ -246,7 +273,7 @@ public class UserController {
         }
 
         user.setUsername(body.get("data").get("username").asText());
-        user.setPassword(body.get("data").get("password").asText());
+        user.setPassword(passwordEncoder.encode(body.get("data").get("password").asText()));
         if(body.get("data").get("authorities")!=null&&!body.get("data").get("authorities").isNull()){
             List list = new ArrayList<>();
             list.add(roleTableService.get(body.get("data").get("authorities").asLong()));
@@ -254,11 +281,13 @@ public class UserController {
         }else {
             user.setAuthorities(null);
         }
+        List clientsUpdate = new ArrayList<>();
+        clientsUpdate.add(clientTableService.loadClientByClientId("user_admin_client"));
         if(body.get("data").get("clients")!=null&&!body.get("data").get("clients").isNull()){
-            user.setClients(clientTableService.getByIds(JacksonUtil.mapper.convertValue(body.get("data").get("clients"),List.class)));
-        }else {
-            user.setClients(null);
+            clientTableService.getByIds(JacksonUtil.mapper.convertValue(body.get("data").get("clients"),List.class));
+            clientsUpdate.addAll(clientTableService.getByIds(JacksonUtil.mapper.convertValue(body.get("data").get("clients"),List.class)));
         }
+        user.setClients(clientsUpdate);
         if(body.get("data").get("modulesAuthorities")!=null&&!body.get("data").get("modulesAuthorities").isNull()){
             user.setModulesAuthorities(moduleRoleTableService.getByIds(JacksonUtil.mapper.convertValue(body.get("data").get("modulesAuthorities"),List.class)));
         }else {
@@ -278,5 +307,20 @@ public class UserController {
         user.setCreateUser(this.userTableService.getUserByUsername(principal.getName()));
         userTableService.save(user);
         return null;
+    }
+
+    private static boolean validateUserOperation(UserTable ut1,UserTable ut2){
+        if(ut1.getAuthorities().get(0).getAuthority().equals("ROLE_super_admin")){
+            return true;
+        }else{
+            if(ut1.getAuthorities().get(0).getAuthority().equals("ROLE_admin")&&ut2.getAuthorities().get(0).getAuthority().equals("ROLE_admin")){
+                if(ut2.getCreateUser()!=null&&ut2.getCreateUser().getId() ==ut1.getId()){
+                    return true;
+                }
+            }else if(ut1.getAuthorities().get(0).getAuthority().equals("ROLE_admin")&&ut2.getAuthorities().get(0).getAuthority().equals("ROLE_common_user")){
+                //for()
+            }
+            return false;
+        }
     }
 }

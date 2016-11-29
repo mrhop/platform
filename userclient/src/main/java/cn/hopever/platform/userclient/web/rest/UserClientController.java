@@ -70,17 +70,17 @@ public class UserClientController {
                             roleSelected = Long.valueOf(((List<Map>) mapData.get("authorities")).get(0).get("internalId").toString());
                             map.put("defaultValue", roleSelected);
                         }
-                        if ("clients".equals(map.get("name"))) {
-                            if (mapData.get("clients") != null) {
-                                List<Map> listClients = (List<Map>) mapData.get("clients");
-                                clientsSelected = new ArrayList<>();
-                                for (Map client : listClients) {
-                                    clientsSelected.add(client.get("internalId"));
-                                }
-                                map.put("defaultValue", clientsSelected);
-                            }
-
-                        }
+//                        if ("clients".equals(map.get("name"))) {
+//                            if (mapData.get("clients") != null) {
+//                                List<Map> listClients = (List<Map>) mapData.get("clients");
+//                                clientsSelected = new ArrayList<>();
+//                                for (Map client : listClients) {
+//                                    clientsSelected.add(client.get("internalId"));
+//                                }
+//                                map.put("defaultValue", clientsSelected);
+//                            }
+//
+//                        }
                     }
                 }
             }
@@ -104,7 +104,12 @@ public class UserClientController {
                 if (CommonResultStatus.SUCCESS.toString().equals(c2.getStatus()) && c2.getResponseData().get("data") != null) {
                     Map mapItems = (Map) c2.getResponseData().get("data");
                     map.put("items", mapItems.get("clients"));
-                    map.remove("available");
+                    if(mapItems.get("clientsSelected")!=null){
+                        clientsSelected = JacksonUtil.mapper.convertValue(mapItems.get("clientsSelected"),List.class);
+                        map.put("defaultValue", clientsSelected);
+                    }
+
+                        map.remove("available");
                 } else {
                     map.put("items", new ArrayList());
                 }

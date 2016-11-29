@@ -51,7 +51,8 @@ public class ClientController {
             userId = body.get("userId").asLong();
         }
         Iterable<ClientTable> list = null;
-        Iterable<ClientTable> listSelected = null;
+        List<ClientTable> listSelected = null;
+        List<ClientTable> listSelectedUpdated = new ArrayList<>();
         //然后根据roleName
         if ("ROLE_admin".equals(roleName) || "ROLE_common_user".equals(roleName)) {
             //do the get
@@ -68,16 +69,23 @@ public class ClientController {
         if (list != null && list.iterator().hasNext()) {
             listOptions = new ArrayList<>();
             for (ClientTable ct : list) {
-                Map mapOption = new HashMap<>();
-                mapOption.put("label", ct.getClientName());
-                mapOption.put("value", ct.getId());
-                listOptions.add(mapOption);
+                if (!"user_admin_client".equals(ct.getClientId())) {
+                    Map mapOption = new HashMap<>();
+                    mapOption.put("label", ct.getClientName());
+                    mapOption.put("value", ct.getId());
+                    listOptions.add(mapOption);
+                    if (listSelected != null && listSelected.contains(ct)) {
+                        listSelectedUpdated.add(ct);
+                    }
+                }
             }
         }
 
-        if (listSelected != null && listSelected.iterator().hasNext()) {
+        if (listSelectedUpdated.size() > 0) {
             listOptionsSelected = new ArrayList<>();
-            for (ClientTable ct : listSelected) {
+            for (ClientTable ct : listSelectedUpdated) {
+                for (ClientTable ctOption : list) {
+                }
                 listOptionsSelected.add(ct.getId());
             }
         }

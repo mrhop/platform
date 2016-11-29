@@ -41,7 +41,7 @@ public class UserTable implements UserDetails {
     private String password;
 
     @Column(name = "account_non_locked", nullable = false)
-    private boolean accountNonLocked = false;
+    private boolean accountNonLocked = true;
 
     @Column(name = "enabled", nullable = false)
     private boolean enabled = true;
