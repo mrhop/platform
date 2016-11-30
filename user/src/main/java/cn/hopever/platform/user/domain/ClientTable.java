@@ -54,6 +54,9 @@ public class ClientTable implements ClientDetails {
     @Column(name = "scope", nullable = true)
     private String scope;
 
+    @Column(name = "internal_client", nullable = true)
+    private boolean internalClient = false;
+
     @Column(name = "authorized_grant_types", nullable = false)
     private String authorizedGrantTypes;
 
@@ -156,12 +159,14 @@ public class ClientTable implements ClientDetails {
     }
 
     public void setAuthorizedGrantTypes(Set<String> authorizedGrantTypes) {
-        if (authorizedGrantTypes != null) {
+        if (authorizedGrantTypes != null&&authorizedGrantTypes.size()>0) {
             try {
                 this.authorizedGrantTypes = JacksonUtil.mapper.writeValueAsString(authorizedGrantTypes);
             } catch (IOException e) {
                 logger.error("json format error", e);
             }
+        }else{
+            this.authorizedGrantTypes = null;
         }
     }
 

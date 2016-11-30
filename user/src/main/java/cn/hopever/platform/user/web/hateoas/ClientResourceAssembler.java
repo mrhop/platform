@@ -93,6 +93,7 @@ public class ClientResourceAssembler extends ResourceAssemblerSupport<ClientTabl
         if (clientTable != null) {
             clientResource = modelMapper.map(clientTable, ClientResource.class);
             clientResource.setInternalId(clientTable.getId());
+            clientResource.setClientSecret(null);
             clientResource.add(entityLinks.linkFor(ClientResource.class).slash(clientTable.getId()).withSelfRel());
         }
         return clientResource;

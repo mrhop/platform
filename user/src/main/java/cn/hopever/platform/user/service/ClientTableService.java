@@ -1,10 +1,13 @@
 package cn.hopever.platform.user.service;
 
 import cn.hopever.platform.user.domain.ClientTable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.oauth2.provider.ClientDetails;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Donghui Huo on 2016/8/30.
@@ -18,9 +21,12 @@ public interface ClientTableService extends ClientDetailsService {
     public ClientDetails loadClientByClientId(String clientId);
 
     public ClientTable save(ClientTable client);
+    public ClientTable getById(Long id);
     public Iterable<ClientTable> getAll();
     public List<ClientTable> getByUserName(String userName);
     public List<ClientTable> getByUserId(Long userId);
     public List<ClientTable> getByIds(List<Object> ids);
+    public Page<ClientTable> getList(Pageable pageable, Map<String, Object> filterMap);
+
 
 }

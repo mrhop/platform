@@ -94,5 +94,53 @@
         "currentSize": 10
       }
     }
+  },
+  "clientList": {
+    "thead": [
+      {
+        "className": "td-id",
+        "title": "#",
+        "value": "serialNum"
+      },
+      {
+        "title": "客户端账号",
+        "value": "clientId",
+        "filter": true,
+        "editType": "text"
+      },
+      {
+        "title": "客户端名称",
+        "value": "clientName",
+        "filter": true,
+        "editType": "text"
+      },
+      {
+        "title": "是否内部客户端",
+        "value": "scope",
+        "sortable": "true"
+      }
+    ],
+    "tfoot": [
+      {
+        "className": "td-foot",
+        "colSpan": 4,
+        "title": "客户端列表基础信息"
+      }
+    ]
+  },
+  "clientListAdditionalFeature": {
+    "sortAvailable": true,
+    "filterAvailable": true,
+    "editable": true,
+    "deletable": true,
+    "addable": true,
+    "extraClass": "hover",
+    "pager": {
+      "show": true,
+      "rowSize": {
+        "show": true,
+        "currentSize": 10
+      }
+    }
   }
 }

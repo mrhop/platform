@@ -73,7 +73,11 @@ public class CustomUserTableRepositoryImpl extends SimpleJpaRepository<UserTable
                 if (mapFilter != null && mapFilter.size() > 0) {
                     for (String key : mapFilter.keySet()) {
                         if (mapFilter.get(key) != null) {
-                            predicateReturn = builder.and(predicateReturn, builder.like(root.get(key), "%" + mapFilter.get(key) + "%"));
+                            if (predicateReturn == null) {
+                                predicateReturn = builder.like(root.get(key), "%" + mapFilter.get(key) + "%");
+                            } else {
+                                predicateReturn = builder.and(predicateReturn, builder.like(root.get(key), "%" + mapFilter.get(key) + "%"));
+                            }
                         }
                     }
                 }

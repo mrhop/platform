@@ -373,5 +373,204 @@
     "reset": {
       "label": "重置"
     }
+  },
+  "clientupdate": {
+    "structure": [
+      {
+        "name": "clientId",
+        "label": "账号",
+        "type": "text",
+        "placeholder": "账号",
+        "required": true,
+        "readonly": true
+      },
+      {
+        "name": "clientName",
+        "label": "名称",
+        "type": "text",
+        "placeholder": "名称",
+        "required": true,
+        "validateRules": [
+          {
+            "name": "custom_validate",
+            "validateRegex": "^.{2,30}$",
+            "errorMsg": "长度在2-30之间"
+          }
+        ]
+      },
+      {
+        "name": "clientSecret",
+        "label": "密码",
+        "type": "password",
+        "placeholder": "密码",
+        "validateRules": [
+          {
+            "name": "custom_validate",
+            "validateRegex": "^(?![a-zA-Z]+$)(?!\\d+$)(?![!@#$%^&*]+$)[a-zA-Z\\d!@#$%^&*]{6,15}$",
+            "errorMsg": "至少包含数字，字母以及特殊字符【!@#$%^&*】中任意两种,并在6-15字符之间"
+          }
+        ]
+      },
+      {
+        "name": "authorizedGrantTypes",
+        "label": "授权方式",
+        "required": true,
+        "type": "checkbox",
+        "dataType": "number",
+        "items": [
+          {
+            "label": "客户端",
+            "value": "client_credentials"
+          },
+          {
+            "label": "密码",
+            "value": "password"
+          },
+          {
+            "label": "授权码",
+            "value": "authorization_code"
+          }
+        ]
+      },
+      {
+        "name": "internalClient",
+        "label": "是否内部客户端",
+        "type": "checkbox",
+        "dataType": "boolean",
+        "items": [
+          {
+            "label": "是",
+            "value": true
+          }
+        ]
+      },
+      {
+        "name": "authorities",
+        "label": "客户端权限",
+        "type": "text",
+        "readonly": true
+      },
+      {
+        "name": "scope",
+        "label": "授权范围",
+        "type": "text",
+        "readonly": true
+      },
+      {
+        "name": "moduleRoles",
+        "label": "模块角色",
+        "type": "text",
+        "readonly": true
+      },
+      {
+        "name": "id",
+        "type": "hidden",
+        "available": false
+      }
+    ],
+    "submit": {
+      "label": "保存"
+    },
+    "reset": {
+      "label": "重置"
+    },
+    "actions": [
+      {
+        "extraClassName": "btn-default",
+        "action": "backup",
+        "label": "返回"
+      }
+    ]
+  },
+  "clientadd": {
+    "structure": [
+      {
+        "name": "clientId",
+        "label": "账号",
+        "type": "text",
+        "placeholder": "账号",
+        "required": true,
+        "validateRules": [
+          {
+            "name": "custom_validate",
+            "validateRegex": "^(?![a-zA-Z]+$)(?!\\d+$)(?!_+$)[a-zA-Z\\d_]{4,10}$",
+            "errorMsg": "至少包含数字，字母以及_中任意两种,并在4-15字符之间"
+          }
+        ]
+      },
+      {
+        "name": "clientName",
+        "label": "名称",
+        "type": "text",
+        "placeholder": "名称",
+        "required": true,
+        "validateRules": [
+          {
+            "name": "custom_validate",
+            "validateRegex": "^.{2,30}$",
+            "errorMsg": "长度在2-30之间"
+          }
+        ]
+      },
+      {
+        "name": "clientSecret",
+        "label": "密码",
+        "type": "password",
+        "placeholder": "密码",
+        "validateRules": [
+          {
+            "name": "custom_validate",
+            "validateRegex": "^(?![a-zA-Z]+$)(?!\\d+$)(?![!@#$%^&*]+$)[a-zA-Z\\d!@#$%^&*]{6,15}$",
+            "errorMsg": "至少包含数字，字母以及特殊字符【!@#$%^&*】中任意两种,并在6-15字符之间"
+          }
+        ]
+      },
+      {
+        "name": "authorizedGrantTypes",
+        "label": "授权方式",
+        "required": true,
+        "type": "checkbox",
+        "dataType": "number",
+        "items": [
+          {
+            "label": "客户端",
+            "value": "client_credentials"
+          },
+          {
+            "label": "密码",
+            "value": "password"
+          },
+          {
+            "label": "授权码",
+            "value": "authorization_code"
+          }
+        ]
+      },
+      {
+        "name": "internalClient",
+        "label": "是否内部客户端",
+        "type": "checkbox",
+        "dataType": "boolean",
+        "items": [
+          {
+            "label": "是",
+            "value": true
+          }
+        ]
+      }
+    ],
+    "submit": {
+      "label": "保存"
+    },
+    "reset": {
+      "label": "重置"
+    },
+    "actions": [
+      {
+        "extraClassName": "btn-default",
+        "action": "backup",
+        "label": "返回"
+      }
+    ]
   }
 }

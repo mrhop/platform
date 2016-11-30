@@ -23,3 +23,8 @@ config:
         clientoptions: http://localhost:9091/user/client/list/options
         moduleroleoptions: http://localhost:9091/user/modulerole/list/options
         save: http://localhost:9091/user/user/save
+        clientlist: http://localhost:9091/user/client/list
+        clientinfo: http://localhost:9091/user/client/info
+        clientupdate: http://localhost:9091/user/client/update
+        clientsave: http://localhost:9091/user/client/save
+        clientdelete: http://localhost:9091/user/client/delete

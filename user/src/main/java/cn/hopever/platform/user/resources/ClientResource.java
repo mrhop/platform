@@ -35,6 +35,8 @@ public class ClientResource extends ResourceSupport {
 
     private boolean scoped = true;
 
+    private boolean internalClient;
+
     private Set<String> scope;
 
     private Set<String> authorizedGrantTypes;

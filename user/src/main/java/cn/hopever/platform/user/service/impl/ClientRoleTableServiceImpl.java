@@ -1,10 +1,12 @@
 package cn.hopever.platform.user.service.impl;
 
+import cn.hopever.platform.user.domain.ClientRoleTable;
 import cn.hopever.platform.user.repository.ClientRoleTableRepository;
 import cn.hopever.platform.user.service.ClientRoleTableService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,4 +21,14 @@ public class ClientRoleTableServiceImpl implements ClientRoleTableService {
 
     @Autowired
     private ClientRoleTableRepository clientRoleTableRepository;
+
+    @Override
+    public GrantedAuthority loadByAuthority(String authority) {
+        return clientRoleTableRepository.findOneByAuthority(authority);
+    }
+
+    @Override
+    public ClientRoleTable getByAuthority(String authority) {
+         return clientRoleTableRepository.findOneByAuthority(authority);
+    }
 }
