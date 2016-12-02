@@ -145,7 +145,7 @@
         "validateRules": [
           {
             "name": "custom_validate",
-            "validateRegex": "^(?![a-zA-Z]+$)(?!\\d+$)(?!_+$)[a-zA-Z\\d_]{4,15}$",
+            "validateRegex": "^(?![a-zA-Z]+$)(?!\\d+$)(?!_+$)[a-zA-Z\\d_]{4,1}$",
             "errorMsg": "至少包含数字，字母以及_中任意两种,并在4-15字符之间"
           }
         ]
@@ -417,6 +417,12 @@
         "required": true,
         "type": "checkbox",
         "dataType": "number",
+        "validateRules": [
+          {
+            "name": "REQUIRED_VALIDATE",
+            "errorMsg": "不能为空"
+          }
+        ],
         "items": [
           {
             "label": "客户端",
@@ -532,6 +538,12 @@
         "required": true,
         "type": "checkbox",
         "dataType": "number",
+        "validateRules": [
+          {
+            "name": "REQUIRED_VALIDATE",
+            "errorMsg": "不能为空"
+          }
+        ],
         "items": [
           {
             "label": "客户端",
@@ -558,6 +570,118 @@
             "value": true
           }
         ]
+      }
+    ],
+    "submit": {
+      "label": "保存"
+    },
+    "reset": {
+      "label": "重置"
+    }
+  },
+  "moduleroleupdate": {
+    "structure": [
+      {
+        "name": "authority",
+        "label": "账号",
+        "type": "text",
+        "placeholder": "账号",
+        "required": true,
+        "readonly": true
+      },
+      {
+        "name": "name",
+        "label": "名称",
+        "type": "text",
+        "placeholder": "名称",
+        "required": true,
+        "validateRules": [
+          {
+            "name": "custom_validate",
+            "validateRegex": "^.{2,30}$",
+            "errorMsg": "长度在2-30之间"
+          }
+        ]
+      },
+      {
+        "name": "client",
+        "label": "客户端",
+        "type": "select",
+        "dataType": "number",
+        "required": true,
+        "validateRules": [
+          {
+            "name": "REQUIRED_VALIDATE",
+            "errorMsg": "不能为空"
+          }
+        ]
+      },
+      {
+        "name": "id",
+        "type": "hidden",
+        "available": false
+      }
+    ],
+    "submit": {
+      "label": "保存"
+    },
+    "reset": {
+      "label": "重置"
+    },
+    "actions": [
+      {
+        "extraClassName": "btn-default",
+        "action": "backup",
+        "label": "返回"
+      }
+    ]
+  },
+  "moduleroleadd": {
+    "structure": [
+      {
+        "name": "authority",
+        "label": "账号",
+        "placeholder": "账号",
+        "required": true,
+        "validateRules": [
+          {
+            "name": "custom_validate",
+            "validateRegex": "^(?![a-zA-Z]+$)(?!\\d+$)(?!_+$)[a-zA-Z\\d_]{4,15}$",
+            "errorMsg": "至少包含数字，字母以及_中任意两种,并在4-15字符之间"
+          }
+        ]
+      },
+      {
+        "name": "name",
+        "label": "名称",
+        "type": "text",
+        "placeholder": "名称",
+        "required": true,
+        "validateRules": [
+          {
+            "name": "custom_validate",
+            "validateRegex": "^.{2,30}$",
+            "errorMsg": "长度在2-30之间"
+          }
+        ]
+      },
+      {
+        "name": "client",
+        "label": "客户端",
+        "type": "select",
+        "dataType": "number",
+        "required": true,
+        "validateRules": [
+          {
+            "name": "REQUIRED_VALIDATE",
+            "errorMsg": "不能为空"
+          }
+        ]
+      },
+      {
+        "name": "id",
+        "type": "hidden",
+        "available": false
       }
     ],
     "submit": {

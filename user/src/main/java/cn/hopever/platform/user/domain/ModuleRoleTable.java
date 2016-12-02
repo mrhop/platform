@@ -35,7 +35,7 @@ public class ModuleRoleTable implements GrantedAuthority {
     private List<UserTable> users;
 
     @ManyToOne
-    @JoinColumn(name = "client_id", nullable = false)
+    @JoinColumn(name = "client_id", nullable = true)
     private ClientTable client;
 
     @Column(name = "name", nullable = false, length = 50, unique = true)

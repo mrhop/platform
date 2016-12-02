@@ -76,10 +76,10 @@ public class ClientTable implements ClientDetails {
     @Column(name = "additional_information", nullable = true, length = 2000)
     private String additionalInformation;
 
-    @OneToMany(mappedBy = "client",cascade = {CascadeType.ALL})
+    @OneToMany(mappedBy = "client",cascade = {CascadeType.MERGE,CascadeType.PERSIST})
     private List<ModuleRoleTable> moduleRoles;
 
-    @OneToMany(mappedBy = "client",cascade = {CascadeType.ALL})
+    @OneToMany(mappedBy = "client",cascade = {CascadeType.MERGE,CascadeType.PERSIST})
     private List<ModuleTable> modules;
 
     @ManyToMany(mappedBy = "clients")

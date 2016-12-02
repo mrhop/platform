@@ -28,3 +28,10 @@ config:
         clientupdate: http://localhost:9091/user/client/update
         clientsave: http://localhost:9091/user/client/save
         clientdelete: http://localhost:9091/user/client/delete
+        #moduleRole
+        modulerolelist: http://localhost:9091/user/modulerole/list
+        moduleroleinfo: http://localhost:9091/user/modulerole/info
+        moduleroleupdate: http://localhost:9091/user/modulerole/update
+        modulerolesave: http://localhost:9091/user/modulerole/save
+        moduleroledelete: http://localhost:9091/user/modulerole/delete
+        clientoptionsofmodulerole: http://localhost:9091/user/client/list/module/options

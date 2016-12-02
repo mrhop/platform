@@ -104,6 +104,25 @@ public class ClientController {
         return mapReturn;
     }
 
+    @PreAuthorize("#oauth2.hasScope('internal_client') and hasRole('ROLE_super_admin')")
+    @RequestMapping(value = "/list/module/options", method = {RequestMethod.GET})
+    public List getListOptionsForModules() {
+        List listOptions = null;
+        Iterable<ClientTable> list = clientTableService.getAll();
+        if (list != null && list.iterator().hasNext()) {
+            listOptions = new ArrayList<>();
+            for (ClientTable ct : list) {
+                if (!"user_admin_client".equals(ct.getClientId())) {
+                    Map mapOption = new HashMap<>();
+                    mapOption.put("label", ct.getClientName());
+                    mapOption.put("value", ct.getId());
+                    listOptions.add(mapOption);
+                }
+            }
+        }
+        return listOptions;
+    }
+
 
     @PreAuthorize("#oauth2.hasScope('internal_client') and hasRole('ROLE_super_admin')")
     @RequestMapping(value = "/list", method = {RequestMethod.POST})

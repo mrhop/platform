@@ -76,6 +76,7 @@ public class ModuleRoleResourceAssembler extends ResourceAssemblerSupport<Module
             ClientResource clientResource = new ClientResource();
             clientResource.setInternalId(ct.getId());
             clientResource.setClientId(ct.getClientId());
+            clientResource.setClientName(ct.getClientName());
             moduleRoleResource.setClient(clientResource);
         }
         return moduleRoleResource;

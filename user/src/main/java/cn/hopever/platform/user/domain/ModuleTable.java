@@ -22,7 +22,7 @@ public class ModuleTable {
     private long id;
 
     @ManyToOne
-    @JoinColumn(name = "client_id", nullable = false)
+    @JoinColumn(name = "client_id", nullable = true)
     private ClientTable client;
 
     @Column(name = "module_name", nullable = false, length = 50, unique = true)
@@ -48,7 +48,7 @@ public class ModuleTable {
     @Column(name = "available", nullable = false)
     private boolean available = true;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = {CascadeType.MERGE,CascadeType.PERSIST})
     @JoinTable(name = "platform_user_module_module_role", joinColumns = @JoinColumn(name = "module_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private List<ModuleRoleTable> authorities;
 
