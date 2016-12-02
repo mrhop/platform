@@ -9,6 +9,6 @@ import org.springframework.security.core.GrantedAuthority;
 public interface ClientRoleTableService {
 
     public GrantedAuthority loadByAuthority(String authority);
-
     public ClientRoleTable getByAuthority(String authority);
+    public ClientRoleTable saveAuthority(ClientRoleTable clientRoleTable);
 }

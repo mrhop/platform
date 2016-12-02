@@ -17,7 +17,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -163,6 +162,9 @@ public class ClientController {
     public Map updateUser(@RequestBody JsonNode body, Principal principal) {
         Map map = JacksonUtil.mapper.convertValue(body.get("data"), Map.class);
         ClientTable ct = clientTableService.getById(Long.valueOf(map.get("id").toString()));
+        if(ct.getClientId().equals("user_admin_client")){
+            return null;
+        }
         if (body.get("data").get("clientName") != null && !body.get("data").get("clientName").isNull()) {
             ct.setClientName(body.get("data").get("clientName").textValue());
         }
@@ -173,7 +175,7 @@ public class ClientController {
             Set set = JacksonUtil.mapper.convertValue(body.get("data").get("authorizedGrantTypes"), Set.class);
             if (set.contains("authorization_code")) {
                 set.add("refresh_token");
-            }else{
+            } else {
                 set.remove("refresh_token");
             }
             ct.setAuthorizedGrantTypes(set);
@@ -190,31 +192,32 @@ public class ClientController {
         if (isInternalClient && !ct.isInternalClient()) {
             ct.setInternalClient(true);
             ct.getAuthoritiesBasic().add(clientRoleTableService.getByAuthority("internal_client"));
-            Map<String,Boolean> scopes = ct.getScopeAndApprove();
-            scopes.put("internal_client",true);
+            Map<String, Boolean> scopes = ct.getScopeAndApprove();
+            scopes.put("internal_client", true);
             try {
-                ct.setScope( JacksonUtil.mapper.writeValueAsString(scopes));
+                ct.setScope(JacksonUtil.mapper.writeValueAsString(scopes));
             } catch (JsonProcessingException e) {
                 ct.setScope("");
             }
-        }
-        else if (!isInternalClient && ct.isInternalClient()) {
+        } else if (!isInternalClient && ct.isInternalClient()) {
             ct.setInternalClient(false);
             List<ClientRoleTable> listAuth = ct.getAuthoritiesBasic();
-            for (GrantedAuthority ga : listAuth) {
-                if (ga.getAuthority().equals("internal_client")) {
-                    listAuth.remove(ga);
+            for(Iterator<ClientRoleTable> it = listAuth.iterator();it.hasNext();){
+                ClientRoleTable crt = it.next();
+                if ("internal_client".equals(crt.getAuthority())) {
+                    it.remove();
                 }
             }
-            Map<String,Boolean> scopes = ct.getScopeAndApprove();
-            for (String scope : scopes.keySet()) {
-                if (scope.equals("internal_client")) {
-                    scopes.remove(scope);
+            Map<String, Boolean> scopes = ct.getScopeAndApprove();
+            for(Iterator<Map.Entry<String,Boolean>> it = scopes.entrySet().iterator();it.hasNext();){
+                Map.Entry<String,Boolean> entry = it.next();
+                if ("internal_client".equals(entry.getKey())) {
+                    it.remove();
                 }
             }
             if (scopes.size() > 0) {
                 try {
-                    ct.setScope( JacksonUtil.mapper.writeValueAsString(scopes));
+                    ct.setScope(JacksonUtil.mapper.writeValueAsString(scopes));
                 } catch (JsonProcessingException e) {
                     ct.setScope("");
                 }
@@ -224,5 +227,94 @@ public class ClientController {
         }
         clientTableService.save(ct);
         return null;
+    }
+
+    @PreAuthorize("#oauth2.hasScope('user_admin_client') and hasRole('ROLE_super_admin')")
+    @RequestMapping(value = "/save", method = {RequestMethod.POST})
+    public Map saveUser(@RequestBody JsonNode body, Principal principal) {
+        Map map = JacksonUtil.mapper.convertValue(body.get("data"), Map.class);
+        ClientTable ct = new ClientTable();
+        if (body.get("data").get("clientId") != null && !body.get("data").get("clientId").isNull()) {
+            if(clientTableService.getByClientId(body.get("data").get("clientId").asText())!=null){
+                Map mapReturn = new HashMap<>();
+                mapReturn.put("message", "客户端账户已存在");
+                return mapReturn;
+            }
+            ct.setClientId(body.get("data").get("clientId").textValue());
+        }
+        if (body.get("data").get("clientName") != null && !body.get("data").get("clientName").isNull()) {
+            ct.setClientName(body.get("data").get("clientName").textValue());
+        }
+        if (body.get("data").get("clientSecret") != null && !body.get("data").get("clientSecret").isNull()) {
+            ct.setClientSecret(body.get("data").get("clientSecret").textValue());
+        }
+        if (body.get("data").get("authorizedGrantTypes") != null && !body.get("data").get("authorizedGrantTypes").isNull()) {
+            Set set = JacksonUtil.mapper.convertValue(body.get("data").get("authorizedGrantTypes"), Set.class);
+            if (set.contains("authorization_code")) {
+                set.add("refresh_token");
+            } else {
+                set.remove("refresh_token");
+            }
+            ct.setAuthorizedGrantTypes(set);
+        } else {
+            ct.setAuthorizedGrantTypes("");
+        }
+        boolean isInternalClient = false;
+        if (body.get("data").get("internalClient") != null && !body.get("data").get("internalClient").isNull()) {
+            List<Boolean> b = JacksonUtil.mapper.convertValue(body.get("data").get("internalClient"), List.class);
+            if (b.size() > 0) {
+                isInternalClient = b.get(0);
+            }
+        }
+        if (isInternalClient) {
+            ct.setInternalClient(true);
+            String clientId = body.get("data").get("clientId").textValue();
+            String clientName = body.get("data").get("clientName").textValue();
+            List<ClientRoleTable> list = new ArrayList<>();
+            ClientRoleTable crt = new ClientRoleTable();
+            crt.setAuthority(clientId);
+            crt.setName(clientName);
+            crt.setLevel((short)0);
+            list.add(clientRoleTableService.saveAuthority(crt));
+            list.add(clientRoleTableService.getByAuthority("internal_client"));
+            ct.setAuthorities(list);
+            Map<String, Boolean> scopes = new HashMap<>();
+            scopes.put("internal_client", true);
+            scopes.put(clientId, true);
+            try {
+                ct.setScope(JacksonUtil.mapper.writeValueAsString(scopes));
+            } catch (JsonProcessingException e) {
+                ct.setScope("");
+            }
+        } else if (!isInternalClient) {
+            ct.setInternalClient(false);
+            String clientId = body.get("data").get("clientId").textValue();
+            String clientName = body.get("data").get("clientName").textValue();
+            List<ClientRoleTable> list = new ArrayList<>();
+            ClientRoleTable crt = new ClientRoleTable();
+            crt.setAuthority(clientId);
+            crt.setName(clientName);
+            crt.setLevel((short)0);
+            list.add(clientRoleTableService.saveAuthority(crt));
+            ct.setAuthorities(list);
+            Map<String, Boolean> scopes = new HashMap<>();
+            scopes.put(clientId, true);
+            try {
+                ct.setScope(JacksonUtil.mapper.writeValueAsString(scopes));
+            } catch (JsonProcessingException e) {
+                ct.setScope("");
+            }
+        }
+        clientTableService.save(ct);
+        return null;
+    }
+
+    @PreAuthorize("#oauth2.hasScope('user_admin_client') and hasRole('ROLE_super_admin')")
+    @RequestMapping(value = "/delete", method = {RequestMethod.GET})
+    public void delete(@RequestParam Long id, Principal principal) {
+        ClientTable ct = this.clientTableService.getById(id);
+        if(!ct.getClientId().equals("user_admin_client")){
+            this.clientTableService.delete(ct);
+        }
     }
 }

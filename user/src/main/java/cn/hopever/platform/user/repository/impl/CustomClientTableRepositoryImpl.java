@@ -32,24 +32,18 @@ public class CustomClientTableRepositoryImpl extends SimpleJpaRepository<ClientT
 
     @Override
     public Page<ClientTable> findByFilters(Map<String, Object> mapFilter, Pageable pageable) {
-        if (mapFilter == null || mapFilter.isEmpty()) {
-            return super.findAll(pageable);
-        } else {
             return super.findAll(filterConditions1(mapFilter), pageable);
-        }
     }
 
     private Specification<ClientTable> filterConditions1(Map<String, Object> mapFilter) {
         return new Specification<ClientTable>() {
             public Predicate toPredicate(Root<ClientTable> root, CriteriaQuery<?> query,
                                          CriteriaBuilder builder) {
-                Predicate predicateReturn = null;
+                Predicate predicateReturn = builder.notEqual(root.get("clientId"), "user_admin_client");
                 query.distinct(true);
-                for (String key : mapFilter.keySet()) {
-                    if (mapFilter.get(key) != null) {
-                        if (predicateReturn == null) {
-                            predicateReturn = builder.like(root.get(key), "%" + mapFilter.get(key) + "%");
-                        } else {
+                if(mapFilter!=null&&mapFilter.size()>0){
+                    for (String key : mapFilter.keySet()) {
+                        if (mapFilter.get(key) != null) {
                             predicateReturn = builder.and(predicateReturn, builder.like(root.get(key), "%" + mapFilter.get(key) + "%"));
                         }
                     }

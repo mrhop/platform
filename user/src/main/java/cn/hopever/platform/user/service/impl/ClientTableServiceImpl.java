@@ -2,6 +2,7 @@ package cn.hopever.platform.user.service.impl;
 
 import cn.hopever.platform.user.domain.ClientTable;
 import cn.hopever.platform.user.domain.UserTable;
+import cn.hopever.platform.user.repository.ClientRoleTableRepository;
 import cn.hopever.platform.user.repository.ClientTableRepository;
 import cn.hopever.platform.user.repository.CustomClientTableRepository;
 import cn.hopever.platform.user.repository.UserTableRepository;
@@ -38,9 +39,18 @@ public class ClientTableServiceImpl implements ClientTableService {
     @Autowired
     private UserTableRepository userTableRepository;
 
+    @Autowired
+    private ClientRoleTableRepository clientRoleTableRepository;
+
     @Override
     public ClientTable save(ClientTable client) {
         return clientTableRepository.save(client);
+    }
+
+    @Override
+    public void delete(ClientTable client) {
+        clientRoleTableRepository.delete(clientRoleTableRepository.findOneByAuthority(client.getClientId()));
+        clientTableRepository.delete(client);
     }
 
     @Override
@@ -72,7 +82,7 @@ public class ClientTableServiceImpl implements ClientTableService {
     @Override
     public List<ClientTable> getByIds(List<Object> ids) {
         List<ClientTable> list = new ArrayList<>();
-        for(Object id: ids){
+        for (Object id : ids) {
             list.add(clientTableRepository.findOne(Long.parseLong(id.toString())));
         }
         return list;
@@ -80,7 +90,7 @@ public class ClientTableServiceImpl implements ClientTableService {
 
     @Override
     public Page<ClientTable> getList(Pageable pageable, Map<String, Object> filterMap) {
-        return customClientTableRepository.findByFilters(filterMap,pageable);
+        return customClientTableRepository.findByFilters(filterMap, pageable);
     }
 
 
@@ -92,4 +102,10 @@ public class ClientTableServiceImpl implements ClientTableService {
         }
         return cd;
     }
+    @Override
+    public ClientTable getByClientId(String clientId) throws ClientRegistrationException {
+        ClientTable cd = clientTableRepository.findOneByClientId(clientId);
+        return cd;
+    }
+
 }

@@ -29,6 +29,11 @@ public class ClientRoleTableServiceImpl implements ClientRoleTableService {
 
     @Override
     public ClientRoleTable getByAuthority(String authority) {
-         return clientRoleTableRepository.findOneByAuthority(authority);
+        return clientRoleTableRepository.findOneByAuthority(authority);
+    }
+
+    @Override
+    public ClientRoleTable saveAuthority(ClientRoleTable clientRoleTable) {
+        return clientRoleTableRepository.save(clientRoleTable);
     }
 }

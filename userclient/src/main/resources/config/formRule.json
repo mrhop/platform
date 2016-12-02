@@ -145,7 +145,7 @@
         "validateRules": [
           {
             "name": "custom_validate",
-            "validateRegex": "^(?![a-zA-Z]+$)(?!\\d+$)(?!_+$)[a-zA-Z\\d_]{4,10}$",
+            "validateRegex": "^(?![a-zA-Z]+$)(?!\\d+$)(?!_+$)[a-zA-Z\\d_]{4,15}$",
             "errorMsg": "至少包含数字，字母以及_中任意两种,并在4-15字符之间"
           }
         ]
@@ -493,7 +493,7 @@
         "validateRules": [
           {
             "name": "custom_validate",
-            "validateRegex": "^(?![a-zA-Z]+$)(?!\\d+$)(?!_+$)[a-zA-Z\\d_]{4,10}$",
+            "validateRegex": "^(?![a-zA-Z]+$)(?!\\d+$)(?!_+$)[a-zA-Z\\d_]{4,15}$",
             "errorMsg": "至少包含数字，字母以及_中任意两种,并在4-15字符之间"
           }
         ]
@@ -517,6 +517,7 @@
         "label": "密码",
         "type": "password",
         "placeholder": "密码",
+        "required": true,
         "validateRules": [
           {
             "name": "custom_validate",
@@ -564,13 +565,6 @@
     },
     "reset": {
       "label": "重置"
-    },
-    "actions": [
-      {
-        "extraClassName": "btn-default",
-        "action": "backup",
-        "label": "返回"
-      }
-    ]
+    }
   }
 }

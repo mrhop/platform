@@ -63,7 +63,7 @@ public class ClientTable implements ClientDetails {
     @Column(name = "registered_redirect_uri", nullable = true)
     private String registeredRedirectUri;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = {CascadeType.MERGE,CascadeType.PERSIST}, fetch = FetchType.EAGER)
     @JoinTable(name = "platform_user_client_client_role", joinColumns = @JoinColumn(name = "client_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private List<ClientRoleTable> authorities;
 
