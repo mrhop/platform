@@ -178,7 +178,7 @@ public class ClientController {
 
     @PreAuthorize("#oauth2.hasScope('user_admin_client') and hasRole('ROLE_super_admin')")
     @RequestMapping(value = "/update", method = {RequestMethod.POST})
-    public Map updateUser(@RequestBody JsonNode body, Principal principal) {
+    public Map updateClient(@RequestBody JsonNode body, Principal principal) {
         Map map = JacksonUtil.mapper.convertValue(body.get("data"), Map.class);
         ClientTable ct = clientTableService.getById(Long.valueOf(map.get("id").toString()));
         if(ct.getClientId().equals("user_admin_client")){

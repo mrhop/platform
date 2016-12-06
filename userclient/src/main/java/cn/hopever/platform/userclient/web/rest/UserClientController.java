@@ -107,6 +107,8 @@ public class UserClientController {
                     if (mapItems.get("clientsSelected") != null) {
                         clientsSelected = JacksonUtil.mapper.convertValue(mapItems.get("clientsSelected"), List.class);
                         map.put("defaultValue", clientsSelected);
+                    }else{
+                        map.put("defaultValue", null);
                     }
 
                     map.remove("available");
@@ -651,7 +653,9 @@ public class UserClientController {
                             } else {
                                 map.put("items", new ArrayList());
                             }
-                            map.put("defaultValue", Long.valueOf(((Map) mapData.get("client")).get("internalId").toString()));
+                            if(mapData.get("client")!=null){
+                                map.put("defaultValue", Long.valueOf(((Map) mapData.get("client")).get("internalId").toString()));
+                            }
                             continue;
                         }
                         if ("id".equals(map.get("name"))) {

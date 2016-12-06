@@ -14,18 +14,18 @@ import java.util.List;
 @Entity
 @Table(name = "platform_user_module_role")
 @Data
-@EqualsAndHashCode(of={"id"})
-@ToString(exclude = {"modules", "users","client"})
+@EqualsAndHashCode(of = {"id"})
+@ToString(exclude = {"modules", "users", "client"})
 public class ModuleRoleTable implements GrantedAuthority {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "authority",nullable = false,length= 50,unique = true)
+    @Column(name = "authority", nullable = false, length = 50, unique = true)
     private String authority;
 
-    @Column(name = "level",nullable = false)
+    @Column(name = "level", nullable = false)
     private short level;
 
     @ManyToMany(mappedBy = "authorities")
@@ -34,7 +34,7 @@ public class ModuleRoleTable implements GrantedAuthority {
     @ManyToMany(mappedBy = "modulesAuthorities")
     private List<UserTable> users;
 
-    @ManyToOne
+    @ManyToOne(optional = true)
     @JoinColumn(name = "client_id", nullable = true)
     private ClientTable client;
 

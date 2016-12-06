@@ -21,7 +21,7 @@ public class ModuleTable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @ManyToOne
+    @ManyToOne(optional = true)
     @JoinColumn(name = "client_id", nullable = true)
     private ClientTable client;
 

@@ -168,6 +168,7 @@ public class UserController {
     public Map updateUser(@RequestBody JsonNode body, Principal principal) {
         Map map = JacksonUtil.mapper.convertValue(body.get("data"), Map.class);
         UserTable userController = userTableService.getUserByUsername(principal.getName());
+        String authority = ((OAuth2Authentication) principal).getAuthorities().iterator().next().getAuthority();
         UserTable user = userTableService.get(Long.valueOf(map.get("id").toString()));
         if (!validateUserOperation(userController, user)) {
             Map mapReturn = new HashMap<>();
@@ -208,7 +209,7 @@ public class UserController {
         listPartClients.add(clientTableService.loadClientByClientId("user_admin_client"));
         if (user.getClients() != null) {
             for (ClientTable ct : user.getClients()) {
-                if (userController.getClients() != null && !userController.getClients().contains(ct)) {
+                if (userController.getClients() != null && !authority.equals("ROLE_super_admin") && !userController.getClients().contains(ct)) {
                     listPartClients.add(ct);
                 }
             }
@@ -227,7 +228,6 @@ public class UserController {
                         listPartModileRoles.remove(mr);
                     }
                 }
-
             }
         }
         if (body.get("data").get("modulesAuthorities") != null && !body.get("data").get("modulesAuthorities").isNull()) {
@@ -331,7 +331,7 @@ public class UserController {
             } else if (ut1.getAuthorities().get(0).getAuthority().equals("ROLE_admin") && ut2.getAuthorities().get(0).getAuthority().equals("ROLE_common_user")) {
                 if (ut1.getClients() != null) {
                     for (ClientTable ct : ut1.getClients()) {
-                        if(ct.getClientId().equals("user_admin_client")){
+                        if (ct.getClientId().equals("user_admin_client")) {
                             continue;
                         }
                         if (ut2.getClients() != null && ut2.getClients().contains(ct)) {

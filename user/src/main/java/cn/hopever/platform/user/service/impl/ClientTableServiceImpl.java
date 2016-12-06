@@ -1,6 +1,8 @@
 package cn.hopever.platform.user.service.impl;
 
 import cn.hopever.platform.user.domain.ClientTable;
+import cn.hopever.platform.user.domain.ModuleRoleTable;
+import cn.hopever.platform.user.domain.ModuleTable;
 import cn.hopever.platform.user.domain.UserTable;
 import cn.hopever.platform.user.repository.ClientRoleTableRepository;
 import cn.hopever.platform.user.repository.ClientTableRepository;
@@ -50,6 +52,21 @@ public class ClientTableServiceImpl implements ClientTableService {
     @Override
     public void delete(ClientTable client) {
         clientRoleTableRepository.delete(clientRoleTableRepository.findOneByAuthority(client.getClientId()));
+        if(client.getModuleRoles()!=null){
+            for(ModuleRoleTable mrt :client.getModuleRoles()){
+                mrt.setClient(null);
+            }
+        }
+        if(client.getModules()!=null){
+            for(ModuleTable mt :client.getModules()){
+                mt.setClient(null);
+            }
+        }
+        if(client.getUsers()!=null){
+            for(UserTable ut :client.getUsers()){
+                ut.getClients().remove(client);
+            }
+        }
         clientTableRepository.delete(client);
     }
 

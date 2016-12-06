@@ -118,7 +118,11 @@ public class ModuleRoleController {
                 listTmp.add("");
                 listTmp.add(mrt.getAuthority());
                 listTmp.add(mrt.getName());
-                listTmp.add(mrt.getClient().getClientName());
+                if(mrt.getClient()!=null){
+                    listTmp.add(mrt.getClient().getClientName());
+                }else{
+                    listTmp.add("");
+                }
                 mapTemp.put("value", listTmp);
                 listReturn.add(mapTemp);
             }

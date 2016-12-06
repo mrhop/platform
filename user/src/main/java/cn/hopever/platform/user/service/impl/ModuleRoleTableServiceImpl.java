@@ -92,8 +92,12 @@ public class ModuleRoleTableServiceImpl implements ModuleRoleTableService {
     public void deleteById(Long id) {
         ModuleRoleTable  mrt = moduleRoleTableRepository.findOne(id);
         mrt.setModules(null);
-        mrt.setUsers(null);
-        moduleRoleTableRepository.save(mrt);
-        moduleRoleTableRepository.delete(id);
+        mrt.setClient(null);
+        if(mrt.getUsers()!=null){
+            for(UserTable ut:mrt.getUsers()){
+                ut.getModulesAuthorities().remove(mrt);
+            }
+        }
+        moduleRoleTableRepository.delete(mrt);
     }
 }
