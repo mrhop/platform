@@ -15,12 +15,20 @@ import java.util.List;
  */
 public interface ModuleTableRepository extends PagingAndSortingRepository<ModuleTable, Long> {
     public ModuleTable findOneByModuleName(String moduleName);
+
     public List<ModuleTable> findDistinctByModuleNameLike(String moduleName, Pageable pageable);
 
     //如果是common-user，要根据user，然后指向到module-role，然后根据这个获取到的modulelist，然后根据modulelist中包含的modulerole，进行处理并过滤，然后返回，并筛出二级的包含，并写入到父module中
-    public List<ModuleTable> findDistinctByParentAndClient(ModuleTable parent,ClientTable client,Sort sort);
-    public List<ModuleTable> findDistinctByParentAndClientAndModuleName(ModuleTable parent,ClientTable client,String moduleName,Sort sort);
-    public List<ModuleTable> findDistinctByParentAndClientAndModuleNameLike(ModuleTable parent,ClientTable client,String moduleName,Sort sort);
-    public List<ModuleTable> findDistinctByParentAndClientAndAuthoritiesIn(ModuleTable parent, ClientTable client, Collection<ModuleRoleTable> authorities,Sort sort);
+    public List<ModuleTable> findDistinctByParentAndClient(ModuleTable parent, ClientTable client, Sort sort);
+
+    public List<ModuleTable> findDistinctByParentAndClientAndModuleName(ModuleTable parent, ClientTable client, String moduleName, Sort sort);
+
+    public List<ModuleTable> findDistinctByParentAndClientAndModuleNameLike(ModuleTable parent, ClientTable client, String moduleName, Sort sort);
+
+    public List<ModuleTable> findDistinctByParentAndClientAndAuthoritiesIn(ModuleTable parent, ClientTable client, Collection<ModuleRoleTable> authorities, Sort sort);
+
+    public List<ModuleTable> findDistinctByParentIsNullAndModuleOrderNotNullAndAvailableAndClientNot(boolean available, ClientTable client, Sort sort);
+
+    public List<ModuleTable> findDistinctByParentIsNullAndAvailableAndClient(boolean available, ClientTable client, Sort sort);
 
 }

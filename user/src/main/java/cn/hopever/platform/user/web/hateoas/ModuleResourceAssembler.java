@@ -1,9 +1,11 @@
 package cn.hopever.platform.user.web.hateoas;
 
 import cn.hopever.platform.user.domain.ClientTable;
+import cn.hopever.platform.user.domain.ModuleRoleTable;
 import cn.hopever.platform.user.domain.ModuleTable;
 import cn.hopever.platform.user.resources.ClientResource;
 import cn.hopever.platform.user.resources.ModuleResource;
+import cn.hopever.platform.user.resources.ModuleRoleResource;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,16 +48,16 @@ public class ModuleResourceAssembler extends ResourceAssemblerSupport<ModuleTabl
         //child采用异步获取的策略在列表中显示
         //不采用勾选，删除关系的策略维护模块关系，而是在list中通过删除子module本身来删除关系
         //同时需要添加一个hasChildren的方式，来添加异步获取的触发按钮，所以单个的情况不获取children，parent【再作考虑】
-//        if (moduleTable.getAuthorities() != null) {
-//            Set<ModuleRoleResource> setMrr = new LinkedHashSet<>();
-//            for (ModuleRoleTable mrt : moduleTable.getAuthorities()) {
-//                ModuleRoleResource moduleRoleResource = new ModuleRoleResource();
-//                moduleRoleResource.setInternalId(mrt.getId());
-//                moduleRoleResource.setAuthority(mrt.getAuthority());
-//                setMrr.add(moduleRoleResource);
-//            }
-//            resource.setAuthorities(setMrr);
-//        }
+        if (moduleTable.getAuthorities() != null) {
+            List<ModuleRoleResource> listMrr = new ArrayList<>();
+            for (ModuleRoleTable mrt : moduleTable.getAuthorities()) {
+                ModuleRoleResource moduleRoleResource = new ModuleRoleResource();
+                moduleRoleResource.setInternalId(mrt.getId());
+                moduleRoleResource.setAuthority(mrt.getAuthority());
+                listMrr.add(moduleRoleResource);
+            }
+            resource.setAuthorities(listMrr);
+        }
         return resource;
     }
 
@@ -72,6 +74,7 @@ public class ModuleResourceAssembler extends ResourceAssemblerSupport<ModuleTabl
                     moduleResource.setAvailable(mt.isAvailable());
                     moduleResource.setModuleUrl(mt.getModuleUrl());
                     moduleResource.setIconClass(mt.getIconClass());
+                    moduleResource.setActivated(mt.isActivated());
                     setMr.add(moduleResource);
                 }
                 resource.setChildren(setMr);
@@ -94,6 +97,7 @@ public class ModuleResourceAssembler extends ResourceAssemblerSupport<ModuleTabl
                 moduleResourceParent.setAvailable(mt.isAvailable());
                 moduleResourceParent.setModuleUrl(mt.getModuleUrl());
                 moduleResourceParent.setIconClass(mt.getIconClass());
+                moduleResourceParent.setActivated(mt.isActivated());
                 moduleResource.setParent(moduleResourceParent);
             }
             if (moduleTable.getClient() != null) {

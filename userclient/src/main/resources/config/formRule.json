@@ -690,5 +690,325 @@
     "reset": {
       "label": "重置"
     }
+  },
+  "moduleupdate": {
+    "structure": [
+      {
+        "name": "moduleName",
+        "label": "名称",
+        "type": "text",
+        "placeholder": "名称",
+        "required": true,
+        "validateRules": [
+          {
+            "name": "custom_validate",
+            "validateRegex": "^.{2,30}$",
+            "errorMsg": "长度在2-30之间"
+          }
+        ]
+      },
+      {
+        "name": "client",
+        "label": "客户端",
+        "type": "select",
+        "dataType": "number",
+        "required": true,
+        "updatable": true,
+        "validateRules": [
+          {
+            "name": "REQUIRED_VALIDATE",
+            "errorMsg": "不能为空"
+          }
+        ]
+      },
+      {
+        "name": "authorities",
+        "label": "模块角色",
+        "type": "checkbox",
+        "dataType": "number",
+        "required": true,
+        "available": false,
+        "validateRules": [
+          {
+            "name": "REQUIRED_VALIDATE",
+            "errorMsg": "不能为空"
+          }
+        ]
+      },
+      {
+        "name": "isTop",
+        "label": "是否父模块",
+        "type": "text",
+        "required": true,
+        "readonly": true
+      },
+      {
+        "name": "parent",
+        "label": "父模块",
+        "type": "select",
+        "dataType": "number",
+        "required": true,
+        "available": false,
+        "validateRules": [
+          {
+            "name": "REQUIRED_VALIDATE",
+            "errorMsg": "不能为空"
+          }
+        ]
+      },
+      {
+        "name": "iconClass",
+        "label": "图标",
+        "type": "text",
+        "placeholder": "图标",
+        "required": true,
+        "available": false,
+        "validateRules": [
+          {
+            "name": "REQUIRED_VALIDATE",
+            "errorMsg": "不能为空"
+          }
+        ]
+      },
+      {
+        "name": "moduleUrl",
+        "label": "链接",
+        "type": "text",
+        "placeholder": "链接",
+        "required": true,
+        "available": false,
+        "validateRules": [
+          {
+            "name": "REQUIRED_VALIDATE",
+            "errorMsg": "不能为空"
+          }
+        ]
+      },
+      {
+        "name": "moduleOrder",
+        "label": "顺序",
+        "type": "number",
+        "placeholder": "顺序",
+        "required": true,
+        "available": false,
+        "validateRules": [
+          {
+            "name": "custom_validate",
+            "validateRegex": "^([1-9]\\d|\\d)$",
+            "errorMsg": "请选择1-99正整数"
+          }
+        ]
+      },
+      {
+        "name": "available",
+        "label": "是否可见",
+        "type": "checkbox",
+        "dataType": "boolean",
+        "available": false,
+        "items": [
+          {
+            "label": "是",
+            "value": true
+          }
+        ],
+        "defaultValue": [
+          true
+        ]
+      },
+      {
+        "name": "activated",
+        "label": "是否激活",
+        "type": "checkbox",
+        "dataType": "boolean",
+        "available": false,
+        "items": [
+          {
+            "label": "是",
+            "value": true
+          }
+        ],
+        "defaultValue": [
+          true
+        ]
+      },
+      {
+        "name": "id",
+        "type": "hidden",
+        "available": false
+      }
+    ],
+    "submit": {
+      "label": "保存"
+    },
+    "reset": {
+      "label": "重置"
+    },
+    "actions": [
+      {
+        "extraClassName": "btn-default",
+        "action": "backup",
+        "label": "返回"
+      }
+    ]
+  },
+  "moduleadd": {
+    "structure": [
+      {
+        "name": "moduleName",
+        "label": "名称",
+        "type": "text",
+        "placeholder": "名称",
+        "required": true,
+        "validateRules": [
+          {
+            "name": "custom_validate",
+            "validateRegex": "^.{2,30}$",
+            "errorMsg": "长度在2-30之间"
+          }
+        ]
+      },
+      {
+        "name": "client",
+        "label": "客户端",
+        "type": "select",
+        "dataType": "number",
+        "required": true,
+        "updatable": true,
+        "validateRules": [
+          {
+            "name": "REQUIRED_VALIDATE",
+            "errorMsg": "不能为空"
+          }
+        ]
+      },
+      {
+        "name": "authorities",
+        "label": "模块角色",
+        "type": "checkbox",
+        "dataType": "number",
+        "required": true,
+        "available": false,
+        "validateRules": [
+          {
+            "name": "REQUIRED_VALIDATE",
+            "errorMsg": "不能为空"
+          }
+        ]
+      },
+      {
+        "name": "isTop",
+        "label": "是否父模块",
+        "type": "checkbox",
+        "dataType": "boolean",
+        "available": false,
+        "updatable": true,
+        "items": [
+          {
+            "label": "是",
+            "value": true
+          }
+        ]
+      },
+      {
+        "name": "parent",
+        "label": "父模块",
+        "type": "select",
+        "dataType": "number",
+        "required": true,
+        "available": false,
+        "validateRules": [
+          {
+            "name": "REQUIRED_VALIDATE",
+            "errorMsg": "不能为空"
+          }
+        ]
+      },
+      {
+        "name": "iconClass",
+        "label": "图标",
+        "type": "text",
+        "placeholder": "图标",
+        "required": true,
+        "available": false,
+        "validateRules": [
+          {
+            "name": "REQUIRED_VALIDATE",
+            "errorMsg": "不能为空"
+          }
+        ]
+      },
+      {
+        "name": "moduleUrl",
+        "label": "链接",
+        "type": "text",
+        "placeholder": "链接",
+        "required": true,
+        "available": false,
+        "validateRules": [
+          {
+            "name": "REQUIRED_VALIDATE",
+            "errorMsg": "不能为空"
+          }
+        ]
+      },
+      {
+        "name": "moduleOrder",
+        "label": "顺序",
+        "type": "number",
+        "placeholder": "顺序",
+        "required": true,
+        "available": false,
+        "validateRules": [
+          {
+            "name": "custom_validate",
+            "validateRegex": "^([1-9]\\d|\\d)$",
+            "errorMsg": "请选择1-99正整数"
+          }
+        ]
+      },
+      {
+        "name": "available",
+        "label": "是否可见",
+        "type": "checkbox",
+        "dataType": "boolean",
+        "available": false,
+        "items": [
+          {
+            "label": "是",
+            "value": true
+          }
+        ],
+        "defaultValue": [
+          true
+        ]
+      },
+      {
+        "name": "activated",
+        "label": "是否激活",
+        "type": "checkbox",
+        "dataType": "boolean",
+        "available": false,
+        "items": [
+          {
+            "label": "是",
+            "value": true
+          }
+        ],
+        "defaultValue": [
+          true
+        ]
+      },
+      {
+        "name": "id",
+        "type": "hidden",
+        "available": false
+      }
+    ],
+    "submit": {
+      "label": "保存"
+    },
+    "reset": {
+      "label": "重置"
+    }
   }
 }

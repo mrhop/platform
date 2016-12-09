@@ -190,5 +190,63 @@
         "currentSize": 10
       }
     }
+  },
+  "moduleList": {
+    "thead": [
+      {
+        "className": "td-id",
+        "title": "#",
+        "value": "serialNum"
+      },
+      {
+        "title": "名称",
+        "value": "moduleName",
+        "filter": true,
+        "editType": "text"
+      },
+      {
+        "title": "链接",
+        "value": "moduleUrl"
+      },
+      {
+        "title": "父模块",
+        "value": "parent",
+        "filter": true,
+        "editType": "select"
+      },
+      {
+        "title": "客户端",
+        "value": "client",
+        "filter": true,
+        "editType": "select"
+      },
+      {
+        "title": "已激活",
+        "value": "activated",
+        "filter": true,
+        "editType": "select"
+      }
+    ],
+    "tfoot": [
+      {
+        "className": "td-foot",
+        "colSpan": 7,
+        "title": "模块列表基础信息"
+      }
+    ]
+  },
+  "moduleListAdditionalFeature": {
+    "filterAvailable": true,
+    "editable": true,
+    "deletable": true,
+    "addable": true,
+    "extraClass": "hover",
+    "pager": {
+      "show": true,
+      "rowSize": {
+        "show": true,
+        "currentSize": 10
+      }
+    }
   }
 }

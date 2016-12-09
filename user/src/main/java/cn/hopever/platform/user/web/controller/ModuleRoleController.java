@@ -1,9 +1,12 @@
 package cn.hopever.platform.user.web.controller;
 
+import cn.hopever.platform.user.domain.ClientTable;
 import cn.hopever.platform.user.domain.ModuleRoleTable;
+import cn.hopever.platform.user.domain.ModuleTable;
 import cn.hopever.platform.user.domain.RoleTable;
 import cn.hopever.platform.user.service.ClientTableService;
 import cn.hopever.platform.user.service.ModuleRoleTableService;
+import cn.hopever.platform.user.service.ModuleTableService;
 import cn.hopever.platform.user.service.RoleTableService;
 import cn.hopever.platform.user.web.hateoas.ModuleRoleResourceAssembler;
 import cn.hopever.platform.utils.json.JacksonUtil;
@@ -33,6 +36,9 @@ public class ModuleRoleController {
     Logger logger = LoggerFactory.getLogger(ModuleRoleController.class);
     @Autowired
     private ModuleRoleTableService moduleRoleTableService;
+
+    @Autowired
+    private ModuleTableService moduleTableService;
 
     @Autowired
     private RoleTableService roleTableService;
@@ -91,6 +97,43 @@ public class ModuleRoleController {
         return mapReturn;
     }
 
+    @PreAuthorize("#oauth2.hasScope('internal_client') and hasRole('ROLE_super_admin')")
+    @RequestMapping(value = "/list/module/options", method = {RequestMethod.POST})
+    public Map getListOptionsOfModule(@RequestBody JsonNode body, Principal principal) {
+        Map mapReturn = null;
+        List listOptions = null;
+        List listOptionSelected = null;
+        ClientTable ct = clientTableService.getById(body.get("clientId").asLong());
+        List<ModuleRoleTable> list = ct.getModuleRoles();
+        if(list!=null&&list.size()>0){
+            listOptions = new ArrayList<>();
+            for (ModuleRoleTable mrt : list) {
+                Map mapOption = new HashMap<>();
+                mapOption.put("label", mrt.getName());
+                mapOption.put("value", mrt.getId());
+                listOptions.add(mapOption);
+            }
+        }
+        if( body.get("moduleId")!=null&&!body.get("moduleId").isNull()){
+            Long moduleId = body.get("moduleId").asLong();
+            ModuleTable mt = this.moduleTableService.getById(moduleId);
+            if(mt.getAuthorities()!=null){
+                listOptionSelected = new ArrayList<>();
+                for(ModuleRoleTable mrt:mt.getAuthorities()){
+                    if(list.contains(mrt)){
+                        listOptionSelected.add(mrt.getId());
+                    }
+                }
+            }
+        }
+        if(listOptions!=null){
+            mapReturn = new HashMap<>();
+            mapReturn.put("items",listOptions);
+            mapReturn.put("defaultValue",listOptionSelected);
+        }
+        return mapReturn;
+    }
+
 
     @PreAuthorize("#oauth2.hasScope('internal_client') and hasRole('ROLE_super_admin')")
     @RequestMapping(value = "/list", method = {RequestMethod.POST})
@@ -118,9 +161,9 @@ public class ModuleRoleController {
                 listTmp.add("");
                 listTmp.add(mrt.getAuthority());
                 listTmp.add(mrt.getName());
-                if(mrt.getClient()!=null){
+                if (mrt.getClient() != null) {
                     listTmp.add(mrt.getClient().getClientName());
-                }else{
+                } else {
                     listTmp.add("");
                 }
                 mapTemp.put("value", listTmp);

@@ -34,6 +34,7 @@ public class ModuleResource extends ResourceSupport implements Serializable {
     private List<ModuleResource> children;
 
     private boolean available;
+    private boolean activated;
 
     private List<ModuleRoleResource> authorities;
 

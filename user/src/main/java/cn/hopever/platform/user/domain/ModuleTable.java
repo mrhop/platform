@@ -28,7 +28,7 @@ public class ModuleTable {
     @Column(name = "module_name", nullable = false, length = 50, unique = true)
     private String moduleName;
 
-    @Column(name = "module_order", nullable = false)
+    @Column(name = "module_order", nullable = true)
     private Integer moduleOrder = 0;
 
     @Column(name = "module_url", length = 200)
@@ -47,6 +47,9 @@ public class ModuleTable {
 
     @Column(name = "available", nullable = false)
     private boolean available = true;
+
+    @Column(name = "activated", nullable = false)
+    private boolean activated = true;
 
     @ManyToMany(cascade = {CascadeType.MERGE,CascadeType.PERSIST})
     @JoinTable(name = "platform_user_module_module_role", joinColumns = @JoinColumn(name = "module_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))

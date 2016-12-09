@@ -49,6 +49,16 @@ public class BaseConfig {
     private String moduleroledelete;
     private String clientoptionsofmodulerole;
 
+    //module
+    private String modulelist;
+    private String moduleinfo;
+    private String moduleupdate;
+    private String modulesave;
+    private String moduledelete;
+    private String moduleroleoptionsofmodule;
+    private String moduleparentoptionsofclient;
+    private String moduleparentoptions;
+
     private Map<String,Object> mapRules;
 
     public BaseConfig(){

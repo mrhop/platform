@@ -8,12 +8,14 @@ import cn.hopever.platform.utils.web.CommonResult;
 import cn.hopever.platform.utils.web.CommonResultStatus;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.LongNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -70,17 +72,6 @@ public class UserClientController {
                             roleSelected = Long.valueOf(((List<Map>) mapData.get("authorities")).get(0).get("internalId").toString());
                             map.put("defaultValue", roleSelected);
                         }
-//                        if ("clients".equals(map.get("name"))) {
-//                            if (mapData.get("clients") != null) {
-//                                List<Map> listClients = (List<Map>) mapData.get("clients");
-//                                clientsSelected = new ArrayList<>();
-//                                for (Map client : listClients) {
-//                                    clientsSelected.add(client.get("internalId"));
-//                                }
-//                                map.put("defaultValue", clientsSelected);
-//                            }
-//
-//                        }
                     }
                 }
             }
@@ -107,7 +98,7 @@ public class UserClientController {
                     if (mapItems.get("clientsSelected") != null) {
                         clientsSelected = JacksonUtil.mapper.convertValue(mapItems.get("clientsSelected"), List.class);
                         map.put("defaultValue", clientsSelected);
-                    }else{
+                    } else {
                         map.put("defaultValue", null);
                     }
 
@@ -653,7 +644,7 @@ public class UserClientController {
                             } else {
                                 map.put("items", new ArrayList());
                             }
-                            if(mapData.get("client")!=null){
+                            if (mapData.get("client") != null) {
                                 map.put("defaultValue", Long.valueOf(((Map) mapData.get("client")).get("internalId").toString()));
                             }
                             continue;
@@ -712,6 +703,433 @@ public class UserClientController {
     @RequestMapping(value = "/modulerole/delete", method = {RequestMethod.DELETE})
     public CommonResult deleteModuleRole(HttpServletRequest request) throws Exception {
         request.setAttribute("resourceUrl", baseConfig.getModuleroledelete() + "?id=" + request.getParameter("key"));
+        return commonMethods.getResource(request);
+    }
+
+
+    //MODULE
+    @RequestMapping(value = "/module/list", method = {RequestMethod.GET, RequestMethod.POST})
+    public CommonResult getModuleList(HttpServletRequest request, @RequestBody JsonNode body) throws Exception {
+        request.setAttribute("resourceUrl", baseConfig.getModulelist());
+        if (body.get("currentPage") == null || body.get("currentPage").isNull()) {
+            ((ObjectNode) body).put("currentPage", 0);
+        }
+        if (body.get("rowSize") == null || body.get("rowSize").isNull()) {
+            ((ObjectNode) body).put("rowSize", commonProperties.getPageSize());
+        }
+        CommonResult c = commonMethods.postResource(body, request);
+        if (CommonResultStatus.SUCCESS.toString().equals(c.getStatus())) {
+            if (c.getResponseData() != null) {
+                if (c.getResponseData().get("data") != null) {
+                    Map<String, Object> map = (Map) c.getResponseData().get("data");
+                    c.getResponseData().put("totalCount", map.get("totalCount"));
+                    c.getResponseData().put("rowSize", map.get("rowSize"));
+                    c.getResponseData().put("currentPage", map.get("currentPage"));
+                    c.getResponseData().put("data", map.get("data"));
+                } else {
+                    c.getResponseData().put("totalCount", 0);
+                }
+                if (body.get("init") != null && !body.get("init").isNull() && body.get("init").asBoolean()) {
+                    Map<String, Object> mapModuleList = baseConfig.getTableRule("moduleList");
+                    List<Map> headList = (List) mapModuleList.get("thead");
+                    for (Map<String, Object> map : headList) {
+                        if (map.get("value").equals("client")) {
+                            request.setAttribute("resourceUrl", baseConfig.getClientoptionsofmodulerole());
+                            CommonResult c1 = commonMethods.getResource(request);
+                            map.put("editValue", c1.getResponseData().get("data"));
+                        } else if (map.get("value").equals("parent")) {
+                            request.setAttribute("resourceUrl", baseConfig.getModuleparentoptions());
+                            CommonResult c1 = commonMethods.getResource(request);
+                            map.put("editValue", c1.getResponseData().get("data"));
+                        } else if (map.get("value").equals("activated")) {
+                            List<Map> list = new ArrayList<>();
+                            Map<String, Object> mapAvailable1 = new HashMap<>();
+                            mapAvailable1.put("label", "已激活");
+                            mapAvailable1.put("value", "true");
+                            Map<String, Object> mapAvailable2 = new HashMap<>();
+                            mapAvailable2.put("label", "未激活");
+                            mapAvailable2.put("value", "false");
+                            list.add(mapAvailable1);
+                            list.add(mapAvailable2);
+                            map.put("editValue", list);
+                        }
+
+
+                    }
+                    c.getResponseData().put("rules", mapModuleList);
+                    c.getResponseData().put("additionalFeature", ((Map) baseConfig.getMapRules().get("tableRules")).get("moduleListAdditionalFeature"));
+                }
+            }
+        }
+        return c;
+    }
+
+    @RequestMapping(value = "/module/info", method = {RequestMethod.GET})
+    public CommonResult getModule(HttpServletRequest request) throws Exception {
+        request.setAttribute("resourceUrl", baseConfig.getModuleinfo() + "?id=" + request.getParameter("key"));
+        CommonResult c = commonMethods.getResource(request);
+        Map<String, Object> rule = baseConfig.getFormRule("moduleupdate");
+        List<Map> list = (List<Map>) rule.get("structure");
+
+        if (CommonResultStatus.SUCCESS.toString().equals(c.getStatus())) {
+            if (c.getResponseData() != null) {
+                if (c.getResponseData().get("data") != null) {
+                    Map<String, Object> mapData = (Map) c.getResponseData().get("data");
+                    // List<Map> listReturn = new ArrayList<>();
+                    Long clientId = null;
+                    boolean isTop = false;
+                    ObjectNode jsonNode = JacksonUtil.mapper.createObjectNode();
+                    for (Map map : list) {
+                        if ("client".equals(map.get("name"))) {
+                            request.setAttribute("resourceUrl", baseConfig.getClientoptionsofmodulerole());
+                            CommonResult c1 = commonMethods.getResource(request);
+                            if (CommonResultStatus.SUCCESS.toString().equals(c1.getStatus())) {
+                                map.put("items", c1.getResponseData().get("data"));
+                            } else {
+                                map.put("items", new ArrayList());
+                            }
+                            if (mapData.get("client") != null) {
+                                clientId = Long.valueOf(((Map) mapData.get("client")).get("internalId").toString());
+                                map.put("defaultValue", clientId);
+                            }
+                            continue;
+                        }
+                        if ("authorities".equals(map.get("name")) && clientId != null) {
+                            request.setAttribute("resourceUrl", baseConfig.getModuleroleoptionsofmodule());
+                            jsonNode.set("clientId", JacksonUtil.mapper.convertValue(clientId, LongNode.class));
+                            CommonResult moduleRoleCr = commonMethods.postResource(jsonNode, request);
+                            if (CommonResultStatus.SUCCESS.toString().equals(moduleRoleCr.getStatus()) && moduleRoleCr.getResponseData().get("data") != null) {
+                                map.put("items", ((Map) moduleRoleCr.getResponseData().get("data")).get("items"));
+                                //DO UPDATE
+                                Object listRole = mapData.get(map.get("name"));
+                                List<Object> listOption = null;
+                                if (listRole != null) {
+                                    listOption = new ArrayList<>();
+                                    for (Map mapRole : (List<Map>) listRole) {
+                                        listOption.add(mapRole.get("internalId"));
+                                    }
+                                }
+                                map.put("defaultValue", listOption);
+                                map.remove("available");
+                            } else {
+                                map.remove("items");
+                                map.remove("defaultValue");
+                                map.put("available", false);
+                            }
+                            continue;
+                        }
+                        if ("isTop".equals(map.get("name")) && clientId != null) {
+                            map.remove("available");
+                            isTop = (mapData.get(map.get("name")) != null && (Boolean) mapData.get(map.get("name"))) ? true : false;
+                            if (isTop) {
+                                map.put("defaultValue", "Y");
+                            } else {
+                                map.put("defaultValue", "N");
+                            }
+                            continue;
+                        }
+
+                        if ("parent".equals(map.get("name")) && clientId != null && !isTop) {
+                            request.setAttribute("resourceUrl", baseConfig.getModuleparentoptionsofclient());
+                            jsonNode.set("clientId", JacksonUtil.mapper.convertValue(clientId, LongNode.class));
+                            CommonResult moduleCr = commonMethods.postResource(jsonNode, request);
+                            if (CommonResultStatus.SUCCESS.toString().equals(moduleCr.getStatus())) {
+                                map.put("items", ((Map) moduleCr.getResponseData().get("data")).get("items"));
+                                //DO UPDATE
+                                map.put("defaultValue", ((Map)mapData.get(map.get("name"))).get("internalId"));
+                                map.remove("available");
+                            } else {
+                                map.put("available", false);
+                                map.remove("defaultValue");
+                                map.remove("items");
+                            }
+                            continue;
+                        }
+                        if ("iconClass".equals(map.get("name")) && clientId != null && isTop) {
+                            map.remove("available");
+                            map.put("defaultValue", mapData.get(map.get("name")));
+                            continue;
+                        }
+                        if ("moduleUrl".equals(map.get("name")) && clientId != null && !isTop) {
+                            map.remove("available");
+                            map.put("defaultValue", mapData.get(map.get("name")));
+                            continue;
+                        }
+                        if ("moduleOrder".equals(map.get("name")) && clientId != null) {
+                            map.remove("available");
+                            map.put("defaultValue", mapData.get(map.get("name")));
+                            continue;
+                        }
+                        if ("available".equals(map.get("name")) && clientId != null) {
+                            map.remove("available");
+                            if ((boolean) mapData.get(map.get("name"))) {
+                                List<Boolean> listTmp = new ArrayList<>();
+                                listTmp.add((boolean) mapData.get(map.get("name")));
+                                map.put("defaultValue", listTmp);
+                            }
+                            continue;
+                        }
+                        if ("activated".equals(map.get("name")) && clientId != null) {
+                            if ((boolean) mapData.get(map.get("name"))) {
+                                List<Boolean> listTmp = new ArrayList<>();
+                                listTmp.add((boolean) mapData.get(map.get("name")));
+                                map.put("defaultValue", listTmp);
+                            }
+                            map.remove("available");
+                            continue;
+                        }
+                        if ("id".equals(map.get("name"))) {
+                            map.put("defaultValue", mapData.get("internalId"));
+                            continue;
+                        }
+                        if (mapData.get(map.get("name")) != null) {
+                            map.put("defaultValue", mapData.get(map.get("name")));
+                        }
+                    }
+                }
+            }
+        }
+
+        c.setResponseData(rule);
+        return c;
+    }
+
+    @RequestMapping(value = "/module/update", method = {RequestMethod.POST})
+    public CommonResult updateModule(HttpServletRequest request, @RequestBody JsonNode body) throws Exception {
+        request.setAttribute("resourceUrl", baseConfig.getModuleupdate());
+        return commonMethods.postResource(body, request);
+    }
+
+    @RequestMapping(value = "/module/add", method = {RequestMethod.GET})
+    public CommonResult addModule(HttpServletRequest request) throws Exception {
+        CommonResult c = new CommonResult();
+        Map<String, Object> rule = baseConfig.getFormRule("moduleadd");
+        List<Map> list = (List<Map>) rule.get("structure");
+        for (Map map : list) {
+            if ("client".equals(map.get("name"))) {
+                //首先是options，然后是defaultvalue
+                request.setAttribute("resourceUrl", baseConfig.getClientoptionsofmodulerole());
+                CommonResult c1 = commonMethods.getResource(request);
+                if (CommonResultStatus.SUCCESS.toString().equals(c1.getStatus())) {
+                    map.put("items", c1.getResponseData().get("data"));
+                } else {
+                    map.put("items", new ArrayList());
+                }
+                break;
+            }
+        }
+        c.setResponseData(rule);
+        c.setStatus(CommonResultStatus.SUCCESS.toString());
+        return c;
+    }
+
+    @RequestMapping(value = "/module/add/rule/update", method = {RequestMethod.POST})
+    public CommonResult updateModuleRule(HttpServletRequest request, @RequestBody JsonNode body) throws Exception {
+        CommonResult c = new CommonResult();
+        Map<String, Object> rule = JacksonUtil.mapper.convertValue(body.get("rule"), Map.class);
+        List<Map> list = (List<Map>) rule.get("structure");
+        for (Map map : list) {
+            map.remove("changed");
+        }
+        if ("client".equals(body.get("updateElement").textValue())) {
+            //当client变化之后
+            ObjectNode jsonNode = JacksonUtil.mapper.createObjectNode();
+            boolean isTop = false;
+            for (Map map : list) {
+                if ("authorities".equals(map.get("name"))) {
+                    if (body.get("updateData") != null && !body.get("updateData").isNull()) {
+                        request.setAttribute("resourceUrl", baseConfig.getModuleroleoptionsofmodule());
+                        jsonNode.set("clientId", body.get("updateData"));
+                        jsonNode.put("moduleId", request.getParameter("key"));
+                        CommonResult moduleRoleCr = commonMethods.postResource(jsonNode, request);
+                        if (CommonResultStatus.SUCCESS.toString().equals(moduleRoleCr.getStatus()) && moduleRoleCr.getResponseData().get("data") != null) {
+                            map.put("items", ((Map) moduleRoleCr.getResponseData().get("data")).get("items"));
+                            map.put("defaultValue", ((Map) moduleRoleCr.getResponseData().get("data")).get("defaultValue"));
+                            map.remove("available");
+                        } else {
+                            map.remove("items");
+                            map.remove("defaultValue");
+                            map.put("available", false);
+                        }
+                    } else {
+                        map.remove("items");
+                        map.remove("defaultValue");
+                        map.put("available", false);
+                    }
+                    map.put("changed", true);
+                    continue;
+                }
+                if ("isTop".equals(map.get("name"))) {
+                    if (body.get("updateData") != null && !body.get("updateData").isNull()) {
+                        map.remove("available");
+                    } else {
+                        map.put("available", false);
+                    }
+                    if (map.get("defaultValue") != null) {
+                        isTop = true;
+                    }
+                    map.put("changed", true);
+                    continue;
+                }
+                if ("parent".equals(map.get("name"))) {
+                    if (body.get("updateData") != null && !body.get("updateData").isNull()) {
+                        if (isTop) {
+                            map.put("available", false);
+                            map.remove("defaultValue");
+                            map.remove("items");
+                        } else {
+                            //根据client获取父module,然后是后续的显示，注意其他的update
+                            request.setAttribute("resourceUrl", baseConfig.getModuleparentoptionsofclient());
+                            jsonNode.set("clientId", body.get("updateData"));
+                            jsonNode.put("moduleId", request.getParameter("key"));
+                            CommonResult moduleCr = commonMethods.postResource(jsonNode, request);
+                            if (CommonResultStatus.SUCCESS.toString().equals(moduleCr.getStatus())) {
+                                if(moduleCr.getResponseData().get("data") != null){
+                                    map.put("items", ((Map) moduleCr.getResponseData().get("data")).get("items"));
+                                    map.put("defaultValue", ((Map) moduleCr.getResponseData().get("data")).get("defaultValue"));
+                                }
+                                map.remove("available");
+                            } else {
+                                map.put("available", false);
+                                map.remove("defaultValue");
+                                map.remove("items");
+                            }
+                        }
+                    } else {
+                        map.put("available", false);
+                        map.remove("defaultValue");
+                        map.remove("items");
+                    }
+                    map.put("changed", true);
+                    continue;
+                }
+                if ("iconClass".equals(map.get("name"))) {
+                    if (body.get("updateData") != null && !body.get("updateData").isNull()) {
+                        if (isTop) {
+                            map.remove("available");
+                        } else {
+                            map.put("available", false);
+                            map.remove("defaultValue");
+                        }
+                    } else {
+                        map.put("available", false);
+                        map.remove("defaultValue");
+                    }
+                    map.put("changed", true);
+                    continue;
+                }
+                if ("moduleUrl".equals(map.get("name"))) {
+                    if (body.get("updateData") != null && !body.get("updateData").isNull()) {
+                        if (isTop) {
+                            map.put("available", false);
+                            map.remove("defaultValue");
+                        } else {
+                            map.remove("available");
+                        }
+                    } else {
+                        map.put("available", false);
+                        map.remove("defaultValue");
+                    }
+                    map.put("changed", true);
+                    continue;
+                }
+                if ("moduleOrder".equals(map.get("name"))) {
+                    if (body.get("updateData") != null && !body.get("updateData").isNull()) {
+                        map.remove("available");
+                    } else {
+                        map.put("available", false);
+                    }
+                    map.put("changed", true);
+                    continue;
+                }
+                if ("available".equals(map.get("name"))) {
+                    if (body.get("updateData") != null && !body.get("updateData").isNull()) {
+                        map.remove("available");
+                    } else {
+                        map.put("available", false);
+                    }
+                    map.put("changed", true);
+                    continue;
+                }
+                if ("activated".equals(map.get("name"))) {
+                    if (body.get("updateData") != null && !body.get("updateData").isNull()) {
+                        map.remove("available");
+                    } else {
+                        map.put("available", false);
+                    }
+                    map.put("changed", true);
+                    continue;
+                }
+            }
+
+        }
+        if ("isTop".equals(body.get("updateElement").textValue())) {
+            //当client变化之后
+            ObjectNode jsonNode = JacksonUtil.mapper.createObjectNode();
+            boolean isTop = false;
+            if (body.get("updateData") != null && !body.get("updateData").isNull()) {
+                isTop = true;
+            }
+            for (Map map : list) {
+                if ("client".equals(map.get("name"))) {
+                    jsonNode.put("clientId", (Integer) map.get("defaultValue"));
+                }
+                if ("parent".equals(map.get("name"))) {
+                    if (isTop) {
+                        map.put("available", false);
+                        map.remove("defaultValue");
+                        map.remove("items");
+                    } else {
+                        //根据client获取父module,然后是后续的显示，注意其他的update
+                        request.setAttribute("resourceUrl", baseConfig.getModuleparentoptionsofclient());
+                        CommonResult moduleCr = commonMethods.postResource(jsonNode, request);
+                        if (CommonResultStatus.SUCCESS.toString().equals(moduleCr.getStatus())) {
+                            map.put("items", moduleCr.getResponseData().get("data"));
+                            map.remove("available");
+                        } else {
+                            map.put("available", false);
+                            map.remove("defaultValue");
+                            map.remove("items");
+                        }
+                    }
+                    map.put("changed", true);
+                    continue;
+                }
+                if ("iconClass".equals(map.get("name"))) {
+                    if (isTop) {
+                        map.remove("available");
+                    } else {
+                        map.put("available", false);
+                        map.remove("defaultValue");
+                    }
+                    map.put("changed", true);
+                    continue;
+                }
+                if ("moduleUrl".equals(map.get("name"))) {
+                    if (isTop) {
+                        map.put("available", false);
+                        map.remove("defaultValue");
+                    } else {
+                        map.remove("available");
+                    }
+                    map.put("changed", true);
+                    continue;
+                }
+            }
+        }
+        c.setResponseData(rule);
+        return c;
+    }
+
+    @RequestMapping(value = "/module/save", method = {RequestMethod.POST})
+    public CommonResult saveModule(HttpServletRequest request, @RequestBody JsonNode body) throws Exception {
+        request.setAttribute("resourceUrl", baseConfig.getModulesave());
+        return commonMethods.postResource(body, request);
+    }
+
+    @RequestMapping(value = "/module/delete", method = {RequestMethod.DELETE})
+    public CommonResult deleteModule(HttpServletRequest request) throws Exception {
+        request.setAttribute("resourceUrl", baseConfig.getModuledelete() + "?id=" + request.getParameter("key"));
         return commonMethods.getResource(request);
     }
 }

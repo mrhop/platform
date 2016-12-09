@@ -35,3 +35,12 @@ config:
         modulerolesave: http://localhost:9091/user/modulerole/save
         moduleroledelete: http://localhost:9091/user/modulerole/delete
         clientoptionsofmodulerole: http://localhost:9091/user/client/list/module/options
+        #module
+        modulelist: http://localhost:9091/user/module/list
+        moduleinfo: http://localhost:9091/user/module/info
+        moduleupdate: http://localhost:9091/user/module/update
+        modulesave: http://localhost:9091/user/module/save
+        moduledelete: http://localhost:9091/user/module/delete
+        moduleparentoptions: http://localhost:9091/user/module/list/parent/options
+        moduleparentoptionsofclient: http://localhost:9091/user/module/list/parent/client/options
+        moduleroleoptionsofmodule: http://localhost:9091/user/modulerole/list/module/options
