@@ -1,0 +1,8 @@
+bootRepackage {
+    //mainClass = 'cn.hopever.platform.user.example.Example'
+}
+dependencies {
+    compile project(':utils')
+    //moji file
+    compile 'fm.last:moji:2.0.0'
+}
