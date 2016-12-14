@@ -9,6 +9,12 @@ config:
         moduleList: http://localhost:9091/user/hateoas/module/list/
     common:
         pageSize: 10
+#        imageUpload: http://localhost:8084/utilsweb/upload/image
+#        fileUpload: http://localhost:8084/utilsweb/upload/file
+#        docUpload: http://localhost:8084/utilsweb/upload/doc
+        imageUpload: http://utils.hopever.cn/upload/image
+        fileUpload: http://utils.hopever.cn/upload/file
+        docUpload: http://utils.hopever.cn/upload/doc
 
 spring.mvc.view.prefix: /WEB-INF/jsp/
 spring.mvc.view.suffix: .jsp

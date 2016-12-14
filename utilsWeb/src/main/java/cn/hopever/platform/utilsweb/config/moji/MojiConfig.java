@@ -1,4 +1,4 @@
-package cn.hopever.platform.cms.config.moji;
+package cn.hopever.platform.utilsweb.config.moji;
 
 import fm.last.moji.spring.SpringMojiBean;
 import org.springframework.beans.factory.annotation.Value;
@@ -50,6 +50,4 @@ public class MojiConfig {
         moji.setTestOnBorrow(testOnBorrow);
         return moji;
     }
-
-
 }

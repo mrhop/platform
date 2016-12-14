@@ -4,9 +4,7 @@ server:
 security:
     basic:
         enabled: false
-    oauth2:
-           resource:
-               jwt:
-                   # Tells the JWT framework to fetch the public key from the authorization server during startup
-                   # Note: The authorization server needs to be running...
-                   key-uri: "http://localhost:8080/user/oauth/token_key"
+#    oauth2:
+#           resource:
+#               jwt:
+#                   key-uri: "http://localhost:9091/user/oauth/token_key"

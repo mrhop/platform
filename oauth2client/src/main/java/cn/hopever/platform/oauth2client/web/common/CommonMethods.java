@@ -6,19 +6,24 @@ import cn.hopever.platform.utils.web.CommonResult;
 import cn.hopever.platform.utils.web.CommonResultStatus;
 import cn.hopever.platform.utils.web.CookieUtil;
 import com.fasterxml.jackson.databind.JsonNode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.*;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,6 +32,8 @@ import java.util.Map;
  */
 @Component
 public class CommonMethods {
+
+    Logger logger = LoggerFactory.getLogger(CommonMethods.class);
 
     @Autowired
     @Qualifier("restTemplate")
@@ -46,8 +53,8 @@ public class CommonMethods {
             HttpEntity<?> httpEntity = new HttpEntity<>(headers);
             ResponseEntity<Object> re = restTemplate.exchange(request.getAttribute("resourceUrl").toString(), HttpMethod.GET, httpEntity, Object.class);
             CommonResult cr = new CommonResult();
-            HashMap<String,Object> responseData = new HashMap<>();
-            responseData.put("data",re.getBody());
+            HashMap<String, Object> responseData = new HashMap<>();
+            responseData.put("data", re.getBody());
             cr.setStatus(CommonResultStatus.SUCCESS.toString());
             cr.setMessage("success");
             cr.setResponseData(responseData);
@@ -71,12 +78,54 @@ public class CommonMethods {
             HttpEntity<JsonNode> httpEntity = new HttpEntity<>(body, headers);
             ResponseEntity<Object> re = restTemplate.exchange(request.getAttribute("resourceUrl").toString(), HttpMethod.POST, httpEntity, Object.class);
             CommonResult cr = new CommonResult();
-            HashMap<String,Object> responseData = new HashMap<>();
-            responseData.put("data",re.getBody());
+            HashMap<String, Object> responseData = new HashMap<>();
+            responseData.put("data", re.getBody());
             cr.setStatus(CommonResultStatus.SUCCESS.toString());
             cr.setMessage("success");
             cr.setResponseData(responseData);
             return cr;
+        } else {
+            CommonResult cr = new CommonResult();
+            cr.setStatus(CommonResultStatus.SERVERFAILURE.toString());
+            cr.setMessage("401,Authorization Error");
+            return cr;
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    public CommonResult postFile(HttpServletRequest request, MultipartFile[] files) throws Exception {
+        Object accesstoken = request.getSession().getAttribute("accesstoken");
+        if (validateUser(request)) {
+            LinkedMultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
+            try {
+                for (MultipartFile file : files) {
+                    String[] fileName = file.getOriginalFilename().split("\\.");
+                    String filePrefix = new Date().getTime() + "" + (int) (Math.random() * 1000);
+                    String fileSuffix = fileName[fileName.length - 1];
+                    File fileTmp = File.createTempFile(filePrefix, "." + fileSuffix);
+                    file.transferTo(fileTmp);
+                    map.add("files", new FileSystemResource(fileTmp));
+                }
+                map.add("filePath", request.getAttribute("filePath"));
+                HttpHeaders headers = new HttpHeaders();
+                headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+                headers.add("Authorization", "Bearer " + ((Map<String, Object>) accesstoken).get("accesstoken").toString());
+                HttpEntity<LinkedMultiValueMap<String, Object>> requestEntity = new HttpEntity<>(map, headers);
+                ResponseEntity<Object> re = restTemplate.exchange(request.getAttribute("resourceUrl").toString(), HttpMethod.POST, requestEntity, Object.class);
+                CommonResult cr = new CommonResult();
+                HashMap<String, Object> responseData = new HashMap<>();
+                responseData.put("data", re.getBody());
+                cr.setStatus(CommonResultStatus.SUCCESS.toString());
+                cr.setMessage("success");
+                cr.setResponseData(responseData);
+                return cr;
+            } catch (IOException e) {
+                logger.error("系统错误", e);
+                CommonResult cr = new CommonResult();
+                cr.setStatus(CommonResultStatus.SERVERFAILURE.toString());
+                cr.setMessage("系统错误");
+                return cr;
+            }
         } else {
             CommonResult cr = new CommonResult();
             cr.setStatus(CommonResultStatus.SERVERFAILURE.toString());
@@ -118,7 +167,7 @@ public class CommonMethods {
         headers.add("Authorization", "Bearer " + decryptAccesstoken);
         headers.add("Content-Type", "application/json;charset=UTF-8");
         HttpEntity<?> httpEntity = new HttpEntity<>(headers);
-        ResponseEntity<CommonResult> re = restTemplate.exchange(oauth2Properties.getValidateUserUri()+oauth2Properties.getClientID(), HttpMethod.GET, httpEntity, CommonResult.class);
+        ResponseEntity<CommonResult> re = restTemplate.exchange(oauth2Properties.getValidateUserUri() + oauth2Properties.getClientID(), HttpMethod.GET, httpEntity, CommonResult.class);
         CommonResult cr = re.getBody();
         Map<String, Object> map = cr.getResponseData();
         map.put("accesstoken", decryptAccesstoken);

@@ -58,6 +58,9 @@ public class UserTable implements UserDetails {
     @Column(name = "limited_date", nullable = true)
     private Date limitedDate;
 
+    @Column(name = "photo", nullable = true)
+    private String photo;
+
     @ManyToOne
     @JoinColumn(name = "create_user", nullable = true,insertable = true,updatable = true)
     private UserTable createUser;

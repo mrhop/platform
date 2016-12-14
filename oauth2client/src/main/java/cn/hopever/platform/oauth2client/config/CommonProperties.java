@@ -20,6 +20,9 @@ import java.util.Map;
 public class CommonProperties {
     public static Logger logger = LoggerFactory.getLogger(CommonProperties.class);
     private int pageSize;
+    private String imageUpload;
+    private String fileUpload;
+    private String docUpload;
     private Map<String,Object> mapRules;
     public CommonProperties(){
         mapRules = new HashMap<>();

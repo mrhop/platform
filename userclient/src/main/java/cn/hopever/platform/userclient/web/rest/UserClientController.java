@@ -13,11 +13,9 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by Donghui Huo on 2016/10/17.
@@ -235,9 +233,14 @@ public class UserClientController {
     }
 
     @RequestMapping(value = "/user/update", method = {RequestMethod.POST})
-    public CommonResult updateUser(HttpServletRequest request, @RequestBody JsonNode body) throws Exception {
-        request.setAttribute("resourceUrl", baseConfig.getUpdate());
-        return commonMethods.postResource(body, request);
+    public CommonResult updateUser(HttpServletRequest request, @RequestPart("photo") MultipartFile[] files) throws Exception {
+        request.setAttribute("resourceUrl", commonProperties.getImageUpload());
+        String filePrefix = request.getParameter("username")+"-"+new Date().getTime();
+        request.setAttribute("filePath", "user/photo/");
+        CommonResult cr =   this.commonMethods.postFile(request,files);
+        //进行post的对应设值，需要转化为body
+        return null;
+        //return commonMethods.postResource(body, request);
     }
 
     @RequestMapping(value = "/user/personal/update", method = {RequestMethod.POST})
@@ -836,7 +839,7 @@ public class UserClientController {
                             if (CommonResultStatus.SUCCESS.toString().equals(moduleCr.getStatus())) {
                                 map.put("items", ((Map) moduleCr.getResponseData().get("data")).get("items"));
                                 //DO UPDATE
-                                map.put("defaultValue", ((Map)mapData.get(map.get("name"))).get("internalId"));
+                                map.put("defaultValue", ((Map) mapData.get(map.get("name"))).get("internalId"));
                                 map.remove("available");
                             } else {
                                 map.put("available", false);
@@ -984,7 +987,7 @@ public class UserClientController {
                             jsonNode.put("moduleId", request.getParameter("key"));
                             CommonResult moduleCr = commonMethods.postResource(jsonNode, request);
                             if (CommonResultStatus.SUCCESS.toString().equals(moduleCr.getStatus())) {
-                                if(moduleCr.getResponseData().get("data") != null){
+                                if (moduleCr.getResponseData().get("data") != null) {
                                     map.put("items", ((Map) moduleCr.getResponseData().get("data")).get("items"));
                                     map.put("defaultValue", ((Map) moduleCr.getResponseData().get("data")).get("defaultValue"));
                                 }
