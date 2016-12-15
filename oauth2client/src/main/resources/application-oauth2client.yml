@@ -15,6 +15,14 @@ config:
         imageUpload: http://utils.hopever.cn/upload/image
         fileUpload: http://utils.hopever.cn/upload/file
         docUpload: http://utils.hopever.cn/upload/doc
+#        imagePathPrev: /mogilefs/images/
+#        filePathPrev:  /mogilefs/files/
+#        docPathPrev:  /mogilefs/docs/
+        imagePathPrev: http://www.hopever.cn/mogilefs/images/
+        filePathPrev:  http://www.hopever.cn/mogilefs/files/
+        docPathPrev:  http://www.hopever.cn/mogilefs/docs/
+        defaultUserPhoto: http://localhost/utils/images/user/defaultphoto.png
+
 
 spring.mvc.view.prefix: /WEB-INF/jsp/
 spring.mvc.view.suffix: .jsp

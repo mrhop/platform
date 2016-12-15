@@ -234,19 +234,63 @@ public class UserClientController {
 
     @RequestMapping(value = "/user/update", method = {RequestMethod.POST})
     public CommonResult updateUser(HttpServletRequest request, @RequestPart("photo") MultipartFile[] files) throws Exception {
-        request.setAttribute("resourceUrl", commonProperties.getImageUpload());
-        String filePrefix = request.getParameter("username")+"-"+new Date().getTime();
-        request.setAttribute("filePath", "user/photo/");
-        CommonResult cr =   this.commonMethods.postFile(request,files);
-        //进行post的对应设值，需要转化为body
-        return null;
-        //return commonMethods.postResource(body, request);
+        String userPhoto = null;
+        if (files != null && files.length > 0) {
+            request.setAttribute("resourceUrl", commonProperties.getImageUpload());
+            request.setAttribute("filePath", "user/photo/");
+            CommonResult cr = this.commonMethods.postFile(request, files);
+            if (CommonResultStatus.SUCCESS.toString().equals(cr.getStatus()) && cr.getResponseData().get("data") != null) {
+                List<String> list = ((Map<String, List>) cr.getResponseData().get("data")).get("fileKeys");
+                if (list != null && list.size() > 0) {
+                    userPhoto = commonProperties.getImagePathPrev() + list.get(0);
+                }
+            }
+        }
+        HashMap map = new HashMap<>();
+        Set<String> set =  request.getParameterMap().keySet();
+        for(String key:set){
+            if (key.equals("clients") || key.equals("modulesAuthorities")) {
+                map.put(key, request.getParameterValues(key));
+            } else {
+                String value = request.getParameter(key);
+                if (value != null && value.length() > 0) {
+                    map.put(key, value);
+                }
+            }
+        }
+        map.put("photo", userPhoto);
+        request.setAttribute("resourceUrl", baseConfig.getUpdate());
+        return commonMethods.postResource(map, request);
     }
 
     @RequestMapping(value = "/user/personal/update", method = {RequestMethod.POST})
-    public CommonResult updateUserPersonal(HttpServletRequest request, @RequestBody JsonNode body) throws Exception {
+    public CommonResult updateUserPersonal(HttpServletRequest request, @RequestPart("photo") MultipartFile[] files) throws Exception {
+        String userPhoto = commonProperties.getDefaultUserPhoto();        if (files != null && files.length > 0) {
+            request.setAttribute("resourceUrl", commonProperties.getImageUpload());
+            request.setAttribute("filePath", "user/photo/");
+            CommonResult cr = this.commonMethods.postFile(request, files);
+            if (CommonResultStatus.SUCCESS.toString().equals(cr.getStatus()) && cr.getResponseData().get("data") != null) {
+                List<String> list = ((Map<String, List>) cr.getResponseData().get("data")).get("fileKeys");
+                if (list != null && list.size() > 0) {
+                    userPhoto = commonProperties.getImagePathPrev() + list.get(0);
+                }
+            }
+        }
+        HashMap map = new HashMap<>();
+        Set<String> set =  request.getParameterMap().keySet();
+        for(String key:set){
+            if (key.equals("clients") || key.equals("modulesAuthorities")) {
+                map.put(key, request.getParameterValues(key));
+            } else {
+                String value = request.getParameter(key);
+                if (value != null && value.length() > 0) {
+                    map.put(key, value);
+                }
+            }
+        }
+        map.put("photo", userPhoto);
         request.setAttribute("resourceUrl", baseConfig.getUpdatepersonal());
-        return commonMethods.postResource(body, request);
+        return commonMethods.postResource(map, request);
     }
 
     @RequestMapping(value = "/user/add", method = {RequestMethod.GET})
@@ -272,9 +316,34 @@ public class UserClientController {
     }
 
     @RequestMapping(value = "/user/save", method = {RequestMethod.POST})
-    public CommonResult saveUser(HttpServletRequest request, @RequestBody JsonNode body) throws Exception {
+    public CommonResult saveUser(HttpServletRequest request, @RequestPart("photo") MultipartFile[] files) throws Exception {
+        String userPhoto = commonProperties.getDefaultUserPhoto();
+        if (files != null && files.length > 0) {
+            request.setAttribute("resourceUrl", commonProperties.getImageUpload());
+            request.setAttribute("filePath", "user/photo/");
+            CommonResult cr = this.commonMethods.postFile(request, files);
+            if (CommonResultStatus.SUCCESS.toString().equals(cr.getStatus()) && cr.getResponseData().get("data") != null) {
+                List<String> list = ((Map<String, List>) cr.getResponseData().get("data")).get("fileKeys");
+                if (list != null && list.size() > 0) {
+                    userPhoto = commonProperties.getImagePathPrev() + list.get(0);
+                }
+            }
+        }
+        HashMap map = new HashMap<>();
+        Set<String> set =  request.getParameterMap().keySet();
+        for(String key:set){
+            if (key.equals("clients") || key.equals("modulesAuthorities")) {
+                map.put(key, request.getParameterValues(key));
+            } else {
+                String value = request.getParameter(key);
+                if (value != null && value.length() > 0) {
+                    map.put(key, value);
+                }
+            }
+        }
+        map.put("photo", userPhoto);
         request.setAttribute("resourceUrl", baseConfig.getSave());
-        return commonMethods.postResource(body, request);
+        return commonMethods.postResource(map, request);
     }
 
     @RequestMapping(value = "/user/add/rule/update", method = {RequestMethod.POST})

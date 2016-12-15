@@ -44,6 +44,8 @@ public class CommonController {
     @RequestMapping(value = {"index.html"}, method = RequestMethod.GET)
     public String indexPage(HttpServletRequest request, HttpServletResponse response,Map<String, Object> model) throws Exception {
         Map messages = commonResources.getKeyValues("common/messages/index",localeResolver.resolveLocale(request));
+
+        messages.put("user.photo",((Map)request.getSession().getAttribute("accesstoken")).get("userphoto"));
         model.put("messagesStr",JacksonUtil.mapper.writeValueAsString(messages));
         model.put("messages",messages);
         return "index";

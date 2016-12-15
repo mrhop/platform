@@ -72,7 +72,7 @@
         "validateRules": [
           {
             "name": "custom_validate",
-            "validateRegex": "^.*\\.(jpg|jpeg|bmp|gif)$",
+            "validateRegex": "^.*\\.(jpg|jpeg|bmp|gif|png)$",
             "errorMsg": "请选择图片格式文件"
           }
         ]
@@ -227,7 +227,7 @@
         "validateRules": [
           {
             "name": "custom_validate",
-            "validateRegex": "^.*(?!)\\.(jpg|JPG|jpeg|bmp|gif)$",
+            "validateRegex": "^.*\\.(jpg|jpeg|bmp|gif|png)$",
             "errorMsg": "请选择图片格式文件"
           }
         ]
@@ -368,7 +368,7 @@
         "validateRules": [
           {
             "name": "custom_validate",
-            "validateRegex": "^.*(?!)\\.(jpg|JPG|jpeg|bmp|gif)$",
+            "validateRegex": "^.*\\.(jpg|jpeg|bmp|gif|png)$",
             "errorMsg": "请选择图片格式文件"
           }
         ]

@@ -5,13 +5,13 @@ import cn.hopever.platform.utils.security.AesUtil;
 import cn.hopever.platform.utils.web.CommonResult;
 import cn.hopever.platform.utils.web.CommonResultStatus;
 import cn.hopever.platform.utils.web.CookieUtil;
-import com.fasterxml.jackson.databind.JsonNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.*;
+import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
@@ -68,14 +68,15 @@ public class CommonMethods {
     }
 
     @SuppressWarnings("unchecked")
-    public CommonResult postResource(JsonNode body, HttpServletRequest request) throws Exception {
+    public CommonResult postResource(Object body, HttpServletRequest request) throws Exception {
         Object accesstoken = request.getSession().getAttribute("accesstoken");
         if (validateUser(request)) {
-            MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
+            HttpHeaders headers = new HttpHeaders();
             headers.add("Authorization", "Bearer " + ((Map<String, Object>) accesstoken).get("accesstoken").toString());
             headers.add("Content-Type", "application/json;charset=UTF-8");
             restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-            HttpEntity<JsonNode> httpEntity = new HttpEntity<>(body, headers);
+            restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
+            HttpEntity<Object> httpEntity = new HttpEntity<>(body, headers);
             ResponseEntity<Object> re = restTemplate.exchange(request.getAttribute("resourceUrl").toString(), HttpMethod.POST, httpEntity, Object.class);
             CommonResult cr = new CommonResult();
             HashMap<String, Object> responseData = new HashMap<>();

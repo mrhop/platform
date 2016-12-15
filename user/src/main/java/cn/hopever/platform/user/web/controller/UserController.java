@@ -130,33 +130,36 @@ public class UserController {
 
     @PreAuthorize("#oauth2.hasScope('user_admin_client')")
     @RequestMapping(value = "/personal/update", method = {RequestMethod.POST})
-    public Map updatePersonalUser(@RequestBody JsonNode body, Principal principal) {
-        Map map = JacksonUtil.mapper.convertValue(body.get("data"), Map.class);
-        UserTable user = this.userTableService.get(Long.valueOf(map.get("id").toString()));
-        if (body.get("data").get("email") != null && !body.get("data").get("email").isNull()) {
-            UserTable ut = this.userTableService.getUserByEmail(body.get("data").get("email").asText());
-            if (ut != null && !Long.valueOf(map.get("id").toString()).equals(ut.getId())) {
+    public Map updatePersonalUser(@RequestBody Map<String,Object> body, Principal principal) {
+        long id = Long.valueOf(body.get("id").toString());
+        UserTable user = this.userTableService.get(id);
+        if (body.get("email") != null) {
+            UserTable ut = this.userTableService.getUserByEmail(body.get("email").toString());
+            if (ut != null && id !=ut.getId()) {
                 Map mapReturn = new HashMap<>();
                 mapReturn.put("message", "用户Email已存在");
                 return mapReturn;
             }
-            user.setEmail(body.get("data").get("email").asText());
+            user.setEmail(body.get("email").toString());
         }
 
-        if (body.get("data").get("phone") != null && !body.get("data").get("phone").isNull()) {
-            UserTable ut = this.userTableService.getUserByPhone(body.get("data").get("phone").asText());
-            if (ut != null && !Long.valueOf(map.get("id").toString()).equals(ut.getId())) {
+        if (body.get("phone") != null) {
+            UserTable ut = this.userTableService.getUserByPhone(body.get("phone").toString());
+            if (ut != null && id !=ut.getId()) {
                 Map mapReturn = new HashMap<>();
                 mapReturn.put("message", "用户电话号码已存在");
                 return mapReturn;
             }
-            user.setPhone(body.get("data").get("phone").asText());
+            user.setPhone(body.get("phone").toString());
         }
-        if (body.get("data").get("name") != null && !body.get("data").get("name").isNull()) {
-            user.setName(body.get("data").get("name").asText());
+        if (body.get("name") != null) {
+            user.setName(body.get("name").toString());
         }
-        if (body.get("data").get("password") != null && !body.get("data").get("password").isNull()) {
-            user.setPassword(passwordEncoder.encode(body.get("data").get("password").asText()));
+        if (body.get("password") != null) {
+            user.setPassword(passwordEncoder.encode(body.get("password").toString()));
+        }
+        if (body.get("photo") != null) {
+            user.setPhoto(body.get("photo").toString());
         }
         userTableService.save(user);
         return null;
@@ -165,42 +168,37 @@ public class UserController {
 
     @PreAuthorize("#oauth2.hasScope('user_admin_client') and ( hasRole('ROLE_super_admin') or hasRole('ROLE_admin'))")
     @RequestMapping(value = "/update", method = {RequestMethod.POST})
-    public Map updateUser(@RequestBody JsonNode body, Principal principal) {
-        Map map = JacksonUtil.mapper.convertValue(body.get("data"), Map.class);
+    public Map updateUser(@RequestBody Map<String,Object> body, Principal principal) {
         UserTable userController = userTableService.getUserByUsername(principal.getName());
         String authority = ((OAuth2Authentication) principal).getAuthorities().iterator().next().getAuthority();
-        UserTable user = userTableService.get(Long.valueOf(map.get("id").toString()));
+        long id = Long.valueOf(body.get("id").toString());
+        UserTable user = userTableService.get(id);
         if (!validateUserOperation(userController, user)) {
             Map mapReturn = new HashMap<>();
             mapReturn.put("message", "无权限修改该用户");
             return mapReturn;
         }
-        if (body.get("data").get("email") != null && !body.get("data").get("email").isNull()) {
-            UserTable ut = this.userTableService.getUserByEmail(body.get("data").get("email").asText());
-            if (ut != null && !Long.valueOf(map.get("id").toString()).equals(ut.getId())) {
+        if (body.get("email") != null) {
+            UserTable ut = this.userTableService.getUserByEmail(body.get("email").toString());
+            if (ut != null && ut.getId() != id) {
                 Map mapReturn = new HashMap<>();
                 mapReturn.put("message", "用户Email已存在");
                 return mapReturn;
             }
-            user.setEmail(body.get("data").get("email").asText());
-        } else {
-            user.setEmail(null);
+            user.setEmail(body.get("email").toString());
         }
-
-        if (body.get("data").get("phone") != null && !body.get("data").get("phone").isNull()) {
-            UserTable ut = this.userTableService.getUserByPhone(body.get("data").get("phone").asText());
-            if (ut != null && !Long.valueOf(map.get("id").toString()).equals(ut.getId())) {
+        if (body.get("phone") != null) {
+            UserTable ut = this.userTableService.getUserByPhone(body.get("phone").toString());
+            if (ut != null && ut.getId() != id) {
                 Map mapReturn = new HashMap<>();
                 mapReturn.put("message", "用户电话号码已存在");
                 return mapReturn;
             }
-            user.setPhone(body.get("data").get("phone").asText());
-        } else {
-            user.setPhone(null);
+            user.setPhone(body.get("phone").toString());
         }
-        if (body.get("data").get("authorities") != null && !body.get("data").get("authorities").isNull()) {
+        if (body.get("authorities") != null) {
             List list = new ArrayList<>();
-            list.add(roleTableService.get(body.get("data").get("authorities").asLong()));
+            list.add(roleTableService.get(Long.valueOf(body.get("authorities").toString())));
             user.setAuthorities(list);
         } else {
             user.setAuthorities(null);
@@ -214,8 +212,8 @@ public class UserController {
                 }
             }
         }
-        if (body.get("data").get("clients") != null && !body.get("data").get("clients").isNull()) {
-            listPartClients.addAll(clientTableService.getByIds(JacksonUtil.mapper.convertValue(body.get("data").get("clients"), List.class)));
+        if (body.get("clients") != null) {
+            listPartClients.addAll(clientTableService.getByIds((List<Object>) body.get("clients")));
         }
         user.setClients(listPartClients);
 
@@ -230,22 +228,23 @@ public class UserController {
                 }
             }
         }
-        if (body.get("data").get("modulesAuthorities") != null && !body.get("data").get("modulesAuthorities").isNull()) {
-            listPartModileRoles.addAll(moduleRoleTableService.getByIds(JacksonUtil.mapper.convertValue(body.get("data").get("modulesAuthorities"), List.class)));
+        if (body.get("modulesAuthorities") != null) {
+            listPartModileRoles.addAll(moduleRoleTableService.getByIds((List<Object>) body.get("modulesAuthorities")));
         }
         user.setModulesAuthorities(listPartModileRoles);
-        if (body.get("data").get("limitedDate") != null && !body.get("data").get("limitedDate").isNull()) {
-            user.setLimitedDate(new Date(body.get("data").get("limitedDate").asLong()));
+        if (body.get("limitedDate") != null) {
+            user.setLimitedDate(new Date(Long.valueOf(body.get("limitedDate").toString())));
         } else {
             user.setLimitedDate(null);
         }
-        if (body.get("data").get("name") != null && !body.get("data").get("name").isNull()) {
-            user.setName(body.get("data").get("name").asText());
-        } else {
-            user.setName(null);
+        if (body.get("name") != null) {
+            user.setName(body.get("name").toString());
         }
-        if (body.get("data").get("password") != null && !body.get("data").get("password").isNull()) {
-            user.setPassword(passwordEncoder.encode(body.get("data").get("password").asText()));
+        if (body.get("password") != null) {
+            user.setPassword(passwordEncoder.encode(body.get("password").toString()));
+        }
+        if (body.get("photo") != null) {
+            user.setPhoto(body.get("photo").toString());
         }
         userTableService.save(user);
         return null;
@@ -253,66 +252,69 @@ public class UserController {
 
     @PreAuthorize("#oauth2.hasScope('user_admin_client') and ( hasRole('ROLE_super_admin') or hasRole('ROLE_admin'))")
     @RequestMapping(value = "/save", method = {RequestMethod.POST})
-    public Map saveUser(@RequestBody JsonNode body, Principal principal) {
+    public Map saveUser(@RequestBody Map<String,Object> body, Principal principal) {
         Map map = JacksonUtil.mapper.convertValue(body.get("data"), Map.class);
         UserTable user = new UserTable();
-        if (this.userTableService.getUserByUsername(body.get("data").get("username").asText()) != null) {
+        if (this.userTableService.getUserByUsername(body.get("username").toString()) != null) {
             Map mapReturn = new HashMap<>();
             mapReturn.put("message", "用户账号已存在");
             return mapReturn;
         }
-        if (body.get("data").get("email") != null && !body.get("data").get("email").isNull()) {
-            if (this.userTableService.getUserByEmail(body.get("data").get("email").asText()) != null) {
+        if (body.get("email") != null) {
+            if (this.userTableService.getUserByEmail(body.get("email").toString()) != null) {
                 Map mapReturn = new HashMap<>();
                 mapReturn.put("message", "用户Email已存在");
                 return mapReturn;
             }
-            user.setEmail(body.get("data").get("email").asText());
+            user.setEmail(body.get("email").toString());
         } else {
             user.setEmail(null);
         }
 
-        if (body.get("data").get("phone") != null && !body.get("data").get("phone").isNull()) {
-            if (this.userTableService.getUserByPhone(body.get("data").get("phone").asText()) != null) {
+        if (body.get("phone") != null) {
+            if (this.userTableService.getUserByPhone(body.get("phone").toString()) != null) {
                 Map mapReturn = new HashMap<>();
                 mapReturn.put("message", "用户电话号码已存在");
                 return mapReturn;
             }
-            user.setPhone(body.get("data").get("phone").asText());
+            user.setPhone(body.get("phone").toString());
         } else {
             user.setPhone(null);
         }
 
-        user.setUsername(body.get("data").get("username").asText());
-        user.setPassword(passwordEncoder.encode(body.get("data").get("password").asText()));
-        if (body.get("data").get("authorities") != null && !body.get("data").get("authorities").isNull()) {
+        user.setUsername(body.get("username").toString());
+        user.setPassword(passwordEncoder.encode(body.get("password").toString()));
+        if (body.get("authorities") != null) {
             List list = new ArrayList<>();
-            list.add(roleTableService.get(body.get("data").get("authorities").asLong()));
+            list.add(roleTableService.get(Long.valueOf(body.get("authorities").toString())));
             user.setAuthorities(list);
         } else {
             user.setAuthorities(null);
         }
         List clientsUpdate = new ArrayList<>();
         clientsUpdate.add(clientTableService.loadClientByClientId("user_admin_client"));
-        if (body.get("data").get("clients") != null && !body.get("data").get("clients").isNull()) {
-            clientTableService.getByIds(JacksonUtil.mapper.convertValue(body.get("data").get("clients"), List.class));
-            clientsUpdate.addAll(clientTableService.getByIds(JacksonUtil.mapper.convertValue(body.get("data").get("clients"), List.class)));
+        if (body.get("clients") != null) {
+            clientTableService.getByIds((List<Object>)body.get("clients"));
+            clientsUpdate.addAll(clientTableService.getByIds((List<Object>)body.get("clients")));
         }
         user.setClients(clientsUpdate);
-        if (body.get("data").get("modulesAuthorities") != null && !body.get("data").get("modulesAuthorities").isNull()) {
-            user.setModulesAuthorities(moduleRoleTableService.getByIds(JacksonUtil.mapper.convertValue(body.get("data").get("modulesAuthorities"), List.class)));
+        if (body.get("modulesAuthorities") != null) {
+            user.setModulesAuthorities(moduleRoleTableService.getByIds((List<Object>)body.get("modulesAuthorities")));
         } else {
             user.setModulesAuthorities(null);
         }
-        if (body.get("data").get("limitedDate") != null && !body.get("data").get("limitedDate").isNull()) {
-            user.setLimitedDate(new Date(body.get("data").get("limitedDate").asLong()));
+        if (body.get("limitedDate") != null ) {
+            user.setLimitedDate(new Date(Long.valueOf(body.get("limitedDate").toString())));
         } else {
             user.setLimitedDate(null);
         }
-        if (body.get("data").get("name") != null && !body.get("data").get("name").isNull()) {
-            user.setName(body.get("data").get("name").asText());
+        if (body.get("name") != null) {
+            user.setName(body.get("name").toString());
         } else {
             user.setName(null);
+        }
+        if (body.get("photo") != null) {
+            user.setPhoto(body.get("photo").toString());
         }
         user.setCreatedDate(new Date());
         user.setCreateUser(this.userTableService.getUserByUsername(principal.getName()));

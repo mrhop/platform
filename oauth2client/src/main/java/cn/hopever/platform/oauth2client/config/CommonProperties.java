@@ -23,6 +23,10 @@ public class CommonProperties {
     private String imageUpload;
     private String fileUpload;
     private String docUpload;
+    private String imagePathPrev;
+    private String filePathPrev;
+    private String docPathPrev;
+    private String defaultUserPhoto;
     private Map<String,Object> mapRules;
     public CommonProperties(){
         mapRules = new HashMap<>();

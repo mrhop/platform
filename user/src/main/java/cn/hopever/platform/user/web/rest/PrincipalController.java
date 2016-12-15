@@ -43,15 +43,16 @@ public class PrincipalController {
     public CommonResult checkuserScope(Principal principal, @PathVariable String clientId) {
         //首先获取用户的角色，然后判断client，如果client正确，则返回，如果client不正确，则看用户是否是superadmin 或者该用户是否和该client有关系
         CommonResult c = new CommonResult();
+        UserTable ut = userTableService.getUserByUsername(principal.getName());
         c.setStatus(CommonResultStatus.SUCCESS.toString());
         HashMap<String, Object> map = new HashMap<>();
         map.put("available", false);
+        map.put("userphoto",ut.getPhoto());
         //如果是super_admin
         String authority = ((OAuth2Authentication) principal).getAuthorities().iterator().next().getAuthority();
         if ("ROLE_super_admin".equals(authority)) {
             map.put("available", true);
         }else{
-            UserTable ut = userTableService.getUserByUsername(principal.getName());
             if(ut.getClients()!=null){
                 for(ClientTable ct:ut.getClients()){
                     if(ct.getClientId().equals(clientId)){

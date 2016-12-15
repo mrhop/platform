@@ -1,7 +1,5 @@
 package cn.hopever.platform.utilsweb.web.rest;
 
-import cn.hopever.platform.utils.web.CommonResult;
-import cn.hopever.platform.utils.web.CommonResultStatus;
 import fm.last.moji.MojiFile;
 import fm.last.moji.spring.SpringMojiBean;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
@@ -18,6 +16,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Donghui Huo on 2016/12/12.
@@ -39,22 +38,22 @@ public class UtilsWebController {
 
     //@PreAuthorize("#oauth2.hasScope('internal_client') and isAuthenticated()")
     @RequestMapping(value = "/upload/image", method = {RequestMethod.POST, RequestMethod.GET})
-    public CommonResult uploadImg(HttpServletRequest request, @RequestPart("files") MultipartFile[] files) throws Exception {
+    public Map uploadImg(HttpServletRequest request, @RequestPart("files") MultipartFile[] files) throws Exception {
         return upload(request,files,mojiImages);
     }
 
     //@PreAuthorize("#oauth2.hasScope('internal_client') and isAuthenticated()")
     @RequestMapping(value = "/upload/doc", method = {RequestMethod.POST})
-    public CommonResult uploadDoc(HttpServletRequest request, @RequestPart("files") MultipartFile[] files) throws Exception {
+    public Map uploadDoc(HttpServletRequest request, @RequestPart("files") MultipartFile[] files) throws Exception {
         return upload(request,files,mojiDocs);
     }
 
     //@PreAuthorize("#oauth2.hasScope('internal_client') and isAuthenticated()")
     @RequestMapping(value = "/upload/file", method = {RequestMethod.POST})
-    public CommonResult uploadFile(HttpServletRequest request, @RequestPart("files") MultipartFile[] files) throws Exception {
+    public Map uploadFile(HttpServletRequest request, @RequestPart("files") MultipartFile[] files) throws Exception {
         return upload(request,files,mojiFiles);
     }
-    private CommonResult upload(HttpServletRequest request, @RequestPart("files") MultipartFile[] files,SpringMojiBean mojiBean) throws IOException {
+    private Map upload(HttpServletRequest request, @RequestPart("files") MultipartFile[] files, SpringMojiBean mojiBean) throws IOException {
         String filePath = request.getParameter("filePath");
         HashMap<String, Object> responseData = new HashMap<>();
         List<String> list = new ArrayList<>();
@@ -69,6 +68,6 @@ public class UtilsWebController {
             list.add(filePath + file.getOriginalFilename());
         }
         responseData.put("fileKeys", list);
-        return new CommonResult(CommonResultStatus.SUCCESS.toString(), "上传成功", responseData);
+        return responseData;
     }
 }
