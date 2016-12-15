@@ -3,6 +3,7 @@ package cn.hopever.platform.user.web.controller;
 import cn.hopever.platform.user.domain.ClientTable;
 import cn.hopever.platform.user.domain.ModuleRoleTable;
 import cn.hopever.platform.user.domain.UserTable;
+import cn.hopever.platform.user.resources.UserResource;
 import cn.hopever.platform.user.service.ClientTableService;
 import cn.hopever.platform.user.service.ModuleRoleTableService;
 import cn.hopever.platform.user.service.RoleTableService;
@@ -113,8 +114,10 @@ public class UserController {
     public Map info(@RequestParam Long id, Principal principal) {
         //返回user是无法解析的，要使用对象解析为map 的形式
         UserTable ut = userTableService.get(id);
+        UserResource ur = userTableAssembler.toResource(ut);
+        ur.setPhoto(null);
         if (validateUserOperation(userTableService.getUserByUsername(principal.getName()), ut)) {
-            return JacksonUtil.mapper.convertValue(userTableAssembler.toResource(ut), Map.class);
+            return JacksonUtil.mapper.convertValue(ur, Map.class);
         } else {
             return null;
         }
@@ -125,7 +128,9 @@ public class UserController {
     public Map info(Principal principal) {
         //返回user是无法解析的，要使用对象解析为map 的形式
         UserTable ut = this.userTableService.getUserByUsername(principal.getName());
-        return JacksonUtil.mapper.convertValue(userTableAssembler.toResource(ut), Map.class);
+        UserResource ur = userTableAssembler.toResource(ut);
+        ur.setPhoto(null);
+        return JacksonUtil.mapper.convertValue(ur, Map.class);
     }
 
     @PreAuthorize("#oauth2.hasScope('user_admin_client')")

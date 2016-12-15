@@ -62,13 +62,16 @@ public class UserClientController {
                         if (mapData.get(map.get("name")) != null) {
                             map.put("defaultValue", mapData.get(map.get("name")));
                             // listReturn.add(map);
+                            continue;
                         }
                         if ("id".equals(map.get("name"))) {
                             map.put("defaultValue", mapData.get("internalId"));
+                            continue;
                         }
                         if ("authorities".equals(map.get("name"))) {
                             roleSelected = Long.valueOf(((List<Map>) mapData.get("authorities")).get(0).get("internalId").toString());
                             map.put("defaultValue", roleSelected);
+                            continue;
                         }
                     }
                 }
@@ -83,6 +86,7 @@ public class UserClientController {
                 } else {
                     map.put("items", new ArrayList());
                 }
+                continue;
             }
             if ("clients".equals(map.get("name"))) {
                 ObjectNode jsonNode = JacksonUtil.mapper.createObjectNode();
@@ -104,6 +108,7 @@ public class UserClientController {
                 } else {
                     map.put("items", new ArrayList());
                 }
+                continue;
             }
             if ("modulesAuthorities".equals(map.get("name")) && clientsSelected != null && clientsSelected.size() > 0) {
                 ObjectNode jsonNode = JacksonUtil.mapper.createObjectNode();
@@ -120,6 +125,7 @@ public class UserClientController {
                         map.remove("available");
                     }
                 }
+                continue;
             }
         }
 
@@ -247,8 +253,8 @@ public class UserClientController {
             }
         }
         HashMap map = new HashMap<>();
-        Set<String> set =  request.getParameterMap().keySet();
-        for(String key:set){
+        Set<String> set = request.getParameterMap().keySet();
+        for (String key : set) {
             if (key.equals("clients") || key.equals("modulesAuthorities")) {
                 map.put(key, request.getParameterValues(key));
             } else {
@@ -265,7 +271,8 @@ public class UserClientController {
 
     @RequestMapping(value = "/user/personal/update", method = {RequestMethod.POST})
     public CommonResult updateUserPersonal(HttpServletRequest request, @RequestPart("photo") MultipartFile[] files) throws Exception {
-        String userPhoto = commonProperties.getDefaultUserPhoto();        if (files != null && files.length > 0) {
+        String userPhoto = null;
+        if (files != null && files.length > 0) {
             request.setAttribute("resourceUrl", commonProperties.getImageUpload());
             request.setAttribute("filePath", "user/photo/");
             CommonResult cr = this.commonMethods.postFile(request, files);
@@ -277,8 +284,8 @@ public class UserClientController {
             }
         }
         HashMap map = new HashMap<>();
-        Set<String> set =  request.getParameterMap().keySet();
-        for(String key:set){
+        Set<String> set = request.getParameterMap().keySet();
+        for (String key : set) {
             if (key.equals("clients") || key.equals("modulesAuthorities")) {
                 map.put(key, request.getParameterValues(key));
             } else {
@@ -290,7 +297,11 @@ public class UserClientController {
         }
         map.put("photo", userPhoto);
         request.setAttribute("resourceUrl", baseConfig.getUpdatepersonal());
-        return commonMethods.postResource(map, request);
+        CommonResult cr = commonMethods.postResource(map, request);
+        if (userPhoto != null && CommonResultStatus.SUCCESS.toString().equals(cr.getStatus())) {
+            ((Map) request.getSession().getAttribute("accesstoken")).put("userphoto", userPhoto);
+        }
+        return cr;
     }
 
     @RequestMapping(value = "/user/add", method = {RequestMethod.GET})
@@ -330,8 +341,8 @@ public class UserClientController {
             }
         }
         HashMap map = new HashMap<>();
-        Set<String> set =  request.getParameterMap().keySet();
-        for(String key:set){
+        Set<String> set = request.getParameterMap().keySet();
+        for (String key : set) {
             if (key.equals("clients") || key.equals("modulesAuthorities")) {
                 map.put(key, request.getParameterValues(key));
             } else {
