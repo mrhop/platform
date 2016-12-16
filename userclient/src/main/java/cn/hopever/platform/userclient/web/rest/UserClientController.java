@@ -59,11 +59,6 @@ public class UserClientController {
                     Map<String, Object> mapData = (Map) c.getResponseData().get("data");
                     // List<Map> listReturn = new ArrayList<>();
                     for (Map map : list) {
-                        if (mapData.get(map.get("name")) != null) {
-                            map.put("defaultValue", mapData.get(map.get("name")));
-                            // listReturn.add(map);
-                            continue;
-                        }
                         if ("id".equals(map.get("name"))) {
                             map.put("defaultValue", mapData.get("internalId"));
                             continue;
@@ -72,6 +67,10 @@ public class UserClientController {
                             roleSelected = Long.valueOf(((List<Map>) mapData.get("authorities")).get(0).get("internalId").toString());
                             map.put("defaultValue", roleSelected);
                             continue;
+                        }
+                        if (mapData.get(map.get("name")) != null) {
+                            map.put("defaultValue", mapData.get(map.get("name")));
+                            // listReturn.add(map);
                         }
                     }
                 }
