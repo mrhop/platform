@@ -5,19 +5,18 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Donghui Huo on 2016/12/19.
  */
 
 @Entity
-@Table(name = "platform_cms_article")
+@Table(name = "platform_cms_file_library_type")
 @Data
 @EqualsAndHashCode(of = {"id"})
 @ToString(exclude = {"website"})
-public class ArticleTable {
-    // title,content
+public class FileLibraryTypeTable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -25,17 +24,8 @@ public class ArticleTable {
     @Column(nullable = false)
     private String title;
 
-    @Column(nullable = false,columnDefinition="TEXT")
-    private String content;
-
-    @Column(name = "is_published",nullable = false)
-    private boolean isPublished = true;
-
-    @Column(name = "create_date")
-    private Date createDate;
-
-    @Column(name = "create_user")
-    private String createUser;
+    @OneToMany(mappedBy = "fileLibraryType")
+    private List<FileLibraryTable> fileLibrarys;
 
     @ManyToOne
     @JoinColumn(name = "template_id", nullable = false)

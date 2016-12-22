@@ -23,6 +23,10 @@ public class TemplateTable {
     @Column(nullable = false, length = 50)
     private String name;
 
+    //NEWS ARTICLE FILELIB等
+    @Column(nullable = false)
+    private String type;
+
     @Column(name = "description")
     private String description;
 
@@ -33,7 +37,7 @@ public class TemplateTable {
     private String layoutScale;
 
     @Column(name = "content_position", nullable = false)
-    private String contentPosition;//使用model 弹出的方式来进行处理--content or news ,核心部分
+    private String contentPosition;//使用model 弹出的方式来进行处理--content or news or fileLib ,核心部分
 
     @Column(name = "content_script")
     private String contentScript;//重新排版文章或者新闻内容时使用

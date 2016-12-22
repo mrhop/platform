@@ -28,7 +28,17 @@ public class NewsTypeTable {
     private String title;
 
     @ManyToOne
+    @JoinColumn(name = "news_list_template_id", nullable = false)
+    private TemplateTable newsListTemplate;
+
+    @ManyToOne
+    @JoinColumn(name = "news_template_id", nullable = false)
+    private TemplateTable newsTemplate;
+
+    @ManyToOne
     @JoinColumn(name = "website_id", nullable = false)
     private WebsiteTable website;
+
+
 
 }
