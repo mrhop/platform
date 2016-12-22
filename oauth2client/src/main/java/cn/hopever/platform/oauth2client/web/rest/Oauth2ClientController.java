@@ -76,12 +76,12 @@ public class Oauth2ClientController {
     private CommonMethods commonMethods;
 
     @RequestMapping(value = "/gettokenbycode", method = RequestMethod.GET)
-    public CommonResult getTokenByCode(HttpServletRequest request,HttpServletResponse response) {
+    public CommonResult getTokenByCode(HttpServletRequest request, HttpServletResponse response) {
         CommonResult c = new CommonResult();
         try {
             OAuth2AccessToken oa = authorizationCodeRestTemplate.getAccessToken();
             Cookie cookie = new Cookie("accesstoken", DesECBUtil.encryptDES(oa.getValue(), oauth2Properties.getSecretKey()));
-            cookie.setPath("/");
+            //cookie.setPath(request.getContextPath());
             cookie.setMaxAge(oa.getExpiresIn());
             //设置domain，保证一键登陆的可行性--目前来看还不可设置，考虑localhost的重新指向来设置
             if (oauth2Properties.getDomainName() != null) {
@@ -150,7 +150,7 @@ public class Oauth2ClientController {
         try {
             OAuth2AccessToken oa = getPasswordRestTemplate(body.get("data").get("username").asText(), body.get("data").get("password").asText()).getAccessToken();
             Cookie cookie = new Cookie("accesstoken", AesUtil.aesEncrypt(oa.getValue(), oauth2Properties.getSecretKey()));
-            cookie.setPath("/");
+            //cookie.setPath(request.getContextPath());
             //设置domain，保证一键登陆的可行性--目前来看还不可设置，考虑localhost的重新指向来设置
             if (oauth2Properties.getDomainName() != null) {
                 cookie.setDomain(oauth2Properties.getDomainName());
@@ -204,7 +204,7 @@ public class Oauth2ClientController {
         resource.setUsername(username);
         resource.setPassword(password);
         resource.setScope(oauth2Properties.getClientScopes());
-        return new OAuth2RestTemplate(resource,  new DefaultOAuth2ClientContext(new DefaultAccessTokenRequest()));
+        return new OAuth2RestTemplate(resource, new DefaultOAuth2ClientContext(new DefaultAccessTokenRequest()));
     }
 
 }

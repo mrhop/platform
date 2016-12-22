@@ -205,7 +205,7 @@ public class ModuleController {
             }
             mt.setAuthorities(listMr);
         }
-        if (map.get("isTop") != null) {
+        if (map.get("isTop") != null && ((List) map.get("isTop")).size() > 0) {
             mt.setParent(null);
             mt.setModuleUrl(null);
             mt.setIconClass(map.get("iconClass").toString());
@@ -219,7 +219,7 @@ public class ModuleController {
             mt.setIconClass(null);
         }
         if (map.get("moduleOrder") != null) {
-            if (map.get("isTop") != null) {
+            if (map.get("isTop") != null && ((List) map.get("isTop")).size() > 0) {
                 mt.setModuleOrder(Integer.valueOf(map.get("moduleOrder").toString()) * 100);
             } else {
                 if (map.get("parent") != null) {

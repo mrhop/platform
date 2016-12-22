@@ -4,3 +4,10 @@ server:
 security:
     basic:
         enabled: false
+config:
+    oauth2:
+        clientID: cms_admin_client
+        clientSecret: secret
+        clientScopes:
+              - cms_admin_client
+              - internal_client

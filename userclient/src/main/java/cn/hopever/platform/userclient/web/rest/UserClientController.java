@@ -1148,6 +1148,7 @@ public class UserClientController {
         if ("isTop".equals(body.get("updateElement").textValue())) {
             //当client变化之后
             ObjectNode jsonNode = JacksonUtil.mapper.createObjectNode();
+            jsonNode.put("moduleId", request.getParameter("key"));
             boolean isTop = false;
             if (body.get("updateData") != null && !body.get("updateData").isNull()) {
                 isTop = true;
@@ -1166,7 +1167,10 @@ public class UserClientController {
                         request.setAttribute("resourceUrl", baseConfig.getModuleparentoptionsofclient());
                         CommonResult moduleCr = commonMethods.postResource(jsonNode, request);
                         if (CommonResultStatus.SUCCESS.toString().equals(moduleCr.getStatus())) {
-                            map.put("items", moduleCr.getResponseData().get("data"));
+                            if (moduleCr.getResponseData().get("data") != null) {
+                                map.put("items", ((Map) moduleCr.getResponseData().get("data")).get("items"));
+                                map.put("defaultValue", ((Map) moduleCr.getResponseData().get("data")).get("defaultValue"));
+                            }
                             map.remove("available");
                         } else {
                             map.put("available", false);
