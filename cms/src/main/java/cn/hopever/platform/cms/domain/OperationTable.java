@@ -31,6 +31,9 @@ public class OperationTable {
     @Column(nullable = false)
     private String ip;
 
+    @Column(name = "operation_user", nullable = false)
+    private String operationUser;
+
     @Column(name = "operation_date", nullable = false)
     private Date operationDate = new Date();
 

@@ -37,9 +37,9 @@ public class TemplateTable {
     private String layoutScale;
 
     @Column(name = "content_position", nullable = false)
-    private String contentPosition;//使用model 弹出的方式来进行处理--content or news or fileLib ,核心部分
+    private String contentPosition;//使用model 弹出的方式来进行处理--content or news or fileLib ,核心部分//block-关联到navigate导航
 
-    @Column(name = "content_script")
+    @Column(name = "content_script",columnDefinition="TEXT")
     private String contentScript;//重新排版文章或者新闻内容时使用
 
     @OneToMany(mappedBy = "template")

@@ -27,7 +27,7 @@ public class BlockTable {
     @OneToMany(mappedBy = "block")
     private List<TemplateBlockTable> templateBlocks;
 
-    //news poll  custom static 【hot-news newest-news poll 这些预制】
+    //news poll  custom static 【hot-news newest-news poll，navigate 这些预制】
     @Column(nullable = false)
     private String type;
 
