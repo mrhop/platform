@@ -36,18 +36,26 @@ public class WebsiteController {
     @PreAuthorize("#oauth2.hasScope('cms_admin_client') and ( hasRole('ROLE_super_admin') or hasRole('ROLE_admin'))")
     @RequestMapping(value = "/info", method = {RequestMethod.GET})
     public Map info(@RequestParam Long id, Principal principal) {
+        this.websiteTableService.get(id);
+        //DO MAP
         return null;
     }
 
     @PreAuthorize("#oauth2.hasScope('cms_admin_client') and ( hasRole('ROLE_super_admin') or hasRole('ROLE_admin'))")
     @RequestMapping(value = "/update", method = {RequestMethod.POST})
     public Map updateWebsite(@RequestBody Map<String,Object> body, Principal principal) {
+        //DO MAP AND UPDATE
+        //this.websiteTableService.save()
+        //return map success
         return null;
     }
 
     @PreAuthorize("#oauth2.hasScope('cms_admin_client') and ( hasRole('ROLE_super_admin') or hasRole('ROLE_admin'))")
     @RequestMapping(value = "/save", method = {RequestMethod.POST})
     public Map saveWebsite(@RequestBody Map<String,Object> body, Principal principal) {
+        //DO MAP AND save
+        //this.websiteTableService.save()
+        //return map success
         return null;
     }
 

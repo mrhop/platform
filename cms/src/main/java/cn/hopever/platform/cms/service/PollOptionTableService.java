@@ -1,7 +1,6 @@
 package cn.hopever.platform.cms.service;
 
 import cn.hopever.platform.cms.domain.PollOptionTable;
-import cn.hopever.platform.cms.domain.PollTable;
 
 import java.util.List;
 
@@ -10,9 +9,11 @@ import java.util.List;
  */
 public interface PollOptionTableService {
     //根据poll的id获取相关的polloption，然后处理
-    public List<PollOptionTable> getListByPoll(PollTable pollTable);
+    public List<PollOptionTable> getListByPoll(Long pollId);
 
     public PollOptionTable save(PollOptionTable pollOptionTable);
 
     public void delete(Long id);
+
+    public PollOptionTable get(Long id);
 }

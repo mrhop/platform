@@ -9,9 +9,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.Principal;
+import java.util.List;
 import java.util.Map;
 
 @Service("websiteTableService")
@@ -37,5 +40,32 @@ public class WebsiteTableServiceImpl implements WebsiteTableService {
     @Override
     public void delete(Long id) {
         websiteTableRepository.delete(id);
+    }
+
+    @Override
+    public WebsiteTable get(Long id) {
+        return websiteTableRepository.findOne(id);
+    }
+
+    @Override
+    public List<WebsiteTable> getList(Principal principal) {
+        String username = principal.getName();
+        username = "[" + username + "]";
+        return this.websiteTableRepository.findByRelatedUsernamesLike(username);
+    }
+
+    @Override
+    public boolean validatePermission(Principal principal, WebsiteTable websiteTable) {
+        String authority = ((OAuth2Authentication) principal).getAuthorities().iterator().next().getAuthority();
+        if ("ROLE_super_admin".equals(authority) || "ROLE_admin".equals(authority)) {
+            return true;
+        } else {
+            boolean validated = false;
+            List<WebsiteTable> list = this.getList(principal);
+            if (websiteTable != null && list != null && list.size() > 0 && list.contains(websiteTable)) {
+                validated = true;
+            }
+            return validated;
+        }
     }
 }

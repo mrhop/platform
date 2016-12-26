@@ -4,6 +4,8 @@ import cn.hopever.platform.cms.domain.WebsiteTable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.security.Principal;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -24,5 +26,11 @@ public interface WebsiteTableService {
     public WebsiteTable save(WebsiteTable websiteTable);
 
     public void delete(Long id);
+
+    public WebsiteTable get(Long id);
+
+    public List<WebsiteTable> getList(Principal principal);
+
+    public boolean validatePermission(Principal principal, WebsiteTable websiteTable);
 
 }

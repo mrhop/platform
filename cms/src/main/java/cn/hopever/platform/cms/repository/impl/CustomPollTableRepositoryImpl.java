@@ -45,7 +45,7 @@ public class CustomPollTableRepositoryImpl extends SimpleJpaRepository<PollTable
                     for (String key : mapFilter.keySet()) {
                         Predicate predicateInternal = null;
                         if (key.equals("website")) {
-                            predicateInternal = builder.equal(root.get(key), mapFilter.get(key));
+                            predicateInternal = root.join("website").in( mapFilter.get(key));
                         }else{
                             predicateInternal =  builder.like(root.get(key), "%" + mapFilter.get(key) + "%");
                         }
