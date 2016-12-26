@@ -56,5 +56,6 @@ public class TemplateTable {
     //每第一次访问时，如果没有缓存，则进行缓存
     //每次更新时，将其关联的cache删除即可，不进行再次生成，只在访问时进行生成
     //同时给出一个批量缓存的处理
+    //website type
 
 }

@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Map;
 
 @Service("fileLibraryTypeTableService")
 @Transactional
@@ -16,7 +15,7 @@ public class FileLibraryTypeTableServiceImpl implements FileLibraryTypeTableServ
     Logger logger = LoggerFactory.getLogger(FileLibraryTypeTableServiceImpl.class);
 
     @Override
-    public List<FileLibraryTypeTable> getList(Map<String, Object> filterMap) {
+    public List<FileLibraryTypeTable> getListByWebsite(long websiteId) {
         return null;
     }
 

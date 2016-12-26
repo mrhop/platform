@@ -22,8 +22,9 @@ public class OperationTable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "related_table", nullable = false)
-    private String relatedTable;
+    //这个操作指向性相关联的enmu采用property 来列举
+    @Column(name = "related_operation", nullable = false)
+    private String relatedOperation;
 
     @Column(name = "related_id", nullable = false)
     private long relatedId;

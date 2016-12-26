@@ -27,6 +27,9 @@ public class WebsiteTable {
     @Column
     private String description;
 
+    @Column(name = "enabled", nullable = false)
+    private boolean enabled = true;
+
     //关联的管理用户名【这个用户名由管理员指定，而且是可以有多个，使用[a,b,c]的方式来实现】
     @Column(name = "related_usernames")
     private String relatedUsernames;
