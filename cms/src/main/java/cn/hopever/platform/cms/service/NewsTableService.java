@@ -16,4 +16,6 @@ public interface NewsTableService {
     public NewsTable save(NewsTable newsTable);
 
     public void delete(Long id);
+
+    public NewsTable get(Long id);
 }

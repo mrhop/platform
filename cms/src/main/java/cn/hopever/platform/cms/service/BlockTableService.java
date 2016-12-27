@@ -17,4 +17,6 @@ public interface BlockTableService {
 
     public void delete(Long id);
 
+    public BlockTable get(Long id);
+
 }

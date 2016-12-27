@@ -3,7 +3,6 @@ package cn.hopever.platform.cms.service.impl;
 import cn.hopever.platform.cms.domain.PollOptionTable;
 import cn.hopever.platform.cms.repository.PollOptionTableRepository;
 import cn.hopever.platform.cms.repository.PollTableRepository;
-import cn.hopever.platform.cms.repository.WebsiteTableRepository;
 import cn.hopever.platform.cms.service.PollOptionTableService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,8 +17,6 @@ import java.util.List;
 public class PollOptionTableServiceImpl implements PollOptionTableService {
     Logger logger = LoggerFactory.getLogger(PollOptionTableServiceImpl.class);
 
-    @Autowired
-    private WebsiteTableRepository websiteTableRepository;
     @Autowired
     private PollTableRepository pollTableRepository;
     @Autowired

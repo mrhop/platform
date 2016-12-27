@@ -12,7 +12,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -40,7 +39,6 @@ public class TemplateController {
     public Map getList(@RequestBody JsonNode body, Principal principal) {
         Map<String, Object> map = new HashMap<>();
         List<HashMap<String, Object>> listReturn;
-        String authority = ((OAuth2Authentication) principal).getAuthorities().iterator().next().getAuthority();
         Page<TemplateTable> list;
         PageRequest pageRequest;
         if (body.get("sort") == null || body.get("sort").isNull()) {
@@ -52,7 +50,8 @@ public class TemplateController {
         if (body.get("filters") != null && !body.get("filters").isNull()) {
             filterMap = JacksonUtil.mapper.convertValue(body.get("filters"), Map.class);
         }
-            list = templateTableService.getList(principal, pageRequest, filterMap);
+        filterMap.put("website", websiteTableService.getWebsiteAsFilter(principal, filterMap.get("website") != null ? filterMap.get("website").toString() : null));
+        list = templateTableService.getList(pageRequest, filterMap);
 
         if (list != null && list.iterator().hasNext()) {
             listReturn = new ArrayList<>();
@@ -81,7 +80,7 @@ public class TemplateController {
     @RequestMapping(value = "/delete", method = {RequestMethod.GET})
     public void delete(@RequestParam Long id, Principal principal) {
         //需要判断是否普通用户有相关的website可处理权
-        if(websiteTableService.validatePermission(principal,templateTableService.get(id).getWebsite())){
+        if (websiteTableService.validatePermission(principal, templateTableService.get(id).getWebsite())) {
             this.templateTableService.delete(id);
         }
     }
@@ -89,7 +88,7 @@ public class TemplateController {
     @PreAuthorize("#oauth2.hasScope('cms_admin_client')")
     @RequestMapping(value = "/info", method = {RequestMethod.GET})
     public Map info(@RequestParam Long id, Principal principal) {
-        if(websiteTableService.validatePermission(principal,templateTableService.get(id).getWebsite())){
+        if (websiteTableService.validatePermission(principal, templateTableService.get(id).getWebsite())) {
             this.templateTableService.get(id);
         }
         return null;
@@ -98,7 +97,7 @@ public class TemplateController {
     @PreAuthorize("#oauth2.hasScope('cms_admin_client')")
     @RequestMapping(value = "/preview", method = {RequestMethod.GET})
     public Map preview(@RequestParam Long id, Principal principal) {
-        if(websiteTableService.validatePermission(principal,templateTableService.get(id).getWebsite())){
+        if (websiteTableService.validatePermission(principal, templateTableService.get(id).getWebsite())) {
             //do preview
         }
         return null;
@@ -107,7 +106,7 @@ public class TemplateController {
     @PreAuthorize("#oauth2.hasScope('cms_admin_client')")
     @RequestMapping(value = "/update", method = {RequestMethod.POST})
     public Map updateTemplate(@RequestBody Map<String, Object> body, Principal principal) {
-        if(websiteTableService.validatePermission(principal,templateTableService.get(Long.valueOf(body.get("id").toString())).getWebsite())){
+        if (websiteTableService.validatePermission(principal, templateTableService.get(Long.valueOf(body.get("id").toString())).getWebsite())) {
             //do update
         }
         return null;
@@ -118,7 +117,6 @@ public class TemplateController {
     public Map saveTemplate(@RequestBody Map<String, Object> body, Principal principal) {
         return null;
     }
-
 
 
 }

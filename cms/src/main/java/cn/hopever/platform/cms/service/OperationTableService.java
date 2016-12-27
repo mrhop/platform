@@ -16,4 +16,6 @@ public interface OperationTableService {
     public OperationTable save(OperationTable operationTable);
 
     public void delete(Long id);
+
+    public OperationTable get(Long id);
 }

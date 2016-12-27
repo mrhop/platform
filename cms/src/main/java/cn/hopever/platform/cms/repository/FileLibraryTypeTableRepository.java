@@ -11,5 +11,5 @@ import java.util.List;
  * 全部采用
  */
 public interface FileLibraryTypeTableRepository extends PagingAndSortingRepository<FileLibraryTypeTable, Long> {
-    public List<FileLibraryTypeTable> findByWebsite(WebsiteTable websiteTable);
+    public List<FileLibraryTypeTable> findByWebsiteIn(List<WebsiteTable> list);
 }

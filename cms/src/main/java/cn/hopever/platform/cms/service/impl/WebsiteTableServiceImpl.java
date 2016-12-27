@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -67,5 +68,20 @@ public class WebsiteTableServiceImpl implements WebsiteTableService {
             }
             return validated;
         }
+    }
+
+    @Override
+    public List<WebsiteTable> getWebsiteAsFilter(Principal principal, String id) {
+        List<WebsiteTable> list = null;
+        if (id != null) {
+            list = new ArrayList<>();
+            list.add(websiteTableRepository.findOne(Long.valueOf(id)));
+        } else {
+            String authority = ((OAuth2Authentication) principal).getAuthorities().iterator().next().getAuthority();
+            if ("ROLE_common_user".equals(authority)) {
+                list = websiteTableRepository.findByRelatedUsernamesLike("[" + principal.getName() + "]");
+            }
+        }
+        return list;
     }
 }

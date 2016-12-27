@@ -17,4 +17,6 @@ public interface NavigateTableService {
     public NavigateTable save(NavigateTable navigateTable);
 
     public void delete(Long id);
+
+    public NavigateTable get(Long id);
 }

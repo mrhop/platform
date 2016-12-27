@@ -12,7 +12,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -42,7 +41,6 @@ public class ResourceController {
     public Map getList(@RequestBody JsonNode body, Principal principal) {
         Map<String, Object> map = new HashMap<>();
         List<HashMap<String, Object>> listReturn;
-        String authority = ((OAuth2Authentication) principal).getAuthorities().iterator().next().getAuthority();
         Page<ResourceTable> list;
         PageRequest pageRequest;
         if (body.get("sort") == null || body.get("sort").isNull()) {
@@ -54,7 +52,8 @@ public class ResourceController {
         if (body.get("filters") != null && !body.get("filters").isNull()) {
             filterMap = JacksonUtil.mapper.convertValue(body.get("filters"), Map.class);
         }
-        list = resourceTableService.getList(principal, pageRequest, filterMap);
+        filterMap.put("website", websiteTableService.getWebsiteAsFilter(principal, filterMap.get("website") != null ? filterMap.get("website").toString() : null));
+        list = resourceTableService.getList(pageRequest, filterMap);
 
         if (list != null && list.iterator().hasNext()) {
             listReturn = new ArrayList<>();

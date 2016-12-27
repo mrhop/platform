@@ -17,4 +17,6 @@ public interface ArticleTableService {
 
     public void delete(Long id);
 
+    public ArticleTable get(Long id);
+
 }

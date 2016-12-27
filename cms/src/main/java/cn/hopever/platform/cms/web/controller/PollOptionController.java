@@ -25,7 +25,7 @@ public class PollOptionController {
     private PollOptionTableService pollOptionTableService;
 
     @PreAuthorize("#oauth2.hasScope('cms_admin_client')")
-    @RequestMapping(value = "/list", method = {RequestMethod.POST})
+    @RequestMapping(value = "/list", method = {RequestMethod.GET})
     public List getListByPoll(@RequestParam Long pollId, Principal principal) {
         List<HashMap<String, Object>> listReturn = null;
         Iterable<PollOptionTable> list = pollOptionTableService.getListByPoll(pollId);

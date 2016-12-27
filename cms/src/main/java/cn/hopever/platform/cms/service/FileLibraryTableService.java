@@ -18,4 +18,5 @@ public interface FileLibraryTableService {
 
     public void delete(Long id);
 
+    public FileLibraryTable get(Long id);
 }

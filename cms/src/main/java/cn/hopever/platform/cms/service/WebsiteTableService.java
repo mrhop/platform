@@ -33,4 +33,6 @@ public interface WebsiteTableService {
 
     public boolean validatePermission(Principal principal, WebsiteTable websiteTable);
 
+    public List<WebsiteTable> getWebsiteAsFilter(Principal principal,String id);
+
 }
