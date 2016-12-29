@@ -11,3 +11,31 @@ config:
         clientScopes:
               - cms_admin_client
               - internal_client
+    cms:
+        #website
+        #resource
+        resourceTypes:
+                - css
+                - js
+        #template
+        #block
+        blockTypes:
+                - 静态内容
+                - 热点新闻
+                - 最新新闻
+                - 投票模块
+                - 导航模块
+                - 文件库
+                - 自定义内容
+        #news
+        #newsType
+        #poll
+        #pollOption
+        #operation
+        relatedOperations:
+                - 投票
+                - 新增文章
+        #navigate
+        #fileLibrary
+        #fileLibraryType
+        #article
