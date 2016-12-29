@@ -4,6 +4,7 @@ import cn.hopever.platform.cms.domain.NewsTable;
 import cn.hopever.platform.cms.service.NewsTableService;
 import cn.hopever.platform.cms.service.NewsTypeTableService;
 import cn.hopever.platform.utils.json.JacksonUtil;
+import cn.hopever.platform.utils.tools.DateFormat;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,10 +16,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by Donghui Huo on 2016/8/29.
@@ -58,6 +56,18 @@ public class NewsController {
                 mapTemp.put("key", nt.getId());
                 List<Object> listTmp = new ArrayList<>();
                 listTmp.add("");
+                listTmp.add(nt.getTitle());
+                listTmp.add(nt.getSubtitle());
+                if (nt.getNewsType() != null) {
+                    listTmp.add(nt.getNewsType().getTitle());
+                } else {
+                    listTmp.add(null);
+                }
+                listTmp.add(nt.getClickTimes());
+                listTmp.add(nt.isPublished() ? "Y" : "N");
+                listTmp.add(nt.getPublishDate() != null ? DateFormat.sdf.format(nt.getPublishDate()) : null);
+                listTmp.add(nt.getCreateUser());
+                listTmp.add(DateFormat.sdf.format(nt.getCreateDate()));
                 mapTemp.put("value", listTmp);
                 listReturn.add(mapTemp);
             }
@@ -84,14 +94,52 @@ public class NewsController {
     @PreAuthorize("#oauth2.hasScope('cms_admin_client')")
     @RequestMapping(value = "/info", method = {RequestMethod.GET})
     public Map info(@RequestParam Long id, Principal principal) {
-        newsTableService.get(id);
-        return null;
+        NewsTable nt = newsTableService.get(id);
+        Map<String, Object> map = new HashMap<>();
+        map.put("id", nt.getId());
+        map.put("title", nt.getTitle());
+        if (nt.getNewsType() != null) {
+            HashMap<String, Object> mapNewsType = new HashMap<>();
+            mapNewsType.put("id", nt.getNewsType().getId());
+            mapNewsType.put("title", nt.getNewsType().getTitle());
+            map.put("newsType", mapNewsType);
+        } else {
+            map.put("newsType", null);
+        }
+        map.put("clickTimes", nt.getClickTimes());
+        map.put("isPublished", nt.isPublished());
+        map.put("publishDate", nt.getPublishDate());
+        map.put("createUser", nt.getCreateUser());
+        map.put("createDate", nt.getCreateDate());
+        //日期是否需要格式化
+
+        return map;
     }
 
     @PreAuthorize("#oauth2.hasScope('cms_admin_client')")
     @RequestMapping(value = "/update", method = {RequestMethod.POST})
     public Map updateNews(@RequestBody Map<String, Object> body, Principal principal) {
         //newsTableService.save();
+        long id = Long.valueOf(body.get("id").toString());
+        NewsTable newsTable = this.newsTableService.get(id);
+        if (body.get("title") != null) {
+            newsTable.setTitle(body.get("title").toString());
+        }
+        if (body.get("newsType") != null) {
+            newsTable.setNewsType(newsTypeTableService.get(Long.valueOf(body.get("website").toString())));
+        }
+        if (body.get("clickTimes") != null) {
+            newsTable.setClickTimes(Integer.valueOf(body.get("clickTimes").toString()));
+        }
+        if (body.get("isPublished") != null && ((List) body.get("isPublished")).size() > 0) {
+            newsTable.setPublished(true);
+        } else {
+            newsTable.setPublished(false);
+        }
+        if (body.get("publishDate") != null) {
+            newsTable.setPublishDate(new Date(Long.valueOf(body.get("publishDate").toString())));
+        }
+        this.newsTableService.save(newsTable);
         return null;
     }
 
@@ -99,6 +147,27 @@ public class NewsController {
     @RequestMapping(value = "/save", method = {RequestMethod.POST})
     public Map saveNews(@RequestBody Map<String, Object> body, Principal principal) {
         //newsTableService.save();
+        NewsTable newsTable = new NewsTable();
+        if (body.get("title") != null) {
+            newsTable.setTitle(body.get("title").toString());
+        }
+        if (body.get("newsType") != null) {
+            newsTable.setNewsType(newsTypeTableService.get(Long.valueOf(body.get("website").toString())));
+        }
+        if (body.get("clickTimes") != null) {
+            newsTable.setClickTimes(Integer.valueOf(body.get("clickTimes").toString()));
+        }
+        if (body.get("isPublished") != null && ((List) body.get("isPublished")).size() > 0) {
+            newsTable.setPublished(true);
+        } else {
+            newsTable.setPublished(false);
+        }
+        if (body.get("publishDate") != null) {
+            newsTable.setPublishDate(new Date(Long.valueOf(body.get("publishDate").toString())));
+        }
+        newsTable.setCreateUser(principal.getName());
+        newsTable.setCreateDate(new Date());
+        this.newsTableService.save(newsTable);
         return null;
     }
 

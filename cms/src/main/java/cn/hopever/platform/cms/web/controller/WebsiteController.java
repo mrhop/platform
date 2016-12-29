@@ -14,10 +14,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by Donghui Huo on 2016/8/29.
@@ -54,6 +51,10 @@ public class WebsiteController {
                 mapTemp.put("key", wt.getId());
                 List<Object> listTmp = new ArrayList<>();
                 listTmp.add("");
+                listTmp.add(wt.getTitle());
+                listTmp.add(wt.getKeywords());
+                listTmp.add(wt.getDescription());
+                listTmp.add(wt.isEnabled() ? "Y" : "N");
                 mapTemp.put("value", listTmp);
                 listReturn.add(mapTemp);
             }
@@ -79,27 +80,93 @@ public class WebsiteController {
     @PreAuthorize("#oauth2.hasScope('cms_admin_client') and ( hasRole('ROLE_super_admin') or hasRole('ROLE_admin'))")
     @RequestMapping(value = "/info", method = {RequestMethod.GET})
     public Map info(@RequestParam Long id, Principal principal) {
-        this.websiteTableService.get(id);
-        //DO MAP
-        return null;
+        WebsiteTable wt = this.websiteTableService.get(id);
+        Map<String, Object> map = new HashMap<>();
+        map.put("id", wt.getId());
+        map.put("title", wt.getTitle());
+        map.put("keywords", wt.getKeywords());
+        map.put("description", wt.getDescription());
+        map.put("enabled", wt.isEnabled());
+        //此处应该有相关联的用户的勾选管理
+        map.put("relatedUsernames", wt.getRelatedUsernames() == null ? null : wt.getRelatedUsernames().split(","));
+        map.put("resourceAddress", wt.getResourceAddress());
+        map.put("resourceUrlPrefix", wt.getResourceUrlPrefix());
+        return map;
     }
 
     @PreAuthorize("#oauth2.hasScope('cms_admin_client') and ( hasRole('ROLE_super_admin') or hasRole('ROLE_admin'))")
     @RequestMapping(value = "/update", method = {RequestMethod.POST})
-    public Map updateWebsite(@RequestBody Map<String,Object> body, Principal principal) {
-        //DO MAP AND UPDATE
-        //this.websiteTableService.save()
-        //return map success
+    public Map updateWebsite(@RequestBody Map<String, Object> body, Principal principal) {
+        long id = Long.valueOf(body.get("id").toString());
+        WebsiteTable websiteTable = this.websiteTableService.get(id);
+        if (body.get("title") != null) {
+            websiteTable.setTitle(body.get("title").toString());
+        }
+        if (body.get("keywords") != null) {
+            websiteTable.setKeywords(body.get("keywords").toString());
+        }
+        if (body.get("description") != null) {
+            websiteTable.setDescription(body.get("description").toString());
+        }
+        if (body.get("enabled") != null && ((List) body.get("enabled")).size() > 0) {
+            websiteTable.setEnabled(true);
+        } else {
+            websiteTable.setEnabled(false);
+        }
+        if (body.get("relatedUsernames") != null && ((List) body.get("relatedUsernames")).size() > 0) {
+            StringBuilder str = new StringBuilder();
+            for (Object username : (List) body.get("relatedUsernames")) {
+                str.append(username.toString()).append(",");
+            }
+            websiteTable.setRelatedUsernames(str.substring(0, str.length() - 1));
+        } else {
+            websiteTable.setRelatedUsernames(null);
+        }
+        if (body.get("resourceAddress") != null) {
+            websiteTable.setResourceAddress(body.get("resourceAddress").toString());
+        }
+        if (body.get("resourceUrlPrefix") != null) {
+            websiteTable.setResourceUrlPrefix(body.get("resourceUrlPrefix").toString());
+        }
+        this.websiteTableService.save(websiteTable);
         return null;
     }
 
     @PreAuthorize("#oauth2.hasScope('cms_admin_client') and ( hasRole('ROLE_super_admin') or hasRole('ROLE_admin'))")
     @RequestMapping(value = "/save", method = {RequestMethod.POST})
-    public Map saveWebsite(@RequestBody Map<String,Object> body, Principal principal) {
-        //DO MAP AND save
-        //this.websiteTableService.save()
-        //return map success
+    public Map saveWebsite(@RequestBody Map<String, Object> body, Principal principal) {
+        long id = Long.valueOf(body.get("id").toString());
+        WebsiteTable websiteTable = new WebsiteTable();
+        if (body.get("title") != null) {
+            websiteTable.setTitle(body.get("title").toString());
+        }
+        if (body.get("keywords") != null) {
+            websiteTable.setKeywords(body.get("keywords").toString());
+        }
+        if (body.get("description") != null) {
+            websiteTable.setDescription(body.get("description").toString());
+        }
+        if (body.get("enabled") != null && ((List) body.get("enabled")).size() > 0) {
+            websiteTable.setEnabled(true);
+        } else {
+            websiteTable.setEnabled(false);
+        }
+        if (body.get("relatedUsernames") != null && ((List) body.get("relatedUsernames")).size() > 0) {
+            StringBuilder str = new StringBuilder();
+            for (Object username : (List) body.get("relatedUsernames")) {
+                str.append(username.toString()).append(",");
+            }
+            websiteTable.setRelatedUsernames(str.substring(0, str.length() - 1));
+        } else {
+            websiteTable.setRelatedUsernames(null);
+        }
+        if (body.get("resourceAddress") != null) {
+            websiteTable.setResourceAddress(body.get("resourceAddress").toString());
+        }
+        if (body.get("resourceUrlPrefix") != null) {
+            websiteTable.setResourceUrlPrefix(body.get("resourceUrlPrefix").toString());
+        }
+        this.websiteTableService.save(websiteTable);
         return null;
     }
-
 }

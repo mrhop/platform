@@ -38,7 +38,4 @@ public class NewsTypeTable {
     @ManyToOne
     @JoinColumn(name = "website_id", nullable = false)
     private WebsiteTable website;
-
-
-
 }

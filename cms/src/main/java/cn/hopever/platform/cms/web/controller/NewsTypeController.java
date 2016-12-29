@@ -2,6 +2,7 @@ package cn.hopever.platform.cms.web.controller;
 
 import cn.hopever.platform.cms.domain.NewsTypeTable;
 import cn.hopever.platform.cms.service.NewsTypeTableService;
+import cn.hopever.platform.cms.service.TemplateTableService;
 import cn.hopever.platform.cms.service.WebsiteTableService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +26,8 @@ public class NewsTypeController {
     @Autowired
     private WebsiteTableService websiteTableService;
     @Autowired
+    private TemplateTableService templateTableService;
+    @Autowired
     private NewsTypeTableService newsTypeTableService;
 
 
@@ -40,6 +43,22 @@ public class NewsTypeController {
                 mapTemp.put("key", ntt.getId());
                 List<Object> listTmp = new ArrayList<>();
                 listTmp.add("");
+                listTmp.add(ntt.getTitle());
+                if (ntt.getNewsListTemplate() != null) {
+                    listTmp.add(ntt.getNewsListTemplate().getName());
+                } else {
+                    listTmp.add(null);
+                }
+                if (ntt.getNewsTemplate() != null) {
+                    listTmp.add(ntt.getNewsTemplate().getName());
+                } else {
+                    listTmp.add(null);
+                }
+                if (ntt.getWebsite() != null) {
+                    listTmp.add(ntt.getWebsite().getTitle());
+                } else {
+                    listTmp.add(null);
+                }
                 mapTemp.put("value", listTmp);
                 listReturn.add(mapTemp);
             }
@@ -60,7 +79,35 @@ public class NewsTypeController {
     @RequestMapping(value = "/info", method = {RequestMethod.GET})
     public Map info(@RequestParam Long id, Principal principal) {
         if (websiteTableService.validatePermission(principal, newsTypeTableService.get(id).getWebsite())) {
-            this.newsTypeTableService.get(id);
+            NewsTypeTable ntt = this.newsTypeTableService.get(id);
+            Map<String, Object> map = new HashMap<>();
+            map.put("id", ntt.getId());
+            map.put("title", ntt.getTitle());
+            if(ntt.getNewsListTemplate()!=null){
+                HashMap<String, Object> mapNewsListTemplate= new HashMap<>();
+                mapNewsListTemplate.put("id",ntt.getNewsListTemplate().getId());
+                mapNewsListTemplate.put("name",ntt.getNewsListTemplate().getName());
+                map.put("newsListTemplate", mapNewsListTemplate);
+            }else{
+                map.put("newsListTemplate", null);
+            }
+            if(ntt.getNewsTemplate()!=null){
+                HashMap<String, Object> mapNewsTemplate= new HashMap<>();
+                mapNewsTemplate.put("id",ntt.getNewsTemplate().getId());
+                mapNewsTemplate.put("name",ntt.getNewsTemplate().getName());
+                map.put("newsTemplate", mapNewsTemplate);
+            }else{
+                map.put("newsTemplate", null);
+            }
+            if(ntt.getWebsite()!=null){
+                HashMap<String, Object> mapWebsite = new HashMap<>();
+                mapWebsite.put("id",ntt.getWebsite().getId());
+                mapWebsite.put("title",ntt.getWebsite().getTitle());
+                map.put("website", mapWebsite);
+            }else{
+                map.put("website", null);
+            }
+            return map;
         }
         return null;
     }
@@ -71,6 +118,21 @@ public class NewsTypeController {
         if (websiteTableService.validatePermission(principal, newsTypeTableService.get(Long.valueOf(body.get("id").toString())).getWebsite())) {
             //do update
             //this.newsTypeTableService.save()
+            long id = Long.valueOf(body.get("id").toString());
+            NewsTypeTable newsTypeTable = this.newsTypeTableService.get(id);
+            if (body.get("title") != null) {
+                newsTypeTable.setTitle(body.get("title").toString());
+            }
+            if (body.get("newsListTemplate") != null ) {
+                newsTypeTable.setNewsListTemplate(templateTableService.get(Long.valueOf(body.get("newsListTemplate").toString())));
+            }
+            if (body.get("newsTemplate") != null ) {
+                newsTypeTable.setNewsTemplate(templateTableService.get(Long.valueOf(body.get("newsTemplate").toString())));
+            }
+            if (body.get("website") != null ) {
+                newsTypeTable.setWebsite(websiteTableService.get(Long.valueOf(body.get("website").toString())));
+            }
+            this.newsTypeTableService.save(newsTypeTable);
         }
         return null;
     }
@@ -78,7 +140,28 @@ public class NewsTypeController {
     @PreAuthorize("#oauth2.hasScope('cms_admin_client')")
     @RequestMapping(value = "/save", method = {RequestMethod.POST})
     public Map saveNewsType(@RequestBody Map<String,Object> body, Principal principal) {
+        NewsTypeTable newsTypeTable = new NewsTypeTable();
+        if (body.get("title") != null) {
+            newsTypeTable.setTitle(body.get("title").toString());
+        }
+        if (body.get("newsListTemplate") != null ) {
+            newsTypeTable.setNewsListTemplate(templateTableService.get(Long.valueOf(body.get("newsListTemplate").toString())));
+        }
+        if (body.get("newsTemplate") != null ) {
+            newsTypeTable.setNewsTemplate(templateTableService.get(Long.valueOf(body.get("newsTemplate").toString())));
+        }
+        if (body.get("website") != null ) {
+            newsTypeTable.setWebsite(websiteTableService.get(Long.valueOf(body.get("website").toString())));
+        }
+        this.newsTypeTableService.save(newsTypeTable);
         return null;
     }
 
+    @PreAuthorize("#oauth2.hasScope('cms_admin_client')")
+    @RequestMapping(value = "/preview", method = {RequestMethod.GET})
+    public Map preview(@RequestParam Long id, Principal principal) {
+        //需要根据resource，news，template等结合获取，并展示
+        return null;
+    }
+    
 }

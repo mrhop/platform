@@ -35,8 +35,12 @@ public class NavigateTable {
     @Column(nullable = false)
     private int orderNum = 0;
 
+    //properties来指定
     @Column(nullable = false)
     private String type;
+
+    @Column(nullable = false)
+    private int level = 0;
 
     @ManyToOne
     @JoinColumn(name = "article_id")

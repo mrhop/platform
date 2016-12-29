@@ -29,6 +29,7 @@ import java.util.Map;
 public class ResourceController {
     Logger logger = LoggerFactory.getLogger(ResourceController.class);
 
+    //只有resource 有global，是的
     @Autowired
     private WebsiteTableService websiteTableService;
 
@@ -62,6 +63,14 @@ public class ResourceController {
                 mapTemp.put("key", rt.getId());
                 List<Object> listTmp = new ArrayList<>();
                 listTmp.add("");
+                listTmp.add(rt.getName());
+                listTmp.add(rt.getUrl());
+                listTmp.add(rt.getType());
+                if(rt.getWebsite()!=null){
+                    listTmp.add(rt.getWebsite().getTitle());
+                }else{
+                    listTmp.add(null);
+                }
                 mapTemp.put("value", listTmp);
                 listReturn.add(mapTemp);
             }
@@ -89,10 +98,22 @@ public class ResourceController {
     @PreAuthorize("#oauth2.hasScope('cms_admin_client')")
     @RequestMapping(value = "/info", method = {RequestMethod.GET})
     public Map info(@RequestParam Long id, Principal principal) {
-
         if (websiteTableService.validatePermission(principal, resourceTableService.get(id).getWebsite())) {
-            this.resourceTableService.get(id);
-            //do map
+            ResourceTable rt = this.resourceTableService.get(id);
+            Map<String, Object> map = new HashMap<>();
+            map.put("id", rt.getId());
+            map.put("name", rt.getName());
+            map.put("url", rt.getUrl());
+            map.put("type", rt.getType());
+            if(rt.getWebsite()!=null){
+                HashMap<String, Object> mapWebsite = new HashMap<>();
+                mapWebsite.put("id",rt.getWebsite().getId());
+                mapWebsite.put("title",rt.getWebsite().getTitle());
+                map.put("website", mapWebsite);
+            }else{
+                map.put("website", null);
+            }
+            return map;
         }
         return null;
     }
@@ -101,7 +122,21 @@ public class ResourceController {
     @RequestMapping(value = "/update", method = {RequestMethod.POST})
     public Map updateResource(@RequestBody Map<String, Object> body, Principal principal) {
         if (websiteTableService.validatePermission(principal, resourceTableService.get(Long.valueOf(body.get("id").toString())).getWebsite())) {
-            //do update
+            long id = Long.valueOf(body.get("id").toString());
+            ResourceTable resourceTable = this.resourceTableService.get(id);
+            if (body.get("name") != null) {
+                resourceTable.setName(body.get("name").toString());
+            }
+            if (body.get("url") != null) {
+                resourceTable.setUrl(body.get("url").toString());
+            }
+            if (body.get("type") != null) {
+                resourceTable.setType(body.get("type").toString());
+            }
+            if (body.get("website") != null ) {
+                resourceTable.setWebsite(websiteTableService.get(Long.valueOf(body.get("website").toString())));
+            }
+            this.resourceTableService.save(resourceTable);
         }
         return null;
     }
@@ -109,6 +144,21 @@ public class ResourceController {
     @PreAuthorize("#oauth2.hasScope('cms_admin_client')")
     @RequestMapping(value = "/save", method = {RequestMethod.POST})
     public Map saveResource(@RequestBody Map<String, Object> body, Principal principal) {
+        long id = Long.valueOf(body.get("id").toString());
+        ResourceTable resourceTable = new ResourceTable();
+        if (body.get("name") != null) {
+            resourceTable.setName(body.get("name").toString());
+        }
+        if (body.get("url") != null) {
+            resourceTable.setUrl(body.get("url").toString());
+        }
+        if (body.get("type") != null) {
+            resourceTable.setType(body.get("type").toString());
+        }
+        if (body.get("website") != null ) {
+            resourceTable.setWebsite(websiteTableService.get(Long.valueOf(body.get("website").toString())));
+        }
+        this.resourceTableService.save(resourceTable);
         return null;
     }
 

@@ -23,10 +23,6 @@ public class TemplateTable {
     @Column(nullable = false, length = 50)
     private String name;
 
-    //NEWS ARTICLE FILELIB等
-    @Column(nullable = false)
-    private String type;
-
     @Column(name = "description")
     private String description;
 

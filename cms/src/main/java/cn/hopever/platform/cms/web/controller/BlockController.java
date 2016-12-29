@@ -1,8 +1,7 @@
 package cn.hopever.platform.cms.web.controller;
 
 import cn.hopever.platform.cms.domain.BlockTable;
-import cn.hopever.platform.cms.service.BlockTableService;
-import cn.hopever.platform.cms.service.WebsiteTableService;
+import cn.hopever.platform.cms.service.*;
 import cn.hopever.platform.utils.json.JacksonUtil;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.slf4j.Logger;
@@ -31,6 +30,12 @@ public class BlockController {
     @Autowired
     private WebsiteTableService websiteTableService;
     @Autowired
+    private NewsTypeTableService newsTypeTableService;
+    @Autowired
+    private PollTableService pollTableService;
+    @Autowired
+    private FileLibraryTypeTableService fileLibraryTypeTableService;
+    @Autowired
     private BlockTableService blockTableService;
 
     @PreAuthorize("#oauth2.hasScope('cms_admin_client')")
@@ -58,6 +63,13 @@ public class BlockController {
                 mapTemp.put("key", bt.getId());
                 List<Object> listTmp = new ArrayList<>();
                 listTmp.add("");
+                listTmp.add(bt.getName());
+                listTmp.add(bt.getType());
+                if (bt.getWebsite() != null) {
+                    listTmp.add(bt.getWebsite().getTitle());
+                } else {
+                    listTmp.add(null);
+                }
                 mapTemp.put("value", listTmp);
                 listReturn.add(mapTemp);
             }
@@ -87,31 +99,135 @@ public class BlockController {
     @RequestMapping(value = "/info", method = {RequestMethod.GET})
     public Map info(@RequestParam Long id, Principal principal) {
         if (websiteTableService.validatePermission(principal, blockTableService.get(id).getWebsite())) {
-            this.blockTableService.get(id);
+            BlockTable bt = this.blockTableService.get(id);
+            Map<String, Object> map = new HashMap<>();
+            map.put("id", bt.getId());
+            map.put("name", bt.getName());
+            map.put("content", bt.getContent());
+            map.put("dataUrl", bt.getDataUrl());
+            map.put("script", bt.getScript());
+            if (bt.getNewsType() != null) {
+                HashMap<String, Object> mapNewsType = new HashMap<>();
+                mapNewsType.put("id", bt.getNewsType().getId());
+                mapNewsType.put("title", bt.getNewsType().getTitle());
+                map.put("newsType", mapNewsType);
+            } else {
+                map.put("newsType", null);
+            }
+            map.put("newsNumber", bt.getNewsNumber());
+            if (bt.getPoll() != null) {
+                HashMap<String, Object> mapPoll = new HashMap<>();
+                mapPoll.put("id", bt.getPoll().getId());
+                mapPoll.put("title", bt.getPoll().getTitle());
+                map.put("poll", mapPoll);
+            } else {
+                map.put("poll", null);
+            }
+            if (bt.getFileLibraryType() != null) {
+                HashMap<String, Object> mapFileLibraryType = new HashMap<>();
+                mapFileLibraryType.put("id", bt.getFileLibraryType().getId());
+                mapFileLibraryType.put("title", bt.getFileLibraryType().getTitle());
+                map.put("fileLibraryType", mapFileLibraryType);
+            } else {
+                map.put("fileLibraryType", null);
+            }
+            map.put("fileLibraryNumber", bt.getFileLibraryNumber());
+            if (bt.getWebsite() != null) {
+                HashMap<String, Object> mapWebsite = new HashMap<>();
+                mapWebsite.put("id", bt.getWebsite().getId());
+                mapWebsite.put("title", bt.getWebsite().getTitle());
+                map.put("website", mapWebsite);
+            } else {
+                map.put("website", null);
+            }
+            return map;
         }
         return null;
     }
 
     @PreAuthorize("#oauth2.hasScope('cms_admin_client')")
     @RequestMapping(value = "/update", method = {RequestMethod.POST})
-    public Map updateBlock(@RequestBody Map<String,Object> body, Principal principal) {
+    public Map updateBlock(@RequestBody Map<String, Object> body, Principal principal) {
         if (websiteTableService.validatePermission(principal, blockTableService.get(Long.valueOf(body.get("id").toString())).getWebsite())) {
             //do update
-            //this.blockTableService.save()
+            long id = Long.valueOf(body.get("id").toString());
+            BlockTable blockTable = this.blockTableService.get(id);
+            if (body.get("name") != null) {
+                blockTable.setName(body.get("name").toString());
+            }
+            if (body.get("type") != null) {
+                blockTable.setType(body.get("type").toString());
+            }
+            if (body.get("content") != null) {
+                blockTable.setContent(body.get("content").toString());
+            }
+            if (body.get("dataUrl") != null) {
+                blockTable.setDataUrl(body.get("dataUrl").toString());
+            }
+            if (body.get("script") != null) {
+                blockTable.setScript(body.get("script").toString());
+            }
+            if (body.get("newsType") != null) {
+                blockTable.setNewsType(newsTypeTableService.get(Long.valueOf(body.get("newsType").toString())));
+            }
+            if (body.get("newsNumber") != null) {
+                blockTable.setNewsNumber(Integer.valueOf(body.get("newsNumber").toString()));
+            }
+            if (body.get("poll") != null) {
+                blockTable.setPoll(pollTableService.get(Long.valueOf(body.get("poll").toString())));
+            }
+            if (body.get("fileLibraryType") != null) {
+                blockTable.setFileLibraryType(fileLibraryTypeTableService.get(Long.valueOf(body.get("fileLibraryType").toString())));
+            }
+            if (body.get("fileLibraryNumber") != null) {
+                blockTable.setFileLibraryNumber(Integer.valueOf(body.get("fileLibraryNumber").toString()));
+            }
+            if (body.get("website") != null) {
+                blockTable.setWebsite(websiteTableService.get(Long.valueOf(body.get("website").toString())));
+            }
+            this.blockTableService.save(blockTable);
         }
         return null;
     }
 
     @PreAuthorize("#oauth2.hasScope('cms_admin_client')")
     @RequestMapping(value = "/save", method = {RequestMethod.POST})
-    public Map saveBlock(@RequestBody Map<String,Object> body, Principal principal) {
+    public Map saveBlock(@RequestBody Map<String, Object> body, Principal principal) {
+        BlockTable blockTable = new BlockTable();
+        if (body.get("name") != null) {
+            blockTable.setName(body.get("name").toString());
+        }
+        if (body.get("type") != null) {
+            blockTable.setType(body.get("type").toString());
+        }
+        if (body.get("content") != null) {
+            blockTable.setContent(body.get("content").toString());
+        }
+        if (body.get("dataUrl") != null) {
+            blockTable.setDataUrl(body.get("dataUrl").toString());
+        }
+        if (body.get("script") != null) {
+            blockTable.setScript(body.get("script").toString());
+        }
+        if (body.get("newsType") != null) {
+            blockTable.setNewsType(newsTypeTableService.get(Long.valueOf(body.get("newsType").toString())));
+        }
+        if (body.get("newsNumber") != null) {
+            blockTable.setNewsNumber(Integer.valueOf(body.get("newsNumber").toString()));
+        }
+        if (body.get("poll") != null) {
+            blockTable.setPoll(pollTableService.get(Long.valueOf(body.get("poll").toString())));
+        }
+        if (body.get("fileLibraryType") != null) {
+            blockTable.setFileLibraryType(fileLibraryTypeTableService.get(Long.valueOf(body.get("fileLibraryType").toString())));
+        }
+        if (body.get("fileLibraryNumber") != null) {
+            blockTable.setFileLibraryNumber(Integer.valueOf(body.get("fileLibraryNumber").toString()));
+        }
+        if (body.get("website") != null) {
+            blockTable.setWebsite(websiteTableService.get(Long.valueOf(body.get("website").toString())));
+        }
+        this.blockTableService.save(blockTable);
         return null;
     }
-
-    @PreAuthorize("#oauth2.hasScope('cms_admin_client')")
-    @RequestMapping(value = "/preview", method = {RequestMethod.GET})
-    public Map preview(@RequestParam Long id, Principal principal) {
-        return null;
-    }
-
 }

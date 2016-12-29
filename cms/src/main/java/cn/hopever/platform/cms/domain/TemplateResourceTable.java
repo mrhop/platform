@@ -14,7 +14,7 @@ import javax.persistence.*;
 @Data
 @EqualsAndHashCode(of = {"id"})
 @ToString(exclude = {"template", "resource"})
-public class TemplateResourceTable {
+public class  TemplateResourceTable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

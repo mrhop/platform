@@ -15,7 +15,7 @@ import java.util.List;
 @Table(name = "platform_cms_resource")
 @Data
 @EqualsAndHashCode(of = {"id"})
-@ToString(exclude = {"templateResources","website"})
+@ToString(exclude = {"templateResources", "website"})
 public class ResourceTable {
     //资源库，比如css，js等，注意js css关联的文件只放置在nginx的静态lib中，不向moglifs或者tomcat中存储，另外js和css也是，更新时需要做好备份
     //form表单的个性化势在必行
@@ -27,6 +27,9 @@ public class ResourceTable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
+    @Column(nullable = false)
+    private String name;
 
     @Column(nullable = false)
     private String url;

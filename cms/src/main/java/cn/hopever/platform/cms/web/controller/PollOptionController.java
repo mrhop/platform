@@ -2,6 +2,7 @@ package cn.hopever.platform.cms.web.controller;
 
 import cn.hopever.platform.cms.domain.PollOptionTable;
 import cn.hopever.platform.cms.service.PollOptionTableService;
+import cn.hopever.platform.cms.service.PollTableService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,8 @@ import java.util.Map;
 public class PollOptionController {
     Logger logger = LoggerFactory.getLogger(PollOptionController.class);
     @Autowired
+    private PollTableService pollTableService;
+    @Autowired
     private PollOptionTableService pollOptionTableService;
 
     @PreAuthorize("#oauth2.hasScope('cms_admin_client')")
@@ -36,6 +39,14 @@ public class PollOptionController {
                 mapTemp.put("key", pot.getId());
                 List<Object> listTmp = new ArrayList<>();
                 listTmp.add("");
+                listTmp.add(pot.getTitle());
+                listTmp.add(pot.getVoteTimes());
+                listTmp.add(pot.getVoteTimes());
+                if (pot.getPoll() != null) {
+                    listTmp.add(pot.getPoll().getTitle());
+                } else {
+                    listTmp.add(null);
+                }
                 mapTemp.put("value", listTmp);
                 listReturn.add(mapTemp);
             }
@@ -53,21 +64,56 @@ public class PollOptionController {
     @PreAuthorize("#oauth2.hasScope('cms_admin_client')")
     @RequestMapping(value = "/info", method = {RequestMethod.GET})
     public Map info(@RequestParam Long id, Principal principal) {
-        this.pollOptionTableService.get(id);
-        return null;
+        PollOptionTable pot = this.pollOptionTableService.get(id);
+        Map<String, Object> map = new HashMap<>();
+        map.put("id", pot.getId());
+        map.put("title", pot.getTitle());
+        map.put("voteTimes", pot.getVoteTimes());
+        if (pot.getPoll() != null) {
+            HashMap<String, Object> mapPoll = new HashMap<>();
+            mapPoll.put("id", pot.getPoll().getId());
+            mapPoll.put("title", pot.getPoll().getTitle());
+            map.put("poll", mapPoll);
+        } else {
+            map.put("website", null);
+        }
+        return map;
     }
 
     @PreAuthorize("#oauth2.hasScope('cms_admin_client')")
     @RequestMapping(value = "/update", method = {RequestMethod.POST})
-    public Map updatePollOption(@RequestBody Map<String,Object> body, Principal principal) {
+    public Map updatePollOption(@RequestBody Map<String, Object> body, Principal principal) {
         //this.pollOptionTableService.save();
+        long id = Long.valueOf(body.get("id").toString());
+        PollOptionTable pollOptionTable = this.pollOptionTableService.get(id);
+        if (body.get("title") != null) {
+            pollOptionTable.setTitle(body.get("title").toString());
+        }
+        if (body.get("voteTimes") != null) {
+            pollOptionTable.setVoteTimes(Integer.valueOf(body.get("voteTimes").toString()));
+        }
+        if (body.get("poll") != null) {
+            pollOptionTable.setPoll(pollTableService.get(Long.valueOf(body.get("poll").toString())));
+        }
+        this.pollOptionTableService.save(pollOptionTable);
         return null;
     }
 
     @PreAuthorize("#oauth2.hasScope('cms_admin_client')")
     @RequestMapping(value = "/save", method = {RequestMethod.POST})
-    public Map savePollOption(@RequestBody Map<String,Object> body, Principal principal) {
+    public Map savePollOption(@RequestBody Map<String, Object> body, Principal principal) {
         //this.pollOptionTableService.save();
+        PollOptionTable pollOptionTable = new PollOptionTable();
+        if (body.get("title") != null) {
+            pollOptionTable.setTitle(body.get("title").toString());
+        }
+        if (body.get("voteTimes") != null) {
+            pollOptionTable.setVoteTimes(Integer.valueOf(body.get("voteTimes").toString()));
+        }
+        if (body.get("poll") != null) {
+            pollOptionTable.setPoll(pollTableService.get(Long.valueOf(body.get("poll").toString())));
+        }
+        this.pollOptionTableService.save(pollOptionTable);
         return null;
     }
 

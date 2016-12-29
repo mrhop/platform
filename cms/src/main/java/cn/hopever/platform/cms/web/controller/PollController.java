@@ -58,6 +58,12 @@ public class PollController {
                 mapTemp.put("key", pt.getId());
                 List<Object> listTmp = new ArrayList<>();
                 listTmp.add("");
+                listTmp.add(pt.getTitle());
+                if(pt.getWebsite()!=null){
+                    listTmp.add(pt.getWebsite().getTitle());
+                }else{
+                    listTmp.add(null);
+                }
                 mapTemp.put("value", listTmp);
                 listReturn.add(mapTemp);
             }
@@ -87,7 +93,19 @@ public class PollController {
     @RequestMapping(value = "/info", method = {RequestMethod.GET})
     public Map info(@RequestParam Long id, Principal principal) {
         if (websiteTableService.validatePermission(principal, pollTableService.get(id).getWebsite())) {
-            this.pollTableService.get(id);
+            PollTable pt = this.pollTableService.get(id);
+            Map<String, Object> map = new HashMap<>();
+            map.put("id", pt.getId());
+            map.put("title", pt.getTitle());
+            if(pt.getWebsite()!=null){
+                HashMap<String, Object> mapWebsite = new HashMap<>();
+                mapWebsite.put("id",pt.getWebsite().getId());
+                mapWebsite.put("title",pt.getWebsite().getTitle());
+                map.put("website", mapWebsite);
+            }else{
+                map.put("website", null);
+            }
+            return map;
         }
         return null;
     }
@@ -98,6 +116,15 @@ public class PollController {
         if (websiteTableService.validatePermission(principal, pollTableService.get(Long.valueOf(body.get("id").toString())).getWebsite())) {
             //do update
             //this.pollTableService.save()
+            long id = Long.valueOf(body.get("id").toString());
+            PollTable pollTable = this.pollTableService.get(id);
+            if (body.get("title") != null) {
+                pollTable.setTitle(body.get("title").toString());
+            }
+            if (body.get("website") != null ) {
+                pollTable.setWebsite(websiteTableService.get(Long.valueOf(body.get("website").toString())));
+            }
+            this.pollTableService.save(pollTable);
         }
         return null;
     }
@@ -105,6 +132,14 @@ public class PollController {
     @PreAuthorize("#oauth2.hasScope('cms_admin_client')")
     @RequestMapping(value = "/save", method = {RequestMethod.POST})
     public Map savePoll(@RequestBody Map<String,Object> body, Principal principal) {
+        PollTable pollTable = new PollTable();
+        if (body.get("title") != null) {
+            pollTable.setTitle(body.get("title").toString());
+        }
+        if (body.get("website") != null ) {
+            pollTable.setWebsite(websiteTableService.get(Long.valueOf(body.get("website").toString())));
+        }
+        this.pollTableService.save(pollTable);
         return null;
     }
 

@@ -27,7 +27,7 @@ public class BlockTable {
     @OneToMany(mappedBy = "block")
     private List<TemplateBlockTable> templateBlocks;
 
-    //news poll  custom static 【hot-news newest-news poll，navigate 这些预制,写入property里面】
+    //news poll  custom static 【hot-news newest-news poll，navigate 这些预制,写入property里面，FileLibraryType】
     @Column(nullable = false)
     private String type;
 
@@ -43,12 +43,23 @@ public class BlockTable {
     @Column(columnDefinition="TEXT")
     private String script;
 
+    @ManyToOne
+    @JoinColumn(name = "news_type_id")
+    private NewsTypeTable newsType;
+
     @Column(name = "news_number")
     private int newsNumber;
 
     @ManyToOne
     @JoinColumn(name = "poll_id")
     private PollTable poll;
+
+    @ManyToOne
+    @JoinColumn(name = "file_library_type_id")
+    private FileLibraryTypeTable fileLibraryType;
+
+    @Column(name = "file_library_number")
+    private int fileLibraryNumber;
 
     @ManyToOne
     @JoinColumn(name = "website_id")
