@@ -26,9 +26,11 @@ public class TemplateTable {
     @Column(name = "description")
     private String description;
 
+    //layoutType static,fluid
     @Column(name = "layout_type", nullable = false)
     private String layoutType;
 
+    //3*3 3*4 4*3 4*4
     @Column(name = "layout_scale", nullable = false)
     private String layoutScale;
 

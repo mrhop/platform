@@ -28,6 +28,14 @@ config:
         resourcesave: http://localhost:9092/resource/save
         resourcedelete: http://localhost:9092/resource/delete
         #template
+        templateLayoutTypes:
+                - static
+                - fluid
+        templateLayoutScales:
+                - 3*3
+                - 3*4
+                - 4*3
+                - 4*4
         templatelist: http://localhost:9092/template/list
         templateinfo: http://localhost:9092/template/info
         templateupdate: http://localhost:9092/template/update

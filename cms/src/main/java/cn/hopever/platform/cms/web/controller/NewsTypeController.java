@@ -4,9 +4,14 @@ import cn.hopever.platform.cms.domain.NewsTypeTable;
 import cn.hopever.platform.cms.service.NewsTypeTableService;
 import cn.hopever.platform.cms.service.TemplateTableService;
 import cn.hopever.platform.cms.service.WebsiteTableService;
+import cn.hopever.platform.utils.json.JacksonUtil;
+import com.fasterxml.jackson.databind.JsonNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,11 +37,25 @@ public class NewsTypeController {
 
 
     @PreAuthorize("#oauth2.hasScope('cms_admin_client')")
-    @RequestMapping(value = "/list", method = {RequestMethod.GET})
-    public List getList(@RequestParam Long websiteId, Principal principal) {
-        List<HashMap<String, Object>> listReturn = null;
-        Iterable<NewsTypeTable> list = newsTypeTableService.getListByWebsites(websiteTableService.getWebsiteAsFilter(principal,websiteId!=null?websiteId.toString():null));
-        if (list.iterator().hasNext()) {
+    @RequestMapping(value = "/list", method = {RequestMethod.POST})
+    public Map getList(@RequestBody JsonNode body, Principal principal) {
+
+        Map<String, Object> map = new HashMap<>();
+        List<HashMap<String, Object>> listReturn;
+        Page<NewsTypeTable> list;
+        PageRequest pageRequest;
+        if (body.get("sort") == null || body.get("sort").isNull()) {
+            pageRequest = new PageRequest(body.get("currentPage").asInt(), body.get("rowSize").asInt(), Sort.Direction.ASC, "id");
+        } else {
+            pageRequest = new PageRequest(body.get("currentPage").asInt(), body.get("rowSize").asInt(), Sort.Direction.fromString(body.get("sort").get("sortDirection").textValue()), body.get("sort").get("sortName").textValue());
+        }
+        Map<String, Object> filterMap = null;
+        if (body.get("filters") != null && !body.get("filters").isNull()) {
+            filterMap = JacksonUtil.mapper.convertValue(body.get("filters"), Map.class);
+        }
+        filterMap.put("website", websiteTableService.getWebsiteAsFilter(principal, filterMap.get("website") != null ? filterMap.get("website").toString() : null));
+        list = newsTypeTableService.getList(pageRequest, filterMap);
+        if (list != null && list.iterator().hasNext()) {
             listReturn = new ArrayList<>();
             for (NewsTypeTable ntt : list) {
                 HashMap<String, Object> mapTemp = new HashMap<>();
@@ -62,8 +81,17 @@ public class NewsTypeController {
                 mapTemp.put("value", listTmp);
                 listReturn.add(mapTemp);
             }
+            map.put("data", listReturn);
+            map.put("totalCount", list.getTotalElements());
+            map.put("rowSize", body.get("rowSize").asInt());
+            map.put("currentPage", list.getNumber());
+        } else {
+            map.put("data", null);
+            map.put("totalCount", 0);
+            map.put("rowSize", body.get("rowSize").asInt());
+            map.put("currentPage", 0);
         }
-        return listReturn;
+        return map;
     }
 
     @PreAuthorize("#oauth2.hasScope('cms_admin_client')")
@@ -83,28 +111,28 @@ public class NewsTypeController {
             Map<String, Object> map = new HashMap<>();
             map.put("id", ntt.getId());
             map.put("title", ntt.getTitle());
-            if(ntt.getNewsListTemplate()!=null){
-                HashMap<String, Object> mapNewsListTemplate= new HashMap<>();
-                mapNewsListTemplate.put("id",ntt.getNewsListTemplate().getId());
-                mapNewsListTemplate.put("name",ntt.getNewsListTemplate().getName());
+            if (ntt.getNewsListTemplate() != null) {
+                HashMap<String, Object> mapNewsListTemplate = new HashMap<>();
+                mapNewsListTemplate.put("id", ntt.getNewsListTemplate().getId());
+                mapNewsListTemplate.put("name", ntt.getNewsListTemplate().getName());
                 map.put("newsListTemplate", mapNewsListTemplate);
-            }else{
+            } else {
                 map.put("newsListTemplate", null);
             }
-            if(ntt.getNewsTemplate()!=null){
-                HashMap<String, Object> mapNewsTemplate= new HashMap<>();
-                mapNewsTemplate.put("id",ntt.getNewsTemplate().getId());
-                mapNewsTemplate.put("name",ntt.getNewsTemplate().getName());
+            if (ntt.getNewsTemplate() != null) {
+                HashMap<String, Object> mapNewsTemplate = new HashMap<>();
+                mapNewsTemplate.put("id", ntt.getNewsTemplate().getId());
+                mapNewsTemplate.put("name", ntt.getNewsTemplate().getName());
                 map.put("newsTemplate", mapNewsTemplate);
-            }else{
+            } else {
                 map.put("newsTemplate", null);
             }
-            if(ntt.getWebsite()!=null){
+            if (ntt.getWebsite() != null) {
                 HashMap<String, Object> mapWebsite = new HashMap<>();
-                mapWebsite.put("id",ntt.getWebsite().getId());
-                mapWebsite.put("title",ntt.getWebsite().getTitle());
+                mapWebsite.put("id", ntt.getWebsite().getId());
+                mapWebsite.put("title", ntt.getWebsite().getTitle());
                 map.put("website", mapWebsite);
-            }else{
+            } else {
                 map.put("website", null);
             }
             return map;
@@ -114,7 +142,7 @@ public class NewsTypeController {
 
     @PreAuthorize("#oauth2.hasScope('cms_admin_client')")
     @RequestMapping(value = "/update", method = {RequestMethod.POST})
-    public Map updateNewsType(@RequestBody Map<String,Object> body, Principal principal) {
+    public Map updateNewsType(@RequestBody Map<String, Object> body, Principal principal) {
         if (websiteTableService.validatePermission(principal, newsTypeTableService.get(Long.valueOf(body.get("id").toString())).getWebsite())) {
             //do update
             //this.newsTypeTableService.save()
@@ -123,13 +151,13 @@ public class NewsTypeController {
             if (body.get("title") != null) {
                 newsTypeTable.setTitle(body.get("title").toString());
             }
-            if (body.get("newsListTemplate") != null ) {
+            if (body.get("newsListTemplate") != null) {
                 newsTypeTable.setNewsListTemplate(templateTableService.get(Long.valueOf(body.get("newsListTemplate").toString())));
             }
-            if (body.get("newsTemplate") != null ) {
+            if (body.get("newsTemplate") != null) {
                 newsTypeTable.setNewsTemplate(templateTableService.get(Long.valueOf(body.get("newsTemplate").toString())));
             }
-            if (body.get("website") != null ) {
+            if (body.get("website") != null) {
                 newsTypeTable.setWebsite(websiteTableService.get(Long.valueOf(body.get("website").toString())));
             }
             this.newsTypeTableService.save(newsTypeTable);
@@ -139,18 +167,18 @@ public class NewsTypeController {
 
     @PreAuthorize("#oauth2.hasScope('cms_admin_client')")
     @RequestMapping(value = "/save", method = {RequestMethod.POST})
-    public Map saveNewsType(@RequestBody Map<String,Object> body, Principal principal) {
+    public Map saveNewsType(@RequestBody Map<String, Object> body, Principal principal) {
         NewsTypeTable newsTypeTable = new NewsTypeTable();
         if (body.get("title") != null) {
             newsTypeTable.setTitle(body.get("title").toString());
         }
-        if (body.get("newsListTemplate") != null ) {
+        if (body.get("newsListTemplate") != null) {
             newsTypeTable.setNewsListTemplate(templateTableService.get(Long.valueOf(body.get("newsListTemplate").toString())));
         }
-        if (body.get("newsTemplate") != null ) {
+        if (body.get("newsTemplate") != null) {
             newsTypeTable.setNewsTemplate(templateTableService.get(Long.valueOf(body.get("newsTemplate").toString())));
         }
-        if (body.get("website") != null ) {
+        if (body.get("website") != null) {
             newsTypeTable.setWebsite(websiteTableService.get(Long.valueOf(body.get("website").toString())));
         }
         this.newsTypeTableService.save(newsTypeTable);
@@ -163,5 +191,5 @@ public class NewsTypeController {
         //需要根据resource，news，template等结合获取，并展示
         return null;
     }
-    
+
 }

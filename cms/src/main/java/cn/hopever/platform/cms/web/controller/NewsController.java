@@ -1,6 +1,7 @@
 package cn.hopever.platform.cms.web.controller;
 
 import cn.hopever.platform.cms.domain.NewsTable;
+import cn.hopever.platform.cms.domain.NewsTypeTable;
 import cn.hopever.platform.cms.service.NewsTableService;
 import cn.hopever.platform.cms.service.NewsTypeTableService;
 import cn.hopever.platform.utils.json.JacksonUtil;
@@ -47,7 +48,8 @@ public class NewsController {
         if (body.get("filters") != null && !body.get("filters").isNull()) {
             filterMap = JacksonUtil.mapper.convertValue(body.get("filters"), Map.class);
         }
-        filterMap.put("newsType", filterMap.get("website") != null ? newsTypeTableService.get(Long.valueOf(filterMap.get("website").toString())) : null);
+        filterMap.put("newsType", filterMap.get("newsType") != null ? newsTypeTableService.get(Long.valueOf(filterMap.get("newsType").toString())) : null);
+        filterMap.put("website", filterMap.get("website") != null ? newsTypeTableService.get(Long.valueOf(filterMap.get("website").toString())) : null);
         list = newsTableService.getList(pageRequest, filterMap);
         if (list != null && list.iterator().hasNext()) {
             listReturn = new ArrayList<>();
@@ -60,6 +62,11 @@ public class NewsController {
                 listTmp.add(nt.getSubtitle());
                 if (nt.getNewsType() != null) {
                     listTmp.add(nt.getNewsType().getTitle());
+                } else {
+                    listTmp.add(null);
+                }
+                if (nt.getWebsite() != null) {
+                    listTmp.add(nt.getWebsite().getTitle());
                 } else {
                     listTmp.add(null);
                 }
@@ -106,6 +113,11 @@ public class NewsController {
         } else {
             map.put("newsType", null);
         }
+        if (nt.getWebsite() != null) {
+            map.put("website", nt.getWebsite().getTitle());
+        } else {
+            map.put("website", null);
+        }
         map.put("clickTimes", nt.getClickTimes());
         map.put("isPublished", nt.isPublished());
         map.put("publishDate", nt.getPublishDate());
@@ -126,7 +138,9 @@ public class NewsController {
             newsTable.setTitle(body.get("title").toString());
         }
         if (body.get("newsType") != null) {
-            newsTable.setNewsType(newsTypeTableService.get(Long.valueOf(body.get("website").toString())));
+            NewsTypeTable newsTypeTable = newsTypeTableService.get(Long.valueOf(body.get("website").toString()));
+            newsTable.setNewsType(newsTypeTable);
+            newsTable.setWebsite(newsTypeTable.getWebsite());
         }
         if (body.get("clickTimes") != null) {
             newsTable.setClickTimes(Integer.valueOf(body.get("clickTimes").toString()));
@@ -152,7 +166,9 @@ public class NewsController {
             newsTable.setTitle(body.get("title").toString());
         }
         if (body.get("newsType") != null) {
-            newsTable.setNewsType(newsTypeTableService.get(Long.valueOf(body.get("website").toString())));
+            NewsTypeTable newsTypeTable = newsTypeTableService.get(Long.valueOf(body.get("website").toString()));
+            newsTable.setNewsType(newsTypeTable);
+            newsTable.setWebsite(newsTypeTable.getWebsite());
         }
         if (body.get("clickTimes") != null) {
             newsTable.setClickTimes(Integer.valueOf(body.get("clickTimes").toString()));

@@ -2,6 +2,8 @@ package cn.hopever.platform.cms.service;
 
 import cn.hopever.platform.cms.domain.NewsTypeTable;
 import cn.hopever.platform.cms.domain.WebsiteTable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Map;
@@ -11,7 +13,7 @@ import java.util.Map;
  */
 public interface NewsTypeTableService {
 
-    public List<NewsTypeTable> getList( Map<String, Object> filterMap);
+    public Page<NewsTypeTable> getList(Pageable pageable, Map<String, Object> filterMap);
 
     public List<NewsTypeTable> getListByWebsites(List<WebsiteTable> list);
 

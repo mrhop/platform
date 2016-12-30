@@ -2,11 +2,14 @@ package cn.hopever.platform.cms.service.impl;
 
 import cn.hopever.platform.cms.domain.NewsTypeTable;
 import cn.hopever.platform.cms.domain.WebsiteTable;
+import cn.hopever.platform.cms.repository.CustomNewsTypeTableRepository;
 import cn.hopever.platform.cms.repository.NewsTypeTableRepository;
 import cn.hopever.platform.cms.service.NewsTypeTableService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,11 +23,12 @@ public class NewsTypeTableServiceImpl implements NewsTypeTableService {
 
     @Autowired
     private NewsTypeTableRepository newsTypeTableRepository;
-
+    @Autowired
+    private CustomNewsTypeTableRepository customNewsTypeTableRepository;
 
     @Override
-    public List<NewsTypeTable> getList( Map<String, Object> filterMap) {
-        return newsTypeTableRepository.findByWebsiteIn((List)filterMap.get("website"));
+    public Page<NewsTypeTable> getList(Pageable pageable, Map<String, Object> filterMap) {
+        return customNewsTypeTableRepository.findByFilters(filterMap,pageable);
     }
 
     @Override

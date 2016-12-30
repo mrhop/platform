@@ -50,4 +50,8 @@ public class NewsTable {
     @JoinColumn(name = "news_type_id")
     private NewsTypeTable newsType;
 
+    @ManyToOne
+    @JoinColumn(name = "website_id")
+    private WebsiteTable website;
+
 }

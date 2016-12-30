@@ -38,6 +38,8 @@ public class BaseConfig {
     private String resourcesave;
     private String resourcedelete;
     //    #template
+    private List<String> templateLayoutTypes;
+    private List<String> templateLayoutScales;
     private String templatelist;
     private String templateinfo;
     private String templateupdate;

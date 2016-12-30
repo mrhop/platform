@@ -22,7 +22,6 @@ public class FileLibraryTable {
     @Column(name = "file_name", nullable = false)
     private String fileName;
 
-    //doc,media[image video等]
     @ManyToOne
     @JoinColumn(name = "file_library_type_id")
     private FileLibraryTypeTable fileLibraryType;

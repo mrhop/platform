@@ -1,2 +1,338 @@
 {
+  "websiteList": {
+    "thead": [
+      {
+        "className": "td-id",
+        "title": "#",
+        "value": "serialNum"
+      },
+      {
+        "title": "标题",
+        "value": "title",
+        "filter": true,
+        "editType": "text"
+      },
+      {
+        "title": "关键字",
+        "value": "keywords"
+      },
+      {
+        "title": "描述",
+        "value": "description"
+      },
+      {
+        "title": "已激活",
+        "value": "enabled",
+        "sortable": "true"
+      }
+    ],
+    "tfoot": [
+      {
+        "className": "td-foot",
+        "colSpan": 5,
+        "title": "网站列表基础信息"
+      }
+    ]
+  },
+  "websiteListAdditionalFeature": {
+    "sortAvailable": true,
+    "filterAvailable": true,
+    "editable": true,
+    "deletable": true,
+    "addable": true,
+    "extraClass": "hover",
+    "pager": {
+      "show": true,
+      "rowSize": {
+        "show": true,
+        "currentSize": 10
+      }
+    }
+  },
+  "resourceList": {
+    "thead": [
+      {
+        "className": "td-id",
+        "title": "#",
+        "value": "serialNum"
+      },
+      {
+        "title": "名称",
+        "value": "name",
+        "filter": true,
+        "editType": "text"
+      },
+      {
+        "title": "链接地址",
+        "value": "url"
+      },
+      {
+        "title": "资源类型",
+        "value": "type",
+        "filter": true,
+        "editType": "select"
+      },
+      {
+        "title": "所属网站",
+        "value": "website",
+        "editType": "select"
+      }
+    ],
+    "tfoot": [
+      {
+        "className": "td-foot",
+        "colSpan": 5,
+        "title": "资源列表基础信息"
+      }
+    ]
+  },
+  "resourceListAdditionalFeature": {
+    "sortAvailable": true,
+    "filterAvailable": true,
+    "editable": true,
+    "deletable": true,
+    "addable": true,
+    "extraClass": "hover",
+    "pager": {
+      "show": true,
+      "rowSize": {
+        "show": true,
+        "currentSize": 10
+      }
+    }
+  },
+  "templateList": {
+    "thead": [
+      {
+        "className": "td-id",
+        "title": "#",
+        "value": "serialNum"
+      },
+      {
+        "title": "名称",
+        "value": "name",
+        "filter": true,
+        "editType": "text"
+      },
+      {
+        "title": "布局类型",
+        "value": "layoutType"
+      },
+      {
+        "title": "布局范围",
+        "value": "layoutScale"
+      },
+      {
+        "title": "内容位置",
+        "value": "contentPosition"
+      },
+      {
+        "title": "所属网站",
+        "value": "website",
+        "editType": "select"
+      }
+    ],
+    "tfoot": [
+      {
+        "className": "td-foot",
+        "colSpan": 6,
+        "title": "模板列表基础信息"
+      }
+    ]
+  },
+  "templateListAdditionalFeature": {
+    "sortAvailable": true,
+    "filterAvailable": true,
+    "editable": true,
+    "deletable": true,
+    "addable": true,
+    "extraClass": "hover",
+    "pager": {
+      "show": true,
+      "rowSize": {
+        "show": true,
+        "currentSize": 10
+      }
+    }
+  },
+  "blockList": {
+    "thead": [
+      {
+        "className": "td-id",
+        "title": "#",
+        "value": "serialNum"
+      },
+      {
+        "title": "模块名称",
+        "value": "name",
+        "filter": true,
+        "editType": "text"
+      },
+      {
+        "title": "模块类型",
+        "value": "type",
+        "filter": true,
+        "editType": "select"
+      },
+      {
+        "title": "所属网站",
+        "value": "website",
+        "editType": "select"
+      }
+    ],
+    "tfoot": [
+      {
+        "className": "td-foot",
+        "colSpan": 4,
+        "title": "模块列表基础信息"
+      }
+    ]
+  },
+  "blockListAdditionalFeature": {
+    "sortAvailable": true,
+    "filterAvailable": true,
+    "editable": true,
+    "deletable": true,
+    "addable": true,
+    "extraClass": "hover",
+    "pager": {
+      "show": true,
+      "rowSize": {
+        "show": true,
+        "currentSize": 10
+      }
+    }
+  },
+  "newsList": {
+    "thead": [
+      {
+        "className": "td-id",
+        "title": "#",
+        "value": "serialNum"
+      },
+      {
+        "title": "标题",
+        "value": "title",
+        "filter": true,
+        "editType": "text"
+      },
+      {
+        "title": "副标题",
+        "value": "subtitle",
+        "filter": true,
+        "editType": "text"
+      },
+      {
+        "title": "新闻类型",
+        "value": "newsType",
+        "filter": true,
+        "editType": "select"
+      },
+      {
+        "title": "所属网站",
+        "value": "website",
+        "editType": "select"
+      },
+      {
+        "title": "点击率",
+        "value": "clickTimes",
+        "filter": true,
+        "editType": "text",
+        "sortable": "true"
+      },
+      {
+        "title": "已发布",
+        "value": "isPublished",
+        "filter": true,
+        "editType": "select",
+        "sortable": "true"
+      },
+      {
+        "title": "发布日期",
+        "value": "publishDate",
+        "sortable": "true"
+      },
+      {
+        "title": "创建人",
+        "value": "createUser"
+      },
+      {
+        "title": "创建日期",
+        "value": "createDate",
+        "sortable": "true"
+      }
+    ],
+    "tfoot": [
+      {
+        "className": "td-foot",
+        "colSpan": 10,
+        "title": "新闻列表基础信息"
+      }
+    ]
+  },
+  "newsListAdditionalFeature": {
+    "sortAvailable": true,
+    "filterAvailable": true,
+    "editable": true,
+    "deletable": true,
+    "addable": true,
+    "extraClass": "hover",
+    "pager": {
+      "show": true,
+      "rowSize": {
+        "show": true,
+        "currentSize": 10
+      }
+    }
+  },
+  "newsTypeList": {
+    "thead": [
+      {
+        "className": "td-id",
+        "title": "#",
+        "value": "serialNum"
+      },
+      {
+        "title": "标题",
+        "value": "title",
+        "filter": true,
+        "editType": "text"
+      },
+      {
+        "title": "新闻列表模板",
+        "value": "newsListTemplate"
+      },
+      {
+        "title": "新闻模板",
+        "value": "newsTemplate"
+      },
+      {
+        "title": "所属网站",
+        "value": "website",
+        "editType": "select"
+      }
+    ],
+    "tfoot": [
+      {
+        "className": "td-foot",
+        "colSpan": 5,
+        "title": "新闻类型列表基础信息"
+      }
+    ]
+  },
+  "newsTypeListAdditionalFeature": {
+    "sortAvailable": true,
+    "filterAvailable": true,
+    "editable": true,
+    "deletable": true,
+    "addable": true,
+    "extraClass": "hover",
+    "pager": {
+      "show": true,
+      "rowSize": {
+        "show": true,
+        "currentSize": 10
+      }
+    }
+  }
 }
