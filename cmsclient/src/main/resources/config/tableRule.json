@@ -334,5 +334,47 @@
         "currentSize": 10
       }
     }
+  },
+  "pollList": {
+    "thead": [
+      {
+        "className": "td-id",
+        "title": "#",
+        "value": "serialNum"
+      },
+      {
+        "title": "标题",
+        "value": "title",
+        "filter": true,
+        "editType": "text"
+      },
+      {
+        "title": "所属网站",
+        "value": "website",
+        "editType": "select"
+      }
+    ],
+    "tfoot": [
+      {
+        "className": "td-foot",
+        "colSpan": 3,
+        "title": "投票列表基础信息"
+      }
+    ]
+  },
+  "pollListAdditionalFeature": {
+    "sortAvailable": true,
+    "filterAvailable": true,
+    "editable": true,
+    "deletable": true,
+    "addable": true,
+    "extraClass": "hover",
+    "pager": {
+      "show": true,
+      "rowSize": {
+        "show": true,
+        "currentSize": 10
+      }
+    }
   }
 }
