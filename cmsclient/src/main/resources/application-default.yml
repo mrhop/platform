@@ -13,11 +13,26 @@ config:
               - internal_client
     cms:
         #website
+        websitelist: http://localhost:9092/website/list
+        websiteinfo: http://localhost:9092/website/info
+        websiteupdate: http://localhost:9092/website/update
+        websitesave: http://localhost:9092/website/save
+        websitedelete: http://localhost:9092/website/delete
         #resource
         resourceTypes:
                 - css
                 - js
+        resourcelist: http://localhost:9092/resource/list
+        resourceinfo: http://localhost:9092/resource/info
+        resourceupdate: http://localhost:9092/resource/update
+        resourcesave: http://localhost:9092/resource/save
+        resourcedelete: http://localhost:9092/resource/delete
         #template
+        templatelist: http://localhost:9092/template/list
+        templateinfo: http://localhost:9092/template/info
+        templateupdate: http://localhost:9092/template/update
+        templatesave: http://localhost:9092/template/save
+        templatedelete: http://localhost:9092/template/delete
         #block
         blockTypes:
                 - 静态内容
@@ -27,15 +42,65 @@ config:
                 - 导航模块
                 - 文件库
                 - 自定义内容
+        blocklist: http://localhost:9092/block/list
+        blockinfo: http://localhost:9092/block/info
+        blockupdate: http://localhost:9092/block/update
+        blocksave: http://localhost:9092/block/save
+        blockdelete: http://localhost:9092/block/delete
         #news
+        newslist: http://localhost:9092/news/list
+        newsinfo: http://localhost:9092/news/info
+        newsupdate: http://localhost:9092/news/update
+        newssave: http://localhost:9092/news/save
+        newsdelete: http://localhost:9092/news/delete
         #newsType
+        newstypelist: http://localhost:9092/newstype/list
+        newstypeinfo: http://localhost:9092/newstype/info
+        newstypeupdate: http://localhost:9092/newstype/update
+        newstypesave: http://localhost:9092/newstype/save
+        newstypedelete: http://localhost:9092/newstype/delete
         #poll
+        polllist: http://localhost:9092/poll/list
+        pollinfo: http://localhost:9092/poll/info
+        pollupdate: http://localhost:9092/poll/update
+        pollsave: http://localhost:9092/poll/save
+        polldelete: http://localhost:9092/poll/delete
         #pollOption
+        polloptionlist: http://localhost:9092/polloption/list
+        polloptioninfo: http://localhost:9092/polloption/info
+        polloptionupdate: http://localhost:9092/polloption/update
+        polloptionsave: http://localhost:9092/polloption/save
+        polloptiondelete: http://localhost:9092/polloption/delete
         #operation
         relatedOperations:
                 - 投票
                 - 新增文章
+        optionlist: http://localhost:9092/operation/list
+        optioninfo: http://localhost:9092/operation/info
+        optionupdate: http://localhost:9092/operation/update
+        optionsave: http://localhost:9092/operation/save
+        optiondelete: http://localhost:9092/operation/delete
         #navigate
+        navigatelist: http://localhost:9092/navigate/list
+        navigateinfo: http://localhost:9092/navigate/info
+        navigateupdate: http://localhost:9092/navigate/update
+        navigatesave: http://localhost:9092/navigate/save
+        navigatedelete: http://localhost:9092/navigate/delete
         #fileLibrary
+        filelibrarylist: http://localhost:9092/filelibrary/list
+        filelibraryinfo: http://localhost:9092/filelibrary/info
+        filelibraryupdate: http://localhost:9092/filelibrary/update
+        filelibrarysave: http://localhost:9092/filelibrary/save
+        filelibrarydelete: http://localhost:9092/filelibrary/delete
         #fileLibraryType
+        filelibrarytypelist: http://localhost:9092/filelibrarytype/list
+        filelibrarytypeinfo: http://localhost:9092/filelibrarytype/info
+        filelibrarytypeupdate: http://localhost:9092/filelibrarytype/update
+        filelibrarytypesave: http://localhost:9092/filelibrarytype/save
+        filelibrarytypedelete: http://localhost:9092/filelibrarytype/delete
         #article
+        articlelist: http://localhost:9092/article/list
+        articleinfo: http://localhost:9092/article/info
+        articleupdate: http://localhost:9092/article/update
+        articlesave: http://localhost:9092/article/save
+        articledelete: http://localhost:9092/article/delete

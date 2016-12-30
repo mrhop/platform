@@ -20,7 +20,7 @@ import java.util.Map;
 @RestController
 @RequestMapping(produces = "application/json")
 @CrossOrigin
-public class CmsClientController {
+public class CmsClientResourceController {
     @Autowired
     private BaseConfig baseConfig;
     @Autowired
@@ -28,8 +28,8 @@ public class CmsClientController {
     @Autowired
     private CommonMethods commonMethods;
 
-    @RequestMapping(value = "/website/list", method = {RequestMethod.GET, RequestMethod.POST})
-    public CommonResult getWebsiteList(HttpServletRequest request, @RequestBody JsonNode body) throws Exception {
+    @RequestMapping(value = "/resource/list", method = {RequestMethod.GET, RequestMethod.POST})
+    public CommonResult getResourceList(HttpServletRequest request, @RequestBody JsonNode body) throws Exception {
         request.setAttribute("resourceUrl", baseConfig.getWebsitelist());
         if (body.get("currentPage") == null || body.get("currentPage").isNull()) {
             ((ObjectNode) body).put("currentPage", 0);
@@ -59,8 +59,8 @@ public class CmsClientController {
         return c;
     }
 
-    @RequestMapping(value = "/website/info", method = {RequestMethod.GET})
-    public CommonResult getWebsite(HttpServletRequest request) throws Exception {
+    @RequestMapping(value = "/resource/info", method = {RequestMethod.GET})
+    public CommonResult getResource(HttpServletRequest request) throws Exception {
         request.setAttribute("resourceUrl", baseConfig.getWebsiteinfo() + "?id=" + request.getParameter("key"));
         CommonResult c = commonMethods.getResource(request);
         Map<String, Object> rule = baseConfig.getFormRule("clientupdate");
@@ -125,20 +125,20 @@ public class CmsClientController {
         return c;
     }
 
-    @RequestMapping(value = "/website/delete", method = {RequestMethod.DELETE})
-    public CommonResult deleteWebsite(HttpServletRequest request) throws Exception {
+    @RequestMapping(value = "/resource/delete", method = {RequestMethod.DELETE})
+    public CommonResult deleteResource(HttpServletRequest request) throws Exception {
         request.setAttribute("resourceUrl", baseConfig.getWebsitedelete() + "?id=" + request.getParameter("key"));
         return commonMethods.getResource(request);
     }
 
-    @RequestMapping(value = "/website/update", method = {RequestMethod.POST})
-    public CommonResult updateWebsite(HttpServletRequest request, @RequestBody JsonNode body) throws Exception {
+    @RequestMapping(value = "/resource/update", method = {RequestMethod.POST})
+    public CommonResult updateResource(HttpServletRequest request, @RequestBody JsonNode body) throws Exception {
         request.setAttribute("resourceUrl", baseConfig.getWebsiteupdate());
         return commonMethods.postResource(body, request);
     }
 
-    @RequestMapping(value = "/website/add", method = {RequestMethod.GET})
-    public CommonResult addWebsite(HttpServletRequest request) throws Exception {
+    @RequestMapping(value = "/resource/add", method = {RequestMethod.GET})
+    public CommonResult addResource(HttpServletRequest request) throws Exception {
         CommonResult c = new CommonResult();
         Map<String, Object> rule = baseConfig.getFormRule("websiteadd");
         List<Map> list = (List<Map>) rule.get("structure");
@@ -148,8 +148,8 @@ public class CmsClientController {
         return c;
     }
 
-    @RequestMapping(value = "/website/save", method = {RequestMethod.POST})
-    public CommonResult saveWebsite(HttpServletRequest request, @RequestBody JsonNode body) throws Exception {
+    @RequestMapping(value = "/resource/save", method = {RequestMethod.POST})
+    public CommonResult saveResource(HttpServletRequest request, @RequestBody JsonNode body) throws Exception {
         request.setAttribute("resourceUrl", baseConfig.getWebsitesave());
         return commonMethods.postResource(body, request);
     }
