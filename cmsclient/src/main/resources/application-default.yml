@@ -89,6 +89,10 @@ config:
         optionsave: http://localhost:9092/operation/save
         optiondelete: http://localhost:9092/operation/delete
         #navigate
+        navigateTypes:
+                        - 文章
+                        - 新闻
+                        - 多媒体
         navigatelist: http://localhost:9092/navigate/list
         navigateinfo: http://localhost:9092/navigate/info
         navigateupdate: http://localhost:9092/navigate/update

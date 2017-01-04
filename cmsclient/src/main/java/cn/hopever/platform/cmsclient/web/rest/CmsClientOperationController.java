@@ -30,7 +30,7 @@ public class CmsClientOperationController {
 
     @RequestMapping(value = "/operation/list", method = {RequestMethod.GET, RequestMethod.POST})
     public CommonResult getOperationList(HttpServletRequest request, @RequestBody JsonNode body) throws Exception {
-        request.setAttribute("resourceUrl", baseConfig.getWebsitelist());
+        request.setAttribute("resourceUrl", baseConfig.getOptionlist());
         if (body.get("currentPage") == null || body.get("currentPage").isNull()) {
             ((ObjectNode) body).put("currentPage", 0);
         }
@@ -51,8 +51,8 @@ public class CmsClientOperationController {
                     c.getResponseData().put("totalCount", 0);
                 }
                 if (body.get("init") != null && !body.get("init").isNull() && body.get("init").asBoolean()) {
-                    c.getResponseData().put("rules", baseConfig.getTableRule("clientList"));
-                    c.getResponseData().put("additionalFeature", ((Map) baseConfig.getMapRules().get("tableRules")).get("clientListAdditionalFeature"));
+                    c.getResponseData().put("rules", baseConfig.getTableRule("optionList"));
+                    c.getResponseData().put("additionalFeature", ((Map) baseConfig.getMapRules().get("tableRules")).get("optionListAdditionalFeature"));
                 }
             }
         }

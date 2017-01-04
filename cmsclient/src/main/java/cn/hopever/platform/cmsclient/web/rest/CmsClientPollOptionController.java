@@ -6,7 +6,6 @@ import cn.hopever.platform.oauth2client.web.common.CommonMethods;
 import cn.hopever.platform.utils.web.CommonResult;
 import cn.hopever.platform.utils.web.CommonResultStatus;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -30,29 +29,17 @@ public class CmsClientPollOptionController {
 
     @RequestMapping(value = "/polloption/list", method = {RequestMethod.GET, RequestMethod.POST})
     public CommonResult getPollOptionList(HttpServletRequest request, @RequestBody JsonNode body) throws Exception {
-        request.setAttribute("resourceUrl", baseConfig.getWebsitelist());
-        if (body.get("currentPage") == null || body.get("currentPage").isNull()) {
-            ((ObjectNode) body).put("currentPage", 0);
-        }
-        if (body.get("rowSize") == null || body.get("rowSize").isNull()) {
-            ((ObjectNode) body).put("rowSize", commonProperties.getPageSize());
-        }
-
-        CommonResult c = commonMethods.postResource(body, request);
+        request.setAttribute("resourceUrl", baseConfig.getPolloptionlist());
+        CommonResult c = commonMethods.getResource(request);
         if (CommonResultStatus.SUCCESS.toString().equals(c.getStatus())) {
             if (c.getResponseData() != null) {
                 if (c.getResponseData().get("data") != null) {
-                    Map<String, Object> map = (Map) c.getResponseData().get("data");
-                    c.getResponseData().put("totalCount", map.get("totalCount"));
-                    c.getResponseData().put("rowSize", map.get("rowSize"));
-                    c.getResponseData().put("currentPage", map.get("currentPage"));
-                    c.getResponseData().put("data", map.get("data"));
+                    c.getResponseData().put("totalCount", ((List) c.getResponseData().get("data")).size());
                 } else {
                     c.getResponseData().put("totalCount", 0);
                 }
-                if (body.get("init") != null && !body.get("init").isNull() && body.get("init").asBoolean()) {
-                    c.getResponseData().put("rules", baseConfig.getTableRule("clientList"));
-                    c.getResponseData().put("additionalFeature", ((Map) baseConfig.getMapRules().get("tableRules")).get("clientListAdditionalFeature"));
+                if (body.get("init") != null && body.get("init").asBoolean()) {
+                    c.getResponseData().put("rules", baseConfig.getTableRule("pollOptionList"));
                 }
             }
         }

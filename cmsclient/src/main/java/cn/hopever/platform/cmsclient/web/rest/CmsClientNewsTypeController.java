@@ -30,7 +30,7 @@ public class CmsClientNewsTypeController {
 
     @RequestMapping(value = "/newstype/list", method = {RequestMethod.GET, RequestMethod.POST})
     public CommonResult getNewsTypeList(HttpServletRequest request, @RequestBody JsonNode body) throws Exception {
-        request.setAttribute("resourceUrl", baseConfig.getWebsitelist());
+        request.setAttribute("resourceUrl", baseConfig.getNewstypelist());
         if (body.get("currentPage") == null || body.get("currentPage").isNull()) {
             ((ObjectNode) body).put("currentPage", 0);
         }

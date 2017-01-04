@@ -30,7 +30,7 @@ public class CmsClientBlockController {
 
     @RequestMapping(value = "/block/list", method = {RequestMethod.GET, RequestMethod.POST})
     public CommonResult getBlockList(HttpServletRequest request, @RequestBody JsonNode body) throws Exception {
-        request.setAttribute("resourceUrl", baseConfig.getWebsitelist());
+        request.setAttribute("resourceUrl", baseConfig.getBlocklist());
         if (body.get("currentPage") == null || body.get("currentPage").isNull()) {
             ((ObjectNode) body).put("currentPage", 0);
         }

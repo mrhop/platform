@@ -75,16 +75,6 @@ public class NavigateController {
                 }
                 listTmp.add(nt.getLevel());
                 listTmp.add(nt.getType());
-                if (nt.getArticle() != null) {
-                    listTmp.add(nt.getArticle().getTitle());
-                } else {
-                    listTmp.add(null);
-                }
-                if (nt.getNewsType() != null) {
-                    listTmp.add(nt.getNewsType().getTitle());
-                } else {
-                    listTmp.add(null);
-                }
                 if (nt.getWebsite() != null) {
                     listTmp.add(nt.getWebsite().getTitle());
                 } else {

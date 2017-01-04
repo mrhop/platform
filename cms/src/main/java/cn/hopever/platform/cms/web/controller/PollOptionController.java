@@ -41,7 +41,6 @@ public class PollOptionController {
                 listTmp.add("");
                 listTmp.add(pot.getTitle());
                 listTmp.add(pot.getVoteTimes());
-                listTmp.add(pot.getVoteTimes());
                 if (pot.getPoll() != null) {
                     listTmp.add(pot.getPoll().getTitle());
                 } else {

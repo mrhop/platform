@@ -39,4 +39,8 @@ public class FileLibraryTable {
     @Column(name = "create_user")
     private String createUser;
 
+    @ManyToOne
+    @JoinColumn(name = "website_id", nullable = false)
+    private WebsiteTable website;
+
 }

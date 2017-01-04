@@ -75,6 +75,7 @@
       {
         "title": "所属网站",
         "value": "website",
+        "filter": true,
         "editType": "select"
       }
     ],
@@ -129,6 +130,7 @@
       {
         "title": "所属网站",
         "value": "website",
+        "filter": true,
         "editType": "select"
       }
     ],
@@ -177,6 +179,7 @@
       {
         "title": "所属网站",
         "value": "website",
+        "filter": true,
         "editType": "select"
       }
     ],
@@ -223,14 +226,15 @@
         "editType": "text"
       },
       {
-        "title": "新闻类型",
-        "value": "newsType",
+        "title": "所属网站",
+        "value": "website",
         "filter": true,
         "editType": "select"
       },
       {
-        "title": "所属网站",
-        "value": "website",
+        "title": "新闻类型",
+        "value": "newsType",
+        "filter": true,
         "editType": "select"
       },
       {
@@ -309,6 +313,7 @@
       {
         "title": "所属网站",
         "value": "website",
+        "filter": true,
         "editType": "select"
       }
     ],
@@ -351,6 +356,7 @@
       {
         "title": "所属网站",
         "value": "website",
+        "filter": true,
         "editType": "select"
       }
     ],
@@ -363,6 +369,337 @@
     ]
   },
   "pollListAdditionalFeature": {
+    "sortAvailable": true,
+    "filterAvailable": true,
+    "editable": true,
+    "deletable": true,
+    "addable": true,
+    "extraClass": "hover",
+    "pager": {
+      "show": true,
+      "rowSize": {
+        "show": true,
+        "currentSize": 10
+      }
+    }
+  },
+  "pollOptionList": {
+    "thead": [
+      {
+        "className": "td-id",
+        "title": "#",
+        "value": "serialNum"
+      },
+      {
+        "title": "标题",
+        "value": "title"
+      },
+      {
+        "title": "标题",
+        "value": "title"
+      },
+      {
+        "title": "投票次数",
+        "value": "voteTimes"
+      },
+      {
+        "title": "所属投票",
+        "value": "poll"
+      }
+    ],
+    "tfoot": [
+      {
+        "className": "td-foot",
+        "colSpan": 3,
+        "title": "投票选项列表基础信息"
+      }
+    ]
+  },
+  "optionList": {
+    "thead": [
+      {
+        "className": "td-id",
+        "title": "#",
+        "value": "serialNum"
+      },
+      {
+        "title": "关联操作",
+        "value": "relatedOperation",
+        "filter": true,
+        "editType": "select"
+      },
+      {
+        "title": "IP地址",
+        "value": "ip"
+      },
+      {
+        "title": "操作员",
+        "value": "operationUser",
+        "filter": true,
+        "editType": "text"
+      },
+      {
+        "title": "操作时间",
+        "value": "operationDate"
+      },
+      {
+        "title": "所属网站",
+        "value": "website",
+        "filter": true,
+        "editType": "select"
+      }
+    ],
+    "tfoot": [
+      {
+        "className": "td-foot",
+        "colSpan": 3,
+        "title": "操作列表基础信息"
+      }
+    ]
+  },
+  "optionListAdditionalFeature": {
+    "sortAvailable": true,
+    "filterAvailable": true,
+    "editable": true,
+    "deletable": true,
+    "addable": true,
+    "extraClass": "hover",
+    "pager": {
+      "show": true,
+      "rowSize": {
+        "show": true,
+        "currentSize": 10
+      }
+    }
+  },
+  "navigateList": {
+    "thead": [
+      {
+        "className": "td-id",
+        "title": "#",
+        "value": "serialNum"
+      },
+      {
+        "title": "标题",
+        "value": "title",
+        "filter": true,
+        "editType": "text"
+      },
+      {
+        "title": "父导航",
+        "value": "parent",
+        "filter": true,
+        "editType": "text"
+      },
+      {
+        "title": "等级",
+        "value": "level"
+      },
+      {
+        "title": "导航类型",
+        "value": "type",
+        "filter": true,
+        "editType": "select"
+      },
+      {
+        "title": "所属网站",
+        "value": "website",
+        "filter": true,
+        "editType": "select"
+      }
+    ],
+    "tfoot": [
+      {
+        "className": "td-foot",
+        "colSpan": 3,
+        "title": "导航列表基础信息"
+      }
+    ]
+  },
+  "navigateListAdditionalFeature": {
+    "sortAvailable": true,
+    "filterAvailable": true,
+    "editable": true,
+    "deletable": true,
+    "addable": true,
+    "extraClass": "hover",
+    "pager": {
+      "show": true,
+      "rowSize": {
+        "show": true,
+        "currentSize": 10
+      }
+    }
+  },
+  "fileLibraryList": {
+    "thead": [
+      {
+        "className": "td-id",
+        "title": "#",
+        "value": "serialNum"
+      },
+      {
+        "title": "文件名",
+        "value": "fileName",
+        "filter": true,
+        "editType": "text"
+      },
+      {
+        "title": "所属网站",
+        "value": "website",
+        "filter": true,
+        "editType": "select"
+      },
+      {
+        "title": "文件分类",
+        "value": "fileLibraryType",
+        "filter": true,
+        "editType": "select"
+      },
+      {
+        "title": "文件地址",
+        "value": "url"
+      },
+      {
+        "title": "已发布",
+        "value": "isPublished",
+        "filter": true,
+        "editType": "select"
+      },
+      {
+        "title": "创建人",
+        "value": "createUser"
+      },
+      {
+        "title": "创建时间",
+        "value": "createDate"
+      }
+    ],
+    "tfoot": [
+      {
+        "className": "td-foot",
+        "colSpan": 3,
+        "title": "多媒体文件列表基础信息"
+      }
+    ]
+  },
+  "fileLibraryListAdditionalFeature": {
+    "sortAvailable": true,
+    "filterAvailable": true,
+    "editable": true,
+    "deletable": true,
+    "addable": true,
+    "extraClass": "hover",
+    "pager": {
+      "show": true,
+      "rowSize": {
+        "show": true,
+        "currentSize": 10
+      }
+    }
+  },
+  "fileLibraryTypeList": {
+    "thead": [
+      {
+        "className": "td-id",
+        "title": "#",
+        "value": "serialNum"
+      },
+      {
+        "title": "标题",
+        "value": "title",
+        "filter": true,
+        "editType": "text"
+      },
+      {
+        "title": "所属网站",
+        "value": "website",
+        "filter": true,
+        "editType": "select"
+      },
+      {
+        "title": "使用模板",
+        "value": "template",
+        "filter": true,
+        "editType": "select"
+      }
+    ],
+    "tfoot": [
+      {
+        "className": "td-foot",
+        "colSpan": 3,
+        "title": "多媒体文件分类列表基础信息"
+      }
+    ]
+  },
+  "fileLibraryTypeListAdditionalFeature": {
+    "sortAvailable": true,
+    "filterAvailable": true,
+    "editable": true,
+    "deletable": true,
+    "addable": true,
+    "extraClass": "hover",
+    "pager": {
+      "show": true,
+      "rowSize": {
+        "show": true,
+        "currentSize": 10
+      }
+    }
+  },
+  "articleList": {
+    "thead": [
+      {
+        "className": "td-id",
+        "title": "#",
+        "value": "serialNum"
+      },
+      {
+        "title": "标题",
+        "value": "title",
+        "filter": true,
+        "editType": "text"
+      },
+      {
+        "title": "已发布",
+        "value": "isPublished",
+        "filter": true,
+        "editType": "select"
+      },
+      {
+        "title": "发布时间",
+        "value": "publishedDate"
+      },
+      {
+        "title": "所属网站",
+        "value": "website",
+        "filter": true,
+        "editType": "select"
+      },
+      {
+        "title": "使用模板",
+        "value": "template",
+        "filter": true,
+        "editType": "select"
+      },
+      {
+        "title": "创建人",
+        "value": "createUser"
+      },
+      {
+        "title": "创建时间",
+        "value": "createDate"
+      }
+    ],
+    "tfoot": [
+      {
+        "className": "td-foot",
+        "colSpan": 3,
+        "title": "文章分类列表基础信息"
+      }
+    ]
+  },
+  "articleListAdditionalFeature": {
     "sortAvailable": true,
     "filterAvailable": true,
     "editable": true,

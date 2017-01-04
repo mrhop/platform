@@ -2,8 +2,10 @@ package cn.hopever.platform.cms.web.controller;
 
 import cn.hopever.platform.cms.domain.NewsTable;
 import cn.hopever.platform.cms.domain.NewsTypeTable;
+import cn.hopever.platform.cms.domain.WebsiteTable;
 import cn.hopever.platform.cms.service.NewsTableService;
 import cn.hopever.platform.cms.service.NewsTypeTableService;
+import cn.hopever.platform.cms.service.WebsiteTableService;
 import cn.hopever.platform.utils.json.JacksonUtil;
 import cn.hopever.platform.utils.tools.DateFormat;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -28,6 +30,8 @@ public class NewsController {
     Logger logger = LoggerFactory.getLogger(NewsController.class);
 
     @Autowired
+    private WebsiteTableService websiteTableService;
+    @Autowired
     private NewsTypeTableService newsTypeTableService;
     @Autowired
     private NewsTableService newsTableService;
@@ -49,7 +53,7 @@ public class NewsController {
             filterMap = JacksonUtil.mapper.convertValue(body.get("filters"), Map.class);
         }
         filterMap.put("newsType", filterMap.get("newsType") != null ? newsTypeTableService.get(Long.valueOf(filterMap.get("newsType").toString())) : null);
-        filterMap.put("website", filterMap.get("website") != null ? newsTypeTableService.get(Long.valueOf(filterMap.get("website").toString())) : null);
+        filterMap.put("website", filterMap.get("website") != null ? websiteTableService.get(Long.valueOf(filterMap.get("website").toString())) : null);
         list = newsTableService.getList(pageRequest, filterMap);
         if (list != null && list.iterator().hasNext()) {
             listReturn = new ArrayList<>();
@@ -60,16 +64,8 @@ public class NewsController {
                 listTmp.add("");
                 listTmp.add(nt.getTitle());
                 listTmp.add(nt.getSubtitle());
-                if (nt.getNewsType() != null) {
-                    listTmp.add(nt.getNewsType().getTitle());
-                } else {
-                    listTmp.add(null);
-                }
-                if (nt.getWebsite() != null) {
-                    listTmp.add(nt.getWebsite().getTitle());
-                } else {
-                    listTmp.add(null);
-                }
+                listTmp.add(nt.getWebsite()!=null?nt.getWebsite().getTitle():null);
+                listTmp.add(nt.getNewsType()!=null?nt.getNewsType().getTitle():null);
                 listTmp.add(nt.getClickTimes());
                 listTmp.add(nt.isPublished() ? "Y" : "N");
                 listTmp.add(nt.getPublishDate() != null ? DateFormat.sdf.format(nt.getPublishDate()) : null);
@@ -105,6 +101,14 @@ public class NewsController {
         Map<String, Object> map = new HashMap<>();
         map.put("id", nt.getId());
         map.put("title", nt.getTitle());
+        if (nt.getWebsite() != null) {
+            HashMap<String, Object> mapWebsite = new HashMap<>();
+            mapWebsite.put("id",nt.getWebsite().getId());
+            mapWebsite.put("title",nt.getWebsite().getTitle());
+            map.put("website", mapWebsite);
+        } else {
+            map.put("website", null);
+        }
         if (nt.getNewsType() != null) {
             HashMap<String, Object> mapNewsType = new HashMap<>();
             mapNewsType.put("id", nt.getNewsType().getId());
@@ -113,11 +117,7 @@ public class NewsController {
         } else {
             map.put("newsType", null);
         }
-        if (nt.getWebsite() != null) {
-            map.put("website", nt.getWebsite().getTitle());
-        } else {
-            map.put("website", null);
-        }
+
         map.put("clickTimes", nt.getClickTimes());
         map.put("isPublished", nt.isPublished());
         map.put("publishDate", nt.getPublishDate());
@@ -137,10 +137,13 @@ public class NewsController {
         if (body.get("title") != null) {
             newsTable.setTitle(body.get("title").toString());
         }
+        if (body.get("website") != null) {
+            WebsiteTable websiteTable = websiteTableService.get(Long.valueOf(body.get("website").toString()));
+            newsTable.setWebsite(websiteTable);
+        }
         if (body.get("newsType") != null) {
             NewsTypeTable newsTypeTable = newsTypeTableService.get(Long.valueOf(body.get("website").toString()));
             newsTable.setNewsType(newsTypeTable);
-            newsTable.setWebsite(newsTypeTable.getWebsite());
         }
         if (body.get("clickTimes") != null) {
             newsTable.setClickTimes(Integer.valueOf(body.get("clickTimes").toString()));
@@ -165,10 +168,13 @@ public class NewsController {
         if (body.get("title") != null) {
             newsTable.setTitle(body.get("title").toString());
         }
+        if (body.get("website") != null) {
+            WebsiteTable websiteTable = websiteTableService.get(Long.valueOf(body.get("website").toString()));
+            newsTable.setWebsite(websiteTable);
+        }
         if (body.get("newsType") != null) {
             NewsTypeTable newsTypeTable = newsTypeTableService.get(Long.valueOf(body.get("website").toString()));
             newsTable.setNewsType(newsTypeTable);
-            newsTable.setWebsite(newsTypeTable.getWebsite());
         }
         if (body.get("clickTimes") != null) {
             newsTable.setClickTimes(Integer.valueOf(body.get("clickTimes").toString()));

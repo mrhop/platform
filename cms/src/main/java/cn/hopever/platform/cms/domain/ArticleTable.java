@@ -31,6 +31,9 @@ public class ArticleTable {
     @Column(name = "is_published",nullable = false)
     private boolean isPublished = true;
 
+    @Column(name = "published_date")
+    private Date publishedDate;
+
     @Column(name = "create_date")
     private Date createDate;
 

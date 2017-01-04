@@ -1,7 +1,7 @@
 package cn.hopever.platform.cms.repository.impl;
 
-import cn.hopever.platform.cms.domain.FileLibraryTable;
-import cn.hopever.platform.cms.repository.CustomFileLibraryTableRepository;
+import cn.hopever.platform.cms.domain.FileLibraryTypeTable;
+import cn.hopever.platform.cms.repository.CustomFileLibraryTypeTableRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -19,25 +19,25 @@ import java.util.Map;
 /**
  * Created by Donghui Huo on 2016/12/26.
  */
-@Repository("customFileLibraryTableRepository")
-public class CustomFileLibraryTableRepositoryImpl extends SimpleJpaRepository<FileLibraryTable, Long> implements CustomFileLibraryTableRepository {
+@Repository("customFileLibraryTypeTableRepository")
+public class CustomFileLibraryTypeTableRepositoryImpl extends SimpleJpaRepository<FileLibraryTypeTable, Long> implements CustomFileLibraryTypeTableRepository {
 
     private final EntityManager entityManager;
 
-    public CustomFileLibraryTableRepositoryImpl(EntityManager entityManager) {
-        super(JpaEntityInformationSupport.getEntityInformation(FileLibraryTable.class, entityManager), entityManager);
+    public CustomFileLibraryTypeTableRepositoryImpl(EntityManager entityManager) {
+        super(JpaEntityInformationSupport.getEntityInformation(FileLibraryTypeTable.class, entityManager), entityManager);
         this.entityManager = entityManager;
     }
 
 
     @Override
-    public Page<FileLibraryTable> findByFilters(Map<String, Object> mapFilter, Pageable pageable) {
+    public Page<FileLibraryTypeTable> findByFilters(Map<String, Object> mapFilter, Pageable pageable) {
         return super.findAll(filterConditions1(mapFilter), pageable);
     }
 
-    private Specification<FileLibraryTable> filterConditions1(Map<String, Object> mapFilter) {
-        return new Specification<FileLibraryTable>() {
-            public Predicate toPredicate(Root<FileLibraryTable> root, CriteriaQuery<?> query,
+    private Specification<FileLibraryTypeTable> filterConditions1(Map<String, Object> mapFilter) {
+        return new Specification<FileLibraryTypeTable>() {
+            public Predicate toPredicate(Root<FileLibraryTypeTable> root, CriteriaQuery<?> query,
                                          CriteriaBuilder builder) {
                 Predicate predicateReturn = null;
                 query.distinct(true);
@@ -46,7 +46,7 @@ public class CustomFileLibraryTableRepositoryImpl extends SimpleJpaRepository<Fi
                         Predicate predicateInternal = null;
                         if (key.equals("website")) {
                             predicateInternal = root.join("website").in(mapFilter.get(key));
-                        } else if (key.equals("isPublished") || key.equals("fileLibraryType")) {
+                        } else if (key.equals("template")) {
                             predicateInternal = builder.equal(root.get(key), mapFilter.get(key));
                         } else {
                             predicateInternal = builder.like(root.get(key), "%" + mapFilter.get(key) + "%");

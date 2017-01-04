@@ -65,13 +65,14 @@ public class ArticleController {
                 listTmp.add("");
                 listTmp.add(at.getTitle());
                 listTmp.add(at.isPublished() ? "Y" : "F");
-                if (at.getTemplate() != null) {
-                    listTmp.add(at.getTemplate().getName());
+                listTmp.add(at.getPublishedDate() != null ? DateFormat.sdf.format(at.getPublishedDate()) : null);
+                if (at.getWebsite() != null) {
+                    listTmp.add(at.getWebsite().getTitle());
                 } else {
                     listTmp.add(null);
                 }
-                if (at.getWebsite() != null) {
-                    listTmp.add(at.getWebsite().getTitle());
+                if (at.getTemplate() != null) {
+                    listTmp.add(at.getTemplate().getName());
                 } else {
                     listTmp.add(null);
                 }

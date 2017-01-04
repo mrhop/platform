@@ -30,7 +30,7 @@ public class CmsClientTemplateController {
 
     @RequestMapping(value = "/template/list", method = {RequestMethod.GET, RequestMethod.POST})
     public CommonResult getTemplateList(HttpServletRequest request, @RequestBody JsonNode body) throws Exception {
-        request.setAttribute("resourceUrl", baseConfig.getWebsitelist());
+        request.setAttribute("resourceUrl", baseConfig.getTemplatelist());
         if (body.get("currentPage") == null || body.get("currentPage").isNull()) {
             ((ObjectNode) body).put("currentPage", 0);
         }

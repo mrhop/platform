@@ -4,9 +4,14 @@ import cn.hopever.platform.cms.domain.FileLibraryTypeTable;
 import cn.hopever.platform.cms.service.FileLibraryTypeTableService;
 import cn.hopever.platform.cms.service.TemplateTableService;
 import cn.hopever.platform.cms.service.WebsiteTableService;
+import cn.hopever.platform.utils.json.JacksonUtil;
+import com.fasterxml.jackson.databind.JsonNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,11 +37,27 @@ public class FileLibraryTypeController {
 
 
     @PreAuthorize("#oauth2.hasScope('cms_admin_client')")
-    @RequestMapping(value = "/list", method = {RequestMethod.GET})
-    public List getList(@RequestParam Long websiteId, Principal principal) {
-        List<HashMap<String, Object>> listReturn = null;
-        Iterable<FileLibraryTypeTable> list = fileLibraryTypeTableService.getListByWebsites(websiteTableService.getWebsiteAsFilter(principal,websiteId!=null?websiteId.toString():null));
-        if (list.iterator().hasNext()) {
+    @RequestMapping(value = "/list", method = {RequestMethod.POST})
+    public Map getList(@RequestBody JsonNode body, Principal principal) {
+        Map<String, Object> map = new HashMap<>();
+        List<HashMap<String, Object>> listReturn;
+        Page<FileLibraryTypeTable> list;
+        PageRequest pageRequest;
+        if (body.get("sort") == null || body.get("sort").isNull()) {
+            pageRequest = new PageRequest(body.get("currentPage").asInt(), body.get("rowSize").asInt(), Sort.Direction.ASC, "id");
+        } else {
+            pageRequest = new PageRequest(body.get("currentPage").asInt(), body.get("rowSize").asInt(), Sort.Direction.fromString(body.get("sort").get("sortDirection").textValue()), body.get("sort").get("sortName").textValue());
+        }
+        Map<String, Object> filterMap = null;
+        if (body.get("filters") != null && !body.get("filters").isNull()) {
+            filterMap = JacksonUtil.mapper.convertValue(body.get("filters"), Map.class);
+        }
+        filterMap.put("fileLibraryType", filterMap.get("fileLibraryType") != null ? fileLibraryTypeTableService.get(Long.valueOf(filterMap.get("fileLibraryType").toString())) : null);
+        filterMap.put("website", filterMap.get("website") != null ? websiteTableService.get(Long.valueOf(filterMap.get("website").toString())) : null);
+
+        list = fileLibraryTypeTableService.getList(pageRequest, filterMap);
+
+        if (list != null && list.iterator().hasNext()) {
             listReturn = new ArrayList<>();
             for (FileLibraryTypeTable fltt : list) {
                 HashMap<String, Object> mapTemp = new HashMap<>();
@@ -44,21 +65,30 @@ public class FileLibraryTypeController {
                 List<Object> listTmp = new ArrayList<>();
                 listTmp.add("");
                 listTmp.add(fltt.getTitle());
-                if(fltt.getTemplate()!=null){
-                    listTmp.add(fltt.getTemplate().getName());
+                if(fltt.getWebsite()!=null){
+                    listTmp.add(fltt.getWebsite().getTitle());
                 }else{
                     listTmp.add(null);
                 }
-                if(fltt.getWebsite()!=null){
-                    listTmp.add(fltt.getWebsite().getTitle());
+                if(fltt.getTemplate()!=null){
+                    listTmp.add(fltt.getTemplate().getName());
                 }else{
                     listTmp.add(null);
                 }
                 mapTemp.put("value", listTmp);
                 listReturn.add(mapTemp);
             }
+            map.put("data", listReturn);
+            map.put("totalCount", list.getTotalElements());
+            map.put("rowSize", body.get("rowSize").asInt());
+            map.put("currentPage", list.getNumber());
+        } else {
+            map.put("data", null);
+            map.put("totalCount", 0);
+            map.put("rowSize", body.get("rowSize").asInt());
+            map.put("currentPage", 0);
         }
-        return listReturn;
+        return map;
     }
 
     @PreAuthorize("#oauth2.hasScope('cms_admin_client')")

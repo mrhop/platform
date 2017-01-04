@@ -30,7 +30,7 @@ public class CmsClientResourceController {
 
     @RequestMapping(value = "/resource/list", method = {RequestMethod.GET, RequestMethod.POST})
     public CommonResult getResourceList(HttpServletRequest request, @RequestBody JsonNode body) throws Exception {
-        request.setAttribute("resourceUrl", baseConfig.getWebsitelist());
+        request.setAttribute("resourceUrl", baseConfig.getResourcelist());
         if (body.get("currentPage") == null || body.get("currentPage").isNull()) {
             ((ObjectNode) body).put("currentPage", 0);
         }

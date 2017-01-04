@@ -84,6 +84,7 @@ public class BaseConfig {
     private String optionsave;
     private String optiondelete;
     //    #navigate
+    private List<String> navigateTypes;
     private String navigatelist;
     private String navigateinfo;
     private String navigateupdate;

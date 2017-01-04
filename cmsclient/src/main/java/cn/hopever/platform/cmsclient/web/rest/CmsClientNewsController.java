@@ -30,7 +30,7 @@ public class CmsClientNewsController {
 
     @RequestMapping(value = "/news/list", method = {RequestMethod.GET, RequestMethod.POST})
     public CommonResult getNewsList(HttpServletRequest request, @RequestBody JsonNode body) throws Exception {
-        request.setAttribute("resourceUrl", baseConfig.getWebsitelist());
+        request.setAttribute("resourceUrl", baseConfig.getNewslist());
         if (body.get("currentPage") == null || body.get("currentPage").isNull()) {
             ((ObjectNode) body).put("currentPage", 0);
         }

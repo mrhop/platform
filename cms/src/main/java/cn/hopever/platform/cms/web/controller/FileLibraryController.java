@@ -1,8 +1,10 @@
 package cn.hopever.platform.cms.web.controller;
 
 import cn.hopever.platform.cms.domain.FileLibraryTable;
+import cn.hopever.platform.cms.domain.WebsiteTable;
 import cn.hopever.platform.cms.service.FileLibraryTableService;
 import cn.hopever.platform.cms.service.FileLibraryTypeTableService;
+import cn.hopever.platform.cms.service.WebsiteTableService;
 import cn.hopever.platform.utils.json.JacksonUtil;
 import cn.hopever.platform.utils.tools.DateFormat;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -27,6 +29,9 @@ public class FileLibraryController {
     Logger logger = LoggerFactory.getLogger(FileLibraryController.class);
 
     @Autowired
+    private WebsiteTableService websiteTableService;
+
+    @Autowired
     private FileLibraryTypeTableService fileLibraryTypeTableService;
     @Autowired
     private FileLibraryTableService fileLibraryTableService;
@@ -48,6 +53,8 @@ public class FileLibraryController {
             filterMap = JacksonUtil.mapper.convertValue(body.get("filters"), Map.class);
         }
         filterMap.put("fileLibraryType", filterMap.get("fileLibraryType") != null ? fileLibraryTypeTableService.get(Long.valueOf(filterMap.get("fileLibraryType").toString())) : null);
+        filterMap.put("website", filterMap.get("website") != null ? websiteTableService.get(Long.valueOf(filterMap.get("website").toString())) : null);
+
         list = fileLibraryTableService.getList(pageRequest, filterMap);
 
         if (list != null && list.iterator().hasNext()) {
@@ -58,11 +65,8 @@ public class FileLibraryController {
                 List<Object> listTmp = new ArrayList<>();
                 listTmp.add("");
                 listTmp.add(flt.getFileName());
-                if(flt.getFileLibraryType()!=null){
-                    listTmp.add(flt.getFileLibraryType().getTitle());
-                }else{
-                    listTmp.add(null);
-                }
+                listTmp.add(flt.getWebsite()!=null?flt.getWebsite().getTitle():null);
+                listTmp.add(flt.getFileLibraryType()!=null?flt.getFileLibraryType().getTitle():null);
                 listTmp.add(flt.getUrl());
                 listTmp.add(flt.isPublished()?"Y":"N");
                 listTmp.add(flt.getCreateUser());
@@ -98,6 +102,14 @@ public class FileLibraryController {
         Map<String, Object> map = new HashMap<>();
         map.put("id", flt.getId());
         map.put("title", flt.getFileName());
+        if (flt.getWebsite() != null) {
+            HashMap<String, Object> mapWebsite = new HashMap<>();
+            mapWebsite.put("id",flt.getWebsite().getId());
+            mapWebsite.put("title",flt.getWebsite().getTitle());
+            map.put("website", mapWebsite);
+        } else {
+            map.put("website", null);
+        }
         if(flt.getFileLibraryType()!=null){
             HashMap<String, Object> mapFileLibraryType = new HashMap<>();
             mapFileLibraryType.put("id",flt.getFileLibraryType().getId());
@@ -121,6 +133,10 @@ public class FileLibraryController {
         FileLibraryTable fileLibraryTable = this.fileLibraryTableService.get(id);
         if (body.get("title") != null) {
             fileLibraryTable.setFileName(body.get("title").toString());
+        }
+        if (body.get("website") != null) {
+            WebsiteTable websiteTable = websiteTableService.get(Long.valueOf(body.get("website").toString()));
+            fileLibraryTable.setWebsite(websiteTable);
         }
         if (body.get("fileLibraryType") != null ) {
             fileLibraryTable.setFileLibraryType(fileLibraryTypeTableService.get(Long.valueOf(body.get("fileLibraryType").toString())));
@@ -147,6 +163,10 @@ public class FileLibraryController {
         FileLibraryTable fileLibraryTable = new FileLibraryTable();
         if (body.get("title") != null) {
             fileLibraryTable.setFileName(body.get("title").toString());
+        }
+        if (body.get("website") != null) {
+            WebsiteTable websiteTable = websiteTableService.get(Long.valueOf(body.get("website").toString()));
+            fileLibraryTable.setWebsite(websiteTable);
         }
         if (body.get("fileLibraryType") != null ) {
             fileLibraryTable.setFileLibraryType(fileLibraryTypeTableService.get(Long.valueOf(body.get("fileLibraryType").toString())));
