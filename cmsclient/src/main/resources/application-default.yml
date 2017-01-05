@@ -18,6 +18,7 @@ config:
         websiteupdate: http://localhost:9092/website/update
         websitesave: http://localhost:9092/website/save
         websitedelete: http://localhost:9092/website/delete
+        websiteoptions: http://localhost:9092/website/options
         #resource
         resourceTypes:
                 - css
@@ -41,6 +42,7 @@ config:
         templateupdate: http://localhost:9092/template/update
         templatesave: http://localhost:9092/template/save
         templatedelete: http://localhost:9092/template/delete
+        templateoptionsofwebsite: http://localhost:9092/template/options/bywebsite
         #block
         blockTypes:
                 - 静态内容
@@ -67,6 +69,7 @@ config:
         newstypeupdate: http://localhost:9092/newstype/update
         newstypesave: http://localhost:9092/newstype/save
         newstypedelete: http://localhost:9092/newstype/delete
+        newstypeoptionsofwebsite: http://localhost:9092/newstype/options/bywebsite
         #poll
         polllist: http://localhost:9092/poll/list
         pollinfo: http://localhost:9092/poll/info
@@ -98,6 +101,7 @@ config:
         navigateupdate: http://localhost:9092/navigate/update
         navigatesave: http://localhost:9092/navigate/save
         navigatedelete: http://localhost:9092/navigate/delete
+        navigateparentoptions: http://localhost:9092/navigate/parent/options
         #fileLibrary
         filelibrarylist: http://localhost:9092/filelibrary/list
         filelibraryinfo: http://localhost:9092/filelibrary/info
@@ -110,6 +114,7 @@ config:
         filelibrarytypeupdate: http://localhost:9092/filelibrarytype/update
         filelibrarytypesave: http://localhost:9092/filelibrarytype/save
         filelibrarytypedelete: http://localhost:9092/filelibrarytype/delete
+        filelibrarytypeoptionsofwebsite: http://localhost:9092/filelibrarytype/options/bywebsite
         #article
         articlelist: http://localhost:9092/article/list
         articleinfo: http://localhost:9092/article/info

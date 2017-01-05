@@ -11,6 +11,8 @@ import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -51,7 +53,26 @@ public class CmsClientBlockController {
                     c.getResponseData().put("totalCount", 0);
                 }
                 if (body.get("init") != null && !body.get("init").isNull() && body.get("init").asBoolean()) {
-                    c.getResponseData().put("rules", baseConfig.getTableRule("blockList"));
+                    Map<String, Object> mapBlockList = baseConfig.getTableRule("blockList");
+                    List<Map> headList = (List) mapBlockList.get("thead");
+                    for (Map<String, Object> map : headList) {
+                        if (map.get("value").equals("type")) {
+                            List<String> blockTypes = baseConfig.getBlockTypes();
+                            List<Map> listOptions = new ArrayList<>();
+                            for (String blockType : blockTypes) {
+                                Map mapOption = new HashMap<>();
+                                mapOption.put("label", blockType);
+                                mapOption.put("value", blockType);
+                                listOptions.add(mapOption);
+                            }
+                            map.put("editValue", listOptions);
+                        } else if (map.get("value").equals("website")) {
+                            request.setAttribute("resourceUrl", baseConfig.getWebsiteoptions());
+                            CommonResult c1 = commonMethods.getResource(request);
+                            map.put("editValue", c1.getResponseData().get("data"));
+                        }
+                    }
+                    c.getResponseData().put("rules", mapBlockList);
                     c.getResponseData().put("additionalFeature", ((Map) baseConfig.getMapRules().get("tableRules")).get("blockListAdditionalFeature"));
                 }
             }

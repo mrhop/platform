@@ -84,4 +84,18 @@ public class WebsiteTableServiceImpl implements WebsiteTableService {
         }
         return list;
     }
+
+    @Override
+    public Iterable<WebsiteTable> getWebsiteAsFilter(Principal principal) {
+        Iterable<WebsiteTable> list = new ArrayList<>();
+
+            String authority = ((OAuth2Authentication) principal).getAuthorities().iterator().next().getAuthority();
+            if ("ROLE_common_user".equals(authority)) {
+                list = websiteTableRepository.findByRelatedUsernamesLike("[" + principal.getName() + "]");
+            }else{
+                list = websiteTableRepository.findAll();
+            }
+
+        return list;
+    }
 }

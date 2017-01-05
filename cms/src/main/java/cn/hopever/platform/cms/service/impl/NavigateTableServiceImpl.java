@@ -1,6 +1,7 @@
 package cn.hopever.platform.cms.service.impl;
 
 import cn.hopever.platform.cms.domain.NavigateTable;
+import cn.hopever.platform.cms.domain.WebsiteTable;
 import cn.hopever.platform.cms.repository.CustomNavigateTableRepository;
 import cn.hopever.platform.cms.repository.NavigateTableRepository;
 import cn.hopever.platform.cms.service.NavigateTableService;
@@ -9,9 +10,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Map;
 
 @Service("navigateTableService")
@@ -42,5 +45,10 @@ public class NavigateTableServiceImpl implements NavigateTableService {
     @Override
     public NavigateTable get(Long id) {
         return navigateTableRepository.findOne(id);
+    }
+
+    @Override
+    public List<NavigateTable> getListByWebsite(WebsiteTable websiteTable) {
+        return navigateTableRepository.findByWebsiteAndParentIsNullAndSort(websiteTable,new Sort(Sort.Direction.ASC,"orderNum"));
     }
 }

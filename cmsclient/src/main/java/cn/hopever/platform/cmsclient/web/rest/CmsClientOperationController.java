@@ -11,6 +11,8 @@ import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -51,7 +53,26 @@ public class CmsClientOperationController {
                     c.getResponseData().put("totalCount", 0);
                 }
                 if (body.get("init") != null && !body.get("init").isNull() && body.get("init").asBoolean()) {
-                    c.getResponseData().put("rules", baseConfig.getTableRule("optionList"));
+                    Map<String, Object> mapOptionList = baseConfig.getTableRule("optionList");
+                    List<Map> headList = (List) mapOptionList.get("thead");
+                    for (Map<String, Object> map : headList) {
+                        if (map.get("value").equals("relatedOperation")) {
+                            List<Map> listOptions = new ArrayList<>();
+                            List<String> relatedOperations = baseConfig.getRelatedOperations();
+                            for(String relatedOperation:relatedOperations){
+                                Map mapOption = new HashMap<>();
+                                mapOption.put("label",relatedOperation);
+                                mapOption.put("value",relatedOperation);
+                                listOptions.add(mapOption);
+                            }
+                            map.put("editValue", listOptions);
+                        } else if (map.get("value").equals("website")) {
+                            request.setAttribute("resourceUrl", baseConfig.getWebsiteoptions());
+                            CommonResult c1 = commonMethods.getResource(request);
+                            map.put("editValue", c1.getResponseData().get("data"));
+                        }
+                    }
+                    c.getResponseData().put("rules", mapOptionList);
                     c.getResponseData().put("additionalFeature", ((Map) baseConfig.getMapRules().get("tableRules")).get("optionListAdditionalFeature"));
                 }
             }

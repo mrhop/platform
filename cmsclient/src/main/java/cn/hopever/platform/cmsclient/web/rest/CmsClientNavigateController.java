@@ -11,6 +11,8 @@ import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -50,8 +52,42 @@ public class CmsClientNavigateController {
                 } else {
                     c.getResponseData().put("totalCount", 0);
                 }
+                //rule的联动
+                if (body.get("filters") != null && !body.get("filters").isNull()) {
+                    JsonNode website = body.get("filters").get("website");
+                    if (website != null && !website.isNull()) {
+                        String websiteId = website.asText();
+                        request.setAttribute("resourceUrl", baseConfig.getNavigateparentoptions()+ "?websiteId=" + websiteId);
+                        CommonResult navigateparentoptions = commonMethods.getResource(request);
+                        List<Map> updateRules = new ArrayList<>();
+                        Map map = new HashMap<>();
+                        map.put("value","parent");
+                        map.put("editValue",navigateparentoptions.getResponseData().get("data"));
+                        updateRules.add(map);
+                        c.getResponseData().put("updateRules", updateRules);
+                    }
+                }
                 if (body.get("init") != null && !body.get("init").isNull() && body.get("init").asBoolean()) {
-                    c.getResponseData().put("rules", baseConfig.getTableRule("navigateList"));
+                    Map<String, Object> mapNavigateList = baseConfig.getTableRule("navigateList");
+                    List<Map> headList = (List) mapNavigateList.get("thead");
+                    for (Map<String, Object> map : headList) {
+                        if (map.get("value").equals("type")) {
+                            List<String> navigateTypes = baseConfig.getNavigateTypes();
+                            List<Map> listOptions = new ArrayList<>();
+                            for (String navigateType : navigateTypes) {
+                                Map mapOption = new HashMap<>();
+                                mapOption.put("label", navigateType);
+                                mapOption.put("value", navigateType);
+                                listOptions.add(mapOption);
+                            }
+                            map.put("editValue", listOptions);
+                        } else if (map.get("value").equals("website")) {
+                            request.setAttribute("resourceUrl", baseConfig.getWebsiteoptions());
+                            CommonResult c1 = commonMethods.getResource(request);
+                            map.put("editValue", c1.getResponseData().get("data"));
+                        }
+                    }
+                    c.getResponseData().put("rules", mapNavigateList);
                     c.getResponseData().put("additionalFeature", ((Map) baseConfig.getMapRules().get("tableRules")).get("navigateListAdditionalFeature"));
                 }
             }

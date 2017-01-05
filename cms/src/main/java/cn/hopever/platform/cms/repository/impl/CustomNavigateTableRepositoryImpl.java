@@ -44,10 +44,8 @@ public class CustomNavigateTableRepositoryImpl extends SimpleJpaRepository<Navig
                 if (mapFilter != null) {
                     for (String key : mapFilter.keySet()) {
                         Predicate predicateInternal = null;
-                        if (key.equals("parent")) {
+                        if (key.equals("parent") || key.equals("website")) {
                             predicateInternal = builder.equal(root.get(key), mapFilter.get(key));
-                        } else if (key.equals("website")) {
-                            predicateInternal = root.join("website").in(mapFilter.get(key));
                         } else {
                             predicateInternal = builder.like(root.get(key), "%" + mapFilter.get(key) + "%");
                         }

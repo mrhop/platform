@@ -38,7 +38,7 @@ public class WebsiteController {
         } else {
             pageRequest = new PageRequest(body.get("currentPage").asInt(), body.get("rowSize").asInt(), Sort.Direction.fromString(body.get("sort").get("sortDirection").textValue()), body.get("sort").get("sortName").textValue());
         }
-        Map<String, Object> filterMap = null;
+        Map<String, Object> filterMap = new HashMap<>();
         if (body.get("filters") != null && !body.get("filters").isNull()) {
             filterMap = JacksonUtil.mapper.convertValue(body.get("filters"), Map.class);
         }
@@ -69,6 +69,23 @@ public class WebsiteController {
             map.put("currentPage", 0);
         }
         return map;
+    }
+
+    @PreAuthorize("#oauth2.hasScope('cms_admin_client')")
+    @RequestMapping(value = "/options", method = {RequestMethod.GET})
+    public List getOptionList(Principal principal) {
+        List<Map> listOptions = null;
+        List<WebsiteTable> list = websiteTableService.getList(principal);
+        if (list != null && list.size() > 0) {
+            listOptions = new ArrayList<>();
+            for (WebsiteTable wt : list) {
+                Map mapOption = new HashMap<>();
+                mapOption.put("label", wt.getTitle());
+                mapOption.put("value", wt.getId());
+                listOptions.add(mapOption);
+            }
+        }
+        return listOptions;
     }
 
     @PreAuthorize("#oauth2.hasScope('cms_admin_client') and ( hasRole('ROLE_super_admin') or hasRole('ROLE_admin'))")

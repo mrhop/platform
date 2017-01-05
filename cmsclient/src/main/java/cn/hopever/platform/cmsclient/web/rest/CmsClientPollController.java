@@ -51,7 +51,16 @@ public class CmsClientPollController {
                     c.getResponseData().put("totalCount", 0);
                 }
                 if (body.get("init") != null && !body.get("init").isNull() && body.get("init").asBoolean()) {
-                    c.getResponseData().put("rules", baseConfig.getTableRule("pollList"));
+                    Map<String, Object> mapPollList = baseConfig.getTableRule("pollList");
+                    List<Map> headList = (List) mapPollList.get("thead");
+                    for (Map<String, Object> map : headList) {
+                        if (map.get("value").equals("website")) {
+                            request.setAttribute("resourceUrl", baseConfig.getWebsiteoptions());
+                            CommonResult c1 = commonMethods.getResource(request);
+                            map.put("editValue", c1.getResponseData().get("data"));
+                        }
+                    }
+                    c.getResponseData().put("rules", mapPollList);
                     c.getResponseData().put("additionalFeature", ((Map) baseConfig.getMapRules().get("tableRules")).get("pollListAdditionalFeature"));
                 }
             }

@@ -50,11 +50,12 @@ public class ArticleController {
         } else {
             pageRequest = new PageRequest(body.get("currentPage").asInt(), body.get("rowSize").asInt(), Sort.Direction.fromString(body.get("sort").get("sortDirection").textValue()), body.get("sort").get("sortName").textValue());
         }
-        Map<String, Object> filterMap = null;
+        Map<String, Object> filterMap = new HashMap<>();
         if (body.get("filters") != null && !body.get("filters").isNull()) {
             filterMap = JacksonUtil.mapper.convertValue(body.get("filters"), Map.class);
         }
         filterMap.put("website", websiteTableService.getWebsiteAsFilter(principal, filterMap.get("website") != null ? filterMap.get("website").toString() : null));
+        filterMap.put("template", filterMap.get("template") != null ? templateTableService.get(Long.valueOf(filterMap.get("template").toString())) : null);
         list = articleTableService.getList(pageRequest, filterMap);
         if (list != null && list.iterator().hasNext()) {
             listReturn = new ArrayList<>();

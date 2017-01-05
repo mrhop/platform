@@ -11,6 +11,8 @@ import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -51,7 +53,26 @@ public class CmsClientResourceController {
                     c.getResponseData().put("totalCount", 0);
                 }
                 if (body.get("init") != null && !body.get("init").isNull() && body.get("init").asBoolean()) {
-                    c.getResponseData().put("rules", baseConfig.getTableRule("resourceList"));
+                    Map<String, Object> mapResourceList = baseConfig.getTableRule("resourceList");
+                    List<Map> headList = (List) mapResourceList.get("thead");
+                    for (Map<String, Object> map : headList) {
+                        if (map.get("value").equals("type")) {
+                            List<String> resourceTypes = baseConfig.getResourceTypes();
+                            List<Map> listOptions = new ArrayList<>();
+                            for (String resourceType : resourceTypes) {
+                                Map mapOption = new HashMap<>();
+                                mapOption.put("label", resourceType);
+                                mapOption.put("value", resourceType);
+                                listOptions.add(mapOption);
+                            }
+                            map.put("editValue", listOptions);
+                        } else if (map.get("value").equals("website")) {
+                            request.setAttribute("resourceUrl", baseConfig.getWebsiteoptions());
+                            CommonResult c1 = commonMethods.getResource(request);
+                            map.put("editValue", c1.getResponseData().get("data"));
+                        }
+                    }
+                    c.getResponseData().put("rules", mapResourceList);
                     c.getResponseData().put("additionalFeature", ((Map) baseConfig.getMapRules().get("tableRules")).get("resourceListAdditionalFeature"));
                 }
             }

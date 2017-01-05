@@ -30,6 +30,7 @@ public class BaseConfig {
     private String websiteupdate;
     private String websitesave;
     private String websitedelete;
+    private String websiteoptions;
     //    #resource
     private List<String> resourceTypes;
     private String resourcelist;
@@ -45,6 +46,7 @@ public class BaseConfig {
     private String templateupdate;
     private String templatesave;
     private String templatedelete;
+    private String templateoptionsofwebsite;
     //    #block
     private List<String> blockTypes;
     private String blocklist;
@@ -64,6 +66,7 @@ public class BaseConfig {
     private String newstypeupdate;
     private String newstypesave;
     private String newstypedelete;
+    private String newstypeoptionsofwebsite;
     //    #poll
     private String polllist;
     private String pollinfo;
@@ -90,6 +93,7 @@ public class BaseConfig {
     private String navigateupdate;
     private String navigatesave;
     private String navigatedelete;
+    private String navigateparentoptions;
     //    #fileLibrary
     private String filelibrarylist;
     private String filelibraryinfo;
@@ -102,6 +106,7 @@ public class BaseConfig {
     private String filelibrarytypeupdate;
     private String filelibrarytypesave;
     private String filelibrarytypedelete;
+    private String filelibrarytypeoptionsofwebsite;
     //    #article
     private String articlelist;
     private String articleinfo;

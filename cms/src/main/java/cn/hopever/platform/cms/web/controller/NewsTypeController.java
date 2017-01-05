@@ -1,6 +1,7 @@
 package cn.hopever.platform.cms.web.controller;
 
 import cn.hopever.platform.cms.domain.NewsTypeTable;
+import cn.hopever.platform.cms.domain.WebsiteTable;
 import cn.hopever.platform.cms.service.NewsTypeTableService;
 import cn.hopever.platform.cms.service.TemplateTableService;
 import cn.hopever.platform.cms.service.WebsiteTableService;
@@ -49,7 +50,7 @@ public class NewsTypeController {
         } else {
             pageRequest = new PageRequest(body.get("currentPage").asInt(), body.get("rowSize").asInt(), Sort.Direction.fromString(body.get("sort").get("sortDirection").textValue()), body.get("sort").get("sortName").textValue());
         }
-        Map<String, Object> filterMap = null;
+        Map<String, Object> filterMap = new HashMap<>();
         if (body.get("filters") != null && !body.get("filters").isNull()) {
             filterMap = JacksonUtil.mapper.convertValue(body.get("filters"), Map.class);
         }
@@ -92,6 +93,25 @@ public class NewsTypeController {
             map.put("currentPage", 0);
         }
         return map;
+    }
+
+    @PreAuthorize("#oauth2.hasScope('cms_admin_client')")
+    @RequestMapping(value = "/options/bywebsite", method = {RequestMethod.GET})
+    public List optionsofwebsite(@RequestParam Long websiteId, Principal principal) {
+        List<Map> listOptions = null;
+        List<WebsiteTable> listWebsite = new ArrayList<>();
+        listWebsite.add(websiteTableService.get(websiteId));
+        List<NewsTypeTable> list = newsTypeTableService.getListByWebsites(listWebsite);
+        if (list != null && list.size() > 0) {
+            listOptions = new ArrayList<>();
+            for (NewsTypeTable ntt : list) {
+                Map mapOption = new HashMap<>();
+                mapOption.put("label", ntt.getTitle());
+                mapOption.put("value", ntt.getId());
+                listOptions.add(mapOption);
+            }
+        }
+        return listOptions;
     }
 
     @PreAuthorize("#oauth2.hasScope('cms_admin_client')")

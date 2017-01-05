@@ -35,4 +35,6 @@ public interface WebsiteTableService {
 
     public List<WebsiteTable> getWebsiteAsFilter(Principal principal,String id);
 
+    public Iterable<WebsiteTable> getWebsiteAsFilter(Principal principal);
+
 }

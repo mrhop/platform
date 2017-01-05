@@ -395,10 +395,6 @@
         "value": "title"
       },
       {
-        "title": "标题",
-        "value": "title"
-      },
-      {
         "title": "投票次数",
         "value": "voteTimes"
       },
@@ -486,6 +482,12 @@
         "editType": "text"
       },
       {
+        "title": "所属网站",
+        "value": "website",
+        "filter": true,
+        "editType": "select"
+      },
+      {
         "title": "父导航",
         "value": "parent",
         "filter": true,
@@ -498,12 +500,6 @@
       {
         "title": "导航类型",
         "value": "type",
-        "filter": true,
-        "editType": "select"
-      },
-      {
-        "title": "所属网站",
-        "value": "website",
         "filter": true,
         "editType": "select"
       }

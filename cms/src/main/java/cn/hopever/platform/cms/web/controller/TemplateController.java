@@ -1,8 +1,6 @@
 package cn.hopever.platform.cms.web.controller;
 
-import cn.hopever.platform.cms.domain.TemplateBlockTable;
-import cn.hopever.platform.cms.domain.TemplateResourceTable;
-import cn.hopever.platform.cms.domain.TemplateTable;
+import cn.hopever.platform.cms.domain.*;
 import cn.hopever.platform.cms.service.BlockTableService;
 import cn.hopever.platform.cms.service.ResourceTableService;
 import cn.hopever.platform.cms.service.TemplateTableService;
@@ -53,7 +51,7 @@ public class TemplateController {
         } else {
             pageRequest = new PageRequest(body.get("currentPage").asInt(), body.get("rowSize").asInt(), Sort.Direction.fromString(body.get("sort").get("sortDirection").textValue()), body.get("sort").get("sortName").textValue());
         }
-        Map<String, Object> filterMap = null;
+        Map<String, Object> filterMap = new HashMap<>();
         if (body.get("filters") != null && !body.get("filters").isNull()) {
             filterMap = JacksonUtil.mapper.convertValue(body.get("filters"), Map.class);
         }
@@ -71,9 +69,9 @@ public class TemplateController {
                 listTmp.add(tt.getLayoutType());
                 listTmp.add(tt.getLayoutScale());
                 listTmp.add(tt.getContentPosition());
-                if(tt.getWebsite()!=null){
+                if (tt.getWebsite() != null) {
                     listTmp.add(tt.getWebsite().getTitle());
-                }else{
+                } else {
                     listTmp.add(null);
                 }
                 mapTemp.put("value", listTmp);
@@ -91,6 +89,24 @@ public class TemplateController {
         }
         return map;
     }
+
+    @RequestMapping(value = "/options/bywebsite", method = {RequestMethod.GET})
+    public List getList(@RequestParam Long websiteId, Principal principal) {
+        List<Map> listOptions = null;
+        WebsiteTable wt = websiteTableService.get(websiteId);
+        List<TemplateTable> list = templateTableService.getListByWebsiteOrNull(wt);
+        if (list != null && list.size() > 0) {
+            listOptions = new ArrayList<>();
+            for (TemplateTable tt : list) {
+                Map mapOption = new HashMap<>();
+                mapOption.put("label", tt.getName());
+                mapOption.put("value", tt.getId());
+                listOptions.add(mapOption);
+            }
+        }
+        return listOptions;
+    }
+
 
     @PreAuthorize("#oauth2.hasScope('cms_admin_client')")
     @RequestMapping(value = "/delete", method = {RequestMethod.GET})
@@ -114,43 +130,43 @@ public class TemplateController {
             map.put("layoutScale", tt.getLayoutScale());
             map.put("contentPosition", tt.getContentPosition());
             map.put("contentScript", tt.getContentScript());
-            if(tt.getWebsite()!=null){
+            if (tt.getWebsite() != null) {
                 HashMap<String, Object> mapWebsite = new HashMap<>();
-                mapWebsite.put("id",tt.getWebsite().getId());
-                mapWebsite.put("title",tt.getWebsite().getTitle());
+                mapWebsite.put("id", tt.getWebsite().getId());
+                mapWebsite.put("title", tt.getWebsite().getTitle());
                 map.put("website", mapWebsite);
-            }else{
+            } else {
                 map.put("website", null);
             }
-            if(tt.getTemplateBlocks()!=null){
-                List<Map<String,Object>> templateBlocks = new ArrayList<>();
-                for(TemplateBlockTable tbt:tt.getTemplateBlocks()){
-                    Map<String,Object> mapTmp = new HashMap<>();
-                    Map<String,Object> mapBlock = new HashMap<>();
-                    mapBlock.put("id",tbt.getBlock().getId());
-                    mapBlock.put("name",tbt.getBlock().getName());
-                    mapTmp.put("block",mapBlock);
-                    mapTmp.put("blockPosition",tbt.getBlockPosition());
+            if (tt.getTemplateBlocks() != null) {
+                List<Map<String, Object>> templateBlocks = new ArrayList<>();
+                for (TemplateBlockTable tbt : tt.getTemplateBlocks()) {
+                    Map<String, Object> mapTmp = new HashMap<>();
+                    Map<String, Object> mapBlock = new HashMap<>();
+                    mapBlock.put("id", tbt.getBlock().getId());
+                    mapBlock.put("name", tbt.getBlock().getName());
+                    mapTmp.put("block", mapBlock);
+                    mapTmp.put("blockPosition", tbt.getBlockPosition());
                     templateBlocks.add(mapTmp);
                 }
                 map.put("templateBlocks", templateBlocks);
-            }else{
+            } else {
                 map.put("templateBlocks", null);
             }
-            if(tt.getTemplateResources()!=null){
-                List<Map<String,Object>> templateResources = new ArrayList<>();
-                for(TemplateResourceTable trt:tt.getTemplateResources()){
-                    Map<String,Object> mapTmp = new HashMap<>();
-                    Map<String,Object> mapResource = new HashMap<>();
-                    mapResource.put("id",trt.getResource().getId());
-                    mapResource.put("name",trt.getResource().getName());
-                    mapTmp.put("resource",mapResource);
-                    mapTmp.put("top",trt.isTop());
-                    mapTmp.put("orderNum",trt.getOrderNum());
+            if (tt.getTemplateResources() != null) {
+                List<Map<String, Object>> templateResources = new ArrayList<>();
+                for (TemplateResourceTable trt : tt.getTemplateResources()) {
+                    Map<String, Object> mapTmp = new HashMap<>();
+                    Map<String, Object> mapResource = new HashMap<>();
+                    mapResource.put("id", trt.getResource().getId());
+                    mapResource.put("name", trt.getResource().getName());
+                    mapTmp.put("resource", mapResource);
+                    mapTmp.put("top", trt.isTop());
+                    mapTmp.put("orderNum", trt.getOrderNum());
                     templateResources.add(mapTmp);
                 }
                 map.put("templateResources", templateResources);
-            }else{
+            } else {
                 map.put("templateResources", null);
             }
             return map;
@@ -189,54 +205,54 @@ public class TemplateController {
             if (body.get("contentPosition") != null) {
                 templateTable.setContentPosition(body.get("contentPosition").toString());
             }
-            if (body.get("contentScript") != null ) {
+            if (body.get("contentScript") != null) {
                 templateTable.setContentScript(body.get("contentScript").toString());
             }
-            if (body.get("website") != null ) {
+            if (body.get("website") != null) {
                 templateTable.setWebsite(websiteTableService.get(Long.valueOf(body.get("website").toString())));
             }
 
-            if (body.get("templateBlocks") != null ) {
-                List<Map<String,Object>> templateBlocks = (List<Map<String,Object>>)body.get("templateBlocks");
-                if(templateBlocks.size()>0){
+            if (body.get("templateBlocks") != null) {
+                List<Map<String, Object>> templateBlocks = (List<Map<String, Object>>) body.get("templateBlocks");
+                if (templateBlocks.size() > 0) {
                     List<TemplateBlockTable> list = new ArrayList<>();
-                    for(Map map:templateBlocks){
+                    for (Map map : templateBlocks) {
                         TemplateBlockTable tbt = new TemplateBlockTable();
-                        Map mapBlock =(Map) map.get("block");
+                        Map mapBlock = (Map) map.get("block");
                         tbt.setBlock(blockTableService.get(Long.valueOf(mapBlock.get("id").toString())));
                         tbt.setTemplate(templateTable);
                         tbt.setBlockPosition(map.get("blockPosition").toString());
                         list.add(tbt);
                     }
                     templateTable.setTemplateBlocks(list);
-                }else{
+                } else {
                     templateTable.setTemplateBlocks(null);
                 }
-            }else{
+            } else {
                 templateTable.setTemplateBlocks(null);
             }
-            if (body.get("templateResources") != null ) {
-                List<Map<String,Object>> templateResources = (List<Map<String,Object>>)body.get("templateResources");
-                if(templateResources.size()>0){
+            if (body.get("templateResources") != null) {
+                List<Map<String, Object>> templateResources = (List<Map<String, Object>>) body.get("templateResources");
+                if (templateResources.size() > 0) {
                     List<TemplateResourceTable> list = new ArrayList<>();
-                    for(Map map:templateResources){
+                    for (Map map : templateResources) {
                         TemplateResourceTable trt = new TemplateResourceTable();
-                        Map mapResource =(Map) map.get("resource");
+                        Map mapResource = (Map) map.get("resource");
                         trt.setResource(resourceTableService.get(Long.valueOf(mapResource.get("id").toString())));
                         trt.setTemplate(templateTable);
-                        if(map.get("top")!=null&&((List)map.get("top")).size()>0){
+                        if (map.get("top") != null && ((List) map.get("top")).size() > 0) {
                             trt.setTop(true);
-                        }else{
+                        } else {
                             trt.setTop(false);
                         }
                         trt.setOrderNum(Integer.valueOf(map.get("orderNum").toString()));
                         list.add(trt);
                     }
                     templateTable.setTemplateResources(list);
-                }else{
+                } else {
                     templateTable.setTemplateResources(null);
                 }
-            }else{
+            } else {
                 templateTable.setTemplateResources(null);
             }
             this.templateTableService.save(templateTable);
@@ -263,53 +279,53 @@ public class TemplateController {
         if (body.get("contentPosition") != null) {
             templateTable.setContentPosition(body.get("contentPosition").toString());
         }
-        if (body.get("contentScript") != null ) {
+        if (body.get("contentScript") != null) {
             templateTable.setContentScript(body.get("contentScript").toString());
         }
-        if (body.get("website") != null ) {
+        if (body.get("website") != null) {
             templateTable.setWebsite(websiteTableService.get(Long.valueOf(body.get("website").toString())));
         }
-        if (body.get("templateBlocks") != null ) {
-            List<Map<String,Object>> templateBlocks = (List<Map<String,Object>>)body.get("templateBlocks");
-            if(templateBlocks.size()>0){
+        if (body.get("templateBlocks") != null) {
+            List<Map<String, Object>> templateBlocks = (List<Map<String, Object>>) body.get("templateBlocks");
+            if (templateBlocks.size() > 0) {
                 List<TemplateBlockTable> list = new ArrayList<>();
-                for(Map map:templateBlocks){
+                for (Map map : templateBlocks) {
                     TemplateBlockTable tbt = new TemplateBlockTable();
-                    Map mapBlock =(Map) map.get("block");
+                    Map mapBlock = (Map) map.get("block");
                     tbt.setBlock(blockTableService.get(Long.valueOf(mapBlock.get("id").toString())));
                     tbt.setTemplate(templateTable);
                     tbt.setBlockPosition(map.get("blockPosition").toString());
                     list.add(tbt);
                 }
                 templateTable.setTemplateBlocks(list);
-            }else{
+            } else {
                 templateTable.setTemplateBlocks(null);
             }
-        }else{
+        } else {
             templateTable.setTemplateBlocks(null);
         }
-        if (body.get("templateResources") != null ) {
-            List<Map<String,Object>> templateResources = (List<Map<String,Object>>)body.get("templateResources");
-            if(templateResources.size()>0){
+        if (body.get("templateResources") != null) {
+            List<Map<String, Object>> templateResources = (List<Map<String, Object>>) body.get("templateResources");
+            if (templateResources.size() > 0) {
                 List<TemplateResourceTable> list = new ArrayList<>();
-                for(Map map:templateResources){
+                for (Map map : templateResources) {
                     TemplateResourceTable trt = new TemplateResourceTable();
-                    Map mapResource =(Map) map.get("resource");
+                    Map mapResource = (Map) map.get("resource");
                     trt.setResource(resourceTableService.get(Long.valueOf(mapResource.get("id").toString())));
                     trt.setTemplate(templateTable);
-                    if(map.get("top")!=null&&((List)map.get("top")).size()>0){
+                    if (map.get("top") != null && ((List) map.get("top")).size() > 0) {
                         trt.setTop(true);
-                    }else{
+                    } else {
                         trt.setTop(false);
                     }
                     trt.setOrderNum(Integer.valueOf(map.get("orderNum").toString()));
                     list.add(trt);
                 }
                 templateTable.setTemplateResources(list);
-            }else{
+            } else {
                 templateTable.setTemplateResources(null);
             }
-        }else{
+        } else {
             templateTable.setTemplateResources(null);
         }
         this.templateTableService.save(templateTable);

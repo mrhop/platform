@@ -1,6 +1,7 @@
 package cn.hopever.platform.cms.web.controller;
 
 import cn.hopever.platform.cms.domain.FileLibraryTypeTable;
+import cn.hopever.platform.cms.domain.WebsiteTable;
 import cn.hopever.platform.cms.service.FileLibraryTypeTableService;
 import cn.hopever.platform.cms.service.TemplateTableService;
 import cn.hopever.platform.cms.service.WebsiteTableService;
@@ -48,12 +49,12 @@ public class FileLibraryTypeController {
         } else {
             pageRequest = new PageRequest(body.get("currentPage").asInt(), body.get("rowSize").asInt(), Sort.Direction.fromString(body.get("sort").get("sortDirection").textValue()), body.get("sort").get("sortName").textValue());
         }
-        Map<String, Object> filterMap = null;
+        Map<String, Object> filterMap = new HashMap<>();
         if (body.get("filters") != null && !body.get("filters").isNull()) {
             filterMap = JacksonUtil.mapper.convertValue(body.get("filters"), Map.class);
         }
-        filterMap.put("fileLibraryType", filterMap.get("fileLibraryType") != null ? fileLibraryTypeTableService.get(Long.valueOf(filterMap.get("fileLibraryType").toString())) : null);
         filterMap.put("website", filterMap.get("website") != null ? websiteTableService.get(Long.valueOf(filterMap.get("website").toString())) : null);
+        filterMap.put("template", filterMap.get("template") != null ? templateTableService.get(Long.valueOf(filterMap.get("template").toString())) : null);
 
         list = fileLibraryTypeTableService.getList(pageRequest, filterMap);
 
@@ -89,6 +90,25 @@ public class FileLibraryTypeController {
             map.put("currentPage", 0);
         }
         return map;
+    }
+
+    @PreAuthorize("#oauth2.hasScope('cms_admin_client')")
+    @RequestMapping(value = "/options/bywebsite", method = {RequestMethod.GET})
+    public List getList(@RequestParam Long websiteId, Principal principal) {
+        List<Map> listOptions = null;
+        List<WebsiteTable> listWebsite = new ArrayList<>();
+        listWebsite.add(websiteTableService.get(websiteId));
+        List<FileLibraryTypeTable> list = fileLibraryTypeTableService.getListByWebsites(listWebsite);
+        if (list != null && list.size() > 0) {
+            listOptions = new ArrayList<>();
+            for (FileLibraryTypeTable fltt : list) {
+                Map mapOption = new HashMap<>();
+                mapOption.put("label", fltt.getTitle());
+                mapOption.put("value", fltt.getId());
+                listOptions.add(mapOption);
+            }
+        }
+        return listOptions;
     }
 
     @PreAuthorize("#oauth2.hasScope('cms_admin_client')")

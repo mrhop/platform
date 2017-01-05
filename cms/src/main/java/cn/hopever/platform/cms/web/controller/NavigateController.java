@@ -1,6 +1,7 @@
 package cn.hopever.platform.cms.web.controller;
 
 import cn.hopever.platform.cms.domain.NavigateTable;
+import cn.hopever.platform.cms.domain.WebsiteTable;
 import cn.hopever.platform.cms.service.ArticleTableService;
 import cn.hopever.platform.cms.service.NavigateTableService;
 import cn.hopever.platform.cms.service.NewsTypeTableService;
@@ -46,20 +47,23 @@ public class NavigateController {
     public Map getList(@RequestBody JsonNode body, Principal principal) {
         Map<String, Object> map = new HashMap<>();
         List<HashMap<String, Object>> listReturn;
-        Page<NavigateTable> list;
+        Page<NavigateTable> list = null;
         PageRequest pageRequest;
         if (body.get("sort") == null || body.get("sort").isNull()) {
             pageRequest = new PageRequest(body.get("currentPage").asInt(), body.get("rowSize").asInt(), Sort.Direction.ASC, "id");
         } else {
             pageRequest = new PageRequest(body.get("currentPage").asInt(), body.get("rowSize").asInt(), Sort.Direction.fromString(body.get("sort").get("sortDirection").textValue()), body.get("sort").get("sortName").textValue());
         }
-        Map<String, Object> filterMap = null;
+        Map<String, Object> filterMap = new HashMap<>();
         if (body.get("filters") != null && !body.get("filters").isNull()) {
             filterMap = JacksonUtil.mapper.convertValue(body.get("filters"), Map.class);
         }
-        filterMap.put("website", websiteTableService.getWebsiteAsFilter(principal, filterMap.get("website") != null ? filterMap.get("website").toString() : null));
-        filterMap.put("parent",filterMap.get("parent") != null?navigateTableService.get(Long.valueOf(filterMap.get("parent").toString())):null);
-        list = navigateTableService.getList(pageRequest, filterMap);
+        Long websiteId = filterMap.get("website") != null ? Long.valueOf(filterMap.get("website").toString()) : null;
+        if (websiteId != null) {
+            filterMap.put("website", websiteTableService.getWebsiteAsFilter(principal, filterMap.get("website") != null ? filterMap.get("website").toString() : null));
+            filterMap.put("parent", filterMap.get("parent") != null ? navigateTableService.get(Long.valueOf(filterMap.get("parent").toString())) : null);
+            list = navigateTableService.getList(pageRequest, filterMap);
+        }
         if (list != null && list.iterator().hasNext()) {
             listReturn = new ArrayList<>();
             for (NavigateTable nt : list) {
@@ -68,6 +72,11 @@ public class NavigateController {
                 List<Object> listTmp = new ArrayList<>();
                 listTmp.add("");
                 listTmp.add(nt.getTitle());
+                if (nt.getWebsite() != null) {
+                    listTmp.add(nt.getWebsite().getTitle());
+                } else {
+                    listTmp.add(null);
+                }
                 if (nt.getParent() != null) {
                     listTmp.add(nt.getParent().getTitle());
                 } else {
@@ -75,11 +84,6 @@ public class NavigateController {
                 }
                 listTmp.add(nt.getLevel());
                 listTmp.add(nt.getType());
-                if (nt.getWebsite() != null) {
-                    listTmp.add(nt.getWebsite().getTitle());
-                } else {
-                    listTmp.add(null);
-                }
                 mapTemp.put("value", listTmp);
                 listReturn.add(mapTemp);
             }
@@ -94,6 +98,28 @@ public class NavigateController {
             map.put("currentPage", 0);
         }
         return map;
+    }
+
+    @PreAuthorize("#oauth2.hasScope('cms_admin_client')")
+    @RequestMapping(value = "/parent/options", method = {RequestMethod.GET})
+    public List<Map> getListByWebsite(@RequestParam Long websiteId, Principal principal) {
+        WebsiteTable wt = websiteTableService.get(websiteId);
+        List<NavigateTable> list = navigateTableService.getListByWebsite(wt);
+        return this.getChildren(list);
+    }
+
+    private List<Map> getChildren(List<NavigateTable> list) {
+        List<Map> listReturn = new ArrayList<>();
+        for (NavigateTable navigateTable : list) {
+            Map map = new HashMap<>();
+            map.put("value", navigateTable.getId());
+            map.put("label", navigateTable.getTitle());
+            if (navigateTable.getChildren() != null && navigateTable.getChildren().size() > 0) {
+                map.put("children", this.getChildren(navigateTable.getChildren()));
+            }
+            listReturn.add(map);
+        }
+        return listReturn;
     }
 
     @PreAuthorize("#oauth2.hasScope('cms_admin_client')")
@@ -119,26 +145,26 @@ public class NavigateController {
             map.put("type", nt.getType());
             if (nt.getArticle() != null) {
                 HashMap<String, Object> mapArticle = new HashMap<>();
-                mapArticle.put("id",nt.getArticle().getId());
-                mapArticle.put("title",nt.getArticle().getTitle());
+                mapArticle.put("id", nt.getArticle().getId());
+                mapArticle.put("title", nt.getArticle().getTitle());
                 map.put("article", mapArticle);
             } else {
                 map.put("article", null);
             }
             if (nt.getNewsType() != null) {
                 HashMap<String, Object> mapNewsType = new HashMap<>();
-                mapNewsType.put("id",nt.getNewsType().getId());
-                mapNewsType.put("title",nt.getNewsType().getTitle());
+                mapNewsType.put("id", nt.getNewsType().getId());
+                mapNewsType.put("title", nt.getNewsType().getTitle());
                 map.put("newsType", mapNewsType);
             } else {
                 map.put("newsType", null);
             }
-            if(nt.getWebsite()!=null){
+            if (nt.getWebsite() != null) {
                 HashMap<String, Object> mapWebsite = new HashMap<>();
-                mapWebsite.put("id",nt.getWebsite().getId());
-                mapWebsite.put("title",nt.getWebsite().getTitle());
+                mapWebsite.put("id", nt.getWebsite().getId());
+                mapWebsite.put("title", nt.getWebsite().getTitle());
                 map.put("website", mapWebsite);
-            }else{
+            } else {
                 map.put("website", null);
             }
             return map;
@@ -148,7 +174,7 @@ public class NavigateController {
 
     @PreAuthorize("#oauth2.hasScope('cms_admin_client')")
     @RequestMapping(value = "/update", method = {RequestMethod.POST})
-    public Map updateNavigate(@RequestBody Map<String,Object> body, Principal principal) {
+    public Map updateNavigate(@RequestBody Map<String, Object> body, Principal principal) {
         if (websiteTableService.validatePermission(principal, navigateTableService.get(Long.valueOf(body.get("id").toString())).getWebsite())) {
             //do update
             long id = Long.valueOf(body.get("id").toString());
@@ -181,7 +207,7 @@ public class NavigateController {
 
     @PreAuthorize("#oauth2.hasScope('cms_admin_client')")
     @RequestMapping(value = "/save", method = {RequestMethod.POST})
-    public Map saveNavigate(@RequestBody Map<String,Object> body, Principal principal) {
+    public Map saveNavigate(@RequestBody Map<String, Object> body, Principal principal) {
         NavigateTable navigateTable = new NavigateTable();
         if (body.get("title") != null) {
             navigateTable.setTitle(body.get("title").toString());

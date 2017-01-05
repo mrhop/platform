@@ -1,6 +1,7 @@
 package cn.hopever.platform.cms.service.impl;
 
 import cn.hopever.platform.cms.domain.TemplateTable;
+import cn.hopever.platform.cms.domain.WebsiteTable;
 import cn.hopever.platform.cms.repository.CustomTemplateTableRepository;
 import cn.hopever.platform.cms.repository.TemplateTableRepository;
 import cn.hopever.platform.cms.service.TemplateTableService;
@@ -12,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Map;
 
 @Service("templateTableService")
@@ -43,5 +45,10 @@ public class TemplateTableServiceImpl implements TemplateTableService {
     @Override
     public TemplateTable get(Long id) {
         return templateTableRepository.findOne(id);
+    }
+
+    @Override
+    public List<TemplateTable> getListByWebsiteAndNull(WebsiteTable websiteTable) {
+        return templateTableRepository.findByWebsiteOrWebsiteIsNull(websiteTable);
     }
 }
