@@ -103,6 +103,15 @@ public class BlockController {
             Map<String, Object> map = new HashMap<>();
             map.put("id", bt.getId());
             map.put("name", bt.getName());
+            if (bt.getWebsite() != null) {
+                HashMap<String, Object> mapWebsite = new HashMap<>();
+                mapWebsite.put("id", bt.getWebsite().getId());
+                mapWebsite.put("title", bt.getWebsite().getTitle());
+                map.put("website", mapWebsite);
+            } else {
+                map.put("website", null);
+            }
+            map.put("type", bt.getType());
             map.put("content", bt.getContent());
             map.put("dataUrl", bt.getDataUrl());
             map.put("script", bt.getScript());
@@ -132,14 +141,7 @@ public class BlockController {
                 map.put("fileLibraryType", null);
             }
             map.put("fileLibraryNumber", bt.getFileLibraryNumber());
-            if (bt.getWebsite() != null) {
-                HashMap<String, Object> mapWebsite = new HashMap<>();
-                mapWebsite.put("id", bt.getWebsite().getId());
-                mapWebsite.put("title", bt.getWebsite().getTitle());
-                map.put("website", mapWebsite);
-            } else {
-                map.put("website", null);
-            }
+
             return map;
         }
         return null;

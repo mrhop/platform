@@ -327,6 +327,24 @@ public class UserController {
         return null;
     }
 
+    @PreAuthorize("#oauth2.hasScope('internal_client') and hasRole('ROLE_super_admin')")
+    @RequestMapping(value = "/list/relatedusers/options", method = {RequestMethod.GET})
+    public List getListOptionsByClients(@RequestParam String clientId) {
+        List listOptions = null;
+        Long selected = null;
+        List<UserTable> list = userTableService.getListByClientId(clientId);
+        if (list != null && list.size() > 0) {
+            listOptions = new ArrayList<>();
+            for (UserTable ut : list) {
+                Map mapOption = new HashMap<>();
+                mapOption.put("label", ut.getUsername());
+                mapOption.put("value", ut.getUsername());
+                listOptions.add(mapOption);
+            }
+        }
+        return list;
+    }
+
     private static boolean validateUserOperation(UserTable ut1, UserTable ut2) {
         if (ut1.getAuthorities().get(0).getAuthority().equals("ROLE_super_admin")) {
             return true;

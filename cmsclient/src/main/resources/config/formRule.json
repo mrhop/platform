@@ -1,2 +1,1901 @@
 {
+  "websiteupdate": {
+    "structure": [
+      {
+        "name": "title",
+        "label": "标题",
+        "type": "text",
+        "placeholder": "标题",
+        "required": true
+      },
+      {
+        "name": "keywords",
+        "label": "关键字",
+        "type": "textarea",
+        "placeholder": "关键字",
+        "required": true
+      },
+      {
+        "name": "description",
+        "label": "详细描述",
+        "type": "textarea",
+        "placeholder": "详细描述",
+        "required": true
+      },
+      {
+        "name": "enabled",
+        "label": "是否激活",
+        "type": "checkbox",
+        "dataType": "boolean",
+        "items": [
+          {
+            "label": "是",
+            "value": true
+          }
+        ]
+      },{
+        "name": "relatedUsernames",
+        "label": "关联用户",
+        "type": "checkbox",
+        "dataType": "number"
+      },
+      {
+        "name": "resourceAddress",
+        "label": "资源地址",
+        "type": "text",
+        "placeholder": "资源地址",
+        "required": true
+      },
+      {
+        "name": "resourceAddress",
+        "label": "资源url",
+        "type": "text",
+        "placeholder": "资源url",
+        "required": true
+      },
+      {
+        "name": "id",
+        "type": "hidden",
+        "available": false
+      }
+    ],
+    "submit": {
+      "label": "保存"
+    },
+    "reset": {
+      "label": "重置"
+    },
+    "actions": [
+      {
+        "extraClassName": "btn-default",
+        "action": "backup",
+        "label": "返回"
+      }
+    ]
+  },
+  "websiteadd": {
+    "structure": [
+      {
+        "name": "title",
+        "label": "标题",
+        "type": "text",
+        "placeholder": "标题",
+        "required": true
+      },
+      {
+        "name": "keywords",
+        "label": "关键字",
+        "type": "textarea",
+        "placeholder": "关键字",
+        "required": true
+      },
+      {
+        "name": "description",
+        "label": "详细描述",
+        "type": "textarea",
+        "placeholder": "详细描述",
+        "required": true
+      },
+      {
+        "name": "enabled",
+        "label": "是否激活",
+        "type": "checkbox",
+        "dataType": "boolean",
+        "items": [
+          {
+            "label": "是",
+            "value": true
+          }
+        ]
+      },{
+        "name": "relatedUsernames",
+        "label": "关联用户",
+        "type": "checkbox",
+        "dataType": "number"
+      },
+      {
+        "name": "resourceAddress",
+        "label": "资源地址",
+        "type": "text",
+        "placeholder": "资源地址",
+        "required": true
+      },
+      {
+        "name": "resourceAddress",
+        "label": "资源url",
+        "type": "text",
+        "placeholder": "资源url",
+        "required": true
+      },
+      {
+        "name": "id",
+        "type": "hidden",
+        "available": false
+      }
+    ],
+    "submit": {
+      "label": "保存"
+    },
+    "reset": {
+      "label": "重置"
+    }
+  },
+  "resourceupdate": {
+    "structure": [
+      {
+        "name": "name",
+        "label": "名称",
+        "type": "text",
+        "placeholder": "名称",
+        "required": true,
+        "readonly": true
+      },
+      {
+        "name": "url",
+        "label": "资源地址",
+        "type": "text",
+        "placeholder": "资源地址",
+        "readonly": true,
+        "required": true
+      },
+      {
+        "name": "type",
+        "label": "资源类型",
+        "type": "text",
+        "placeholder": "资源类型",
+        "readonly": true,
+        "required": true
+      },
+      {
+        "name": "uploadfile",
+        "label": "上传文件",
+        "type": "file",
+        "placeholder": "上传文件",
+        "validateRules": [
+          {
+            "name": "custom_validate",
+            "validateRegex": "^.*\\.(css|js)$",
+            "errorMsg": "请选择图片格式文件"
+          }
+        ]
+      },
+      {
+        "name": "website",
+        "label": "所属网站",
+        "type": "text",
+        "readonly": true
+      },
+      {
+        "name": "id",
+        "type": "hidden",
+        "available": false
+      }
+    ],
+    "submit": {
+      "label": "保存"
+    },
+    "reset": {
+      "label": "重置"
+    },
+    "actions": [
+      {
+        "extraClassName": "btn-default",
+        "action": "backup",
+        "label": "返回"
+      }
+    ]
+  },
+  "resourceadd": {
+    "structure": [
+      {
+        "name": "name",
+        "label": "名称",
+        "type": "text",
+        "placeholder": "名称",
+        "required": true,
+        "validateRules": [
+          {
+            "name": "custom_validate",
+            "validateRegex": "^(?![a-zA-Z]+$)(?!\\d+$)(?!_+$)[a-zA-Z\\d_]{4,50}$",
+            "errorMsg": "至少包含数字，字母以及_中任意两种,并在4-50字符之间"
+          }
+        ]
+      },
+      {
+        "name": "type",
+        "label": "资源类型",
+        "type": "select",
+        "required": true,
+        "validateRules": [
+          {
+            "name": "REQUIRED_VALIDATE",
+            "errorMsg": "不能为空"
+          }
+        ]
+      },
+      {
+        "name": "uploadfile",
+        "label": "上传文件",
+        "type": "file",
+        "placeholder": "上传文件",
+        "required": true,
+        "validateRules": [
+          {
+            "name": "custom_validate",
+            "validateRegex": "^.*\\.(css|js)$",
+            "errorMsg": "请选择css或js文件"
+          }
+        ]
+      },
+      {
+        "name": "website",
+        "label": "所属网站",
+        "type": "select",
+        "dataType": "number"
+      },
+      {
+        "name": "id",
+        "type": "hidden",
+        "available": false
+      }
+    ],
+    "submit": {
+      "label": "保存"
+    },
+    "reset": {
+      "label": "重置"
+    }
+  },
+  "templateupdate": {
+    "structure": [
+      {
+        "name": "name",
+        "label": "名称",
+        "type": "text",
+        "placeholder": "名称",
+        "required": true
+      },
+      {
+        "name": "description",
+        "label": "模板描述",
+        "type": "text",
+        "placeholder": "模板描述"
+      },
+      {
+        "name": "layoutType",
+        "label": "布局类型",
+        "type": "select",
+        "required": true,
+        "validateRules": [
+          {
+            "name": "REQUIRED_VALIDATE",
+            "errorMsg": "不能为空"
+          }
+        ]
+      },
+      {
+        "name": "layoutScale",
+        "label": "布局范围",
+        "type": "select",
+        "required": true,
+        "validateRules": [
+          {
+            "name": "REQUIRED_VALIDATE",
+            "errorMsg": "不能为空"
+          }
+        ]
+      },
+      {
+        "name": "contentPosition",
+        "label": "内容位置",
+        "type": "text",
+        "required": true
+      },
+      {
+        "name": "contentScript",
+        "label": "内容脚本",
+        "type": "textarea"
+      },
+      {
+        "name": "website",
+        "label": "所属网站",
+        "type": "select",
+        "required": true,
+        "updatable": true,
+        "dataType": "number"
+      },
+      {
+        "name": "templateBlocks",
+        "label": "包含模块",
+        "type": "checkbox",
+        "dataType": "number"
+      },
+      {
+        "name": "templateResources",
+        "label": "包含资源",
+        "type": "checkbox",
+        "dataType": "number"
+      },
+      {
+        "name": "id",
+        "type": "hidden",
+        "available": false
+      }
+    ],
+    "submit": {
+      "label": "保存"
+    },
+    "reset": {
+      "label": "重置"
+    },
+    "actions": [
+      {
+        "extraClassName": "btn-default",
+        "action": "backup",
+        "label": "返回"
+      }
+    ]
+  },
+  "templateadd": {
+    "structure": [
+      {
+        "name": "name",
+        "label": "名称",
+        "type": "text",
+        "placeholder": "名称",
+        "required": true
+      },
+      {
+        "name": "description",
+        "label": "模板描述",
+        "type": "text",
+        "placeholder": "模板描述"
+      },
+      {
+        "name": "layoutType",
+        "label": "布局类型",
+        "type": "select",
+        "required": true,
+        "validateRules": [
+          {
+            "name": "REQUIRED_VALIDATE",
+            "errorMsg": "不能为空"
+          }
+        ]
+      },
+      {
+        "name": "layoutScale",
+        "label": "布局范围",
+        "type": "select",
+        "required": true,
+        "validateRules": [
+          {
+            "name": "REQUIRED_VALIDATE",
+            "errorMsg": "不能为空"
+          }
+        ]
+      },
+      {
+        "name": "contentPosition",
+        "label": "内容位置",
+        "type": "text",
+        "required": true
+      },
+      {
+        "name": "contentScript",
+        "label": "内容脚本",
+        "type": "textarea"
+      },
+      {
+        "name": "website",
+        "label": "所属网站",
+        "required": true,
+        "updatable": true,
+        "type": "select",
+        "dataType": "number"
+      },
+      {
+        "name": "templateBlocks",
+        "label": "包含模块",
+        "type": "checkbox",
+        "dataType": "number"
+      },
+      {
+        "name": "templateResources",
+        "label": "包含资源",
+        "type": "checkbox",
+        "dataType": "number"
+      },
+      {
+        "name": "id",
+        "type": "hidden",
+        "available": false
+      }
+    ],
+    "submit": {
+      "label": "保存"
+    },
+    "reset": {
+      "label": "重置"
+    }
+  },
+  "blockupdate": {
+    "structure": [
+      {
+        "name": "name",
+        "label": "名称",
+        "type": "text",
+        "placeholder": "名称",
+        "required": true,
+        "validateRules": [
+          {
+            "name": "REQUIRED_VALIDATE",
+            "errorMsg": "不能为空"
+          }
+        ]
+      },
+      {
+        "name": "website",
+        "label": "所属网站",
+        "type": "select",
+        "dataType": "number",
+        "required": true,
+        "updatable": true
+      },
+      {
+        "name": "type",
+        "label": "模块类型",
+        "type": "select",
+        "required": true,
+        "updatable": true,
+        "validateRules": [
+          {
+            "name": "REQUIRED_VALIDATE",
+            "errorMsg": "不能为空"
+          }
+        ]
+      },
+      {
+        "name": "content",
+        "label": "模块内容描述",
+        "type": "textarea",
+        "placeholder": "模块内容描述",
+        "available": false,
+        "required": true,
+        "validateRules": [
+          {
+            "name": "REQUIRED_VALIDATE",
+            "errorMsg": "不能为空"
+          }
+        ]
+      },
+      {
+        "name": "dataUrl",
+        "label": "数据链接",
+        "type": "text",
+        "placeholder": "数据链接",
+        "available": false,
+        "required": true,
+        "validateRules": [
+          {
+            "name": "REQUIRED_VALIDATE",
+            "errorMsg": "不能为空"
+          }
+        ]
+      },
+      {
+        "name": "script",
+        "label": "自定义脚本",
+        "type": "textarea",
+        "placeholder": "自定义脚本",
+        "available": false,
+        "required": true,
+        "validateRules": [
+          {
+            "name": "REQUIRED_VALIDATE",
+            "errorMsg": "不能为空"
+          }
+        ]
+      },
+      {
+        "name": "newsType",
+        "label": "新闻类型",
+        "type": "select",
+        "placeholder": "新闻类型",
+        "available": false,
+        "required": true,
+        "validateRules": [
+          {
+            "name": "REQUIRED_VALIDATE",
+            "errorMsg": "不能为空"
+          }
+        ]
+      },
+      {
+        "name": "newsNumber",
+        "label": "新闻数目",
+        "type": "number",
+        "placeholder": "新闻数目",
+        "available": false,
+        "required": true,
+        "validateRules": [
+          {
+            "name": "REQUIRED_VALIDATE",
+            "errorMsg": "不能为空"
+          }
+        ]
+      },
+      {
+        "name": "poll",
+        "label": "投票",
+        "type": "select",
+        "placeholder": "投票",
+        "available": false,
+        "required": true,
+        "validateRules": [
+          {
+            "name": "REQUIRED_VALIDATE",
+            "errorMsg": "不能为空"
+          }
+        ]
+      },
+      {
+        "name": "fileLibraryType",
+        "label": "媒体库",
+        "type": "select",
+        "placeholder": "媒体库",
+        "available": false,
+        "required": true,
+        "validateRules": [
+          {
+            "name": "REQUIRED_VALIDATE",
+            "errorMsg": "不能为空"
+          }
+        ]
+      },
+      {
+        "name": "fileLibraryNumber",
+        "label": "媒体文件数",
+        "type": "number",
+        "placeholder": "媒体文件数",
+        "available": false,
+        "required": true,
+        "validateRules": [
+          {
+            "name": "REQUIRED_VALIDATE",
+            "errorMsg": "不能为空"
+          }
+        ]
+      },
+      {
+        "name": "id",
+        "type": "hidden",
+        "available": false
+      }
+    ],
+    "submit": {
+      "label": "保存"
+    },
+    "reset": {
+      "label": "重置"
+    },
+    "actions": [
+      {
+        "extraClassName": "btn-default",
+        "action": "backup",
+        "label": "返回"
+      }
+    ]
+  },
+  "blockadd": {
+    "structure": [
+      {
+        "name": "name",
+        "label": "名称",
+        "type": "text",
+        "placeholder": "名称",
+        "required": true,
+        "validateRules": [
+          {
+            "name": "REQUIRED_VALIDATE",
+            "errorMsg": "不能为空"
+          }
+        ]
+      },
+      {
+        "name": "website",
+        "label": "所属网站",
+        "type": "select",
+        "dataType": "number",
+        "required": true,
+        "updatable": true
+      },
+      {
+        "name": "type",
+        "label": "模块类型",
+        "type": "select",
+        "updatable": true,
+        "required": true,
+        "validateRules": [
+          {
+            "name": "REQUIRED_VALIDATE",
+            "errorMsg": "不能为空"
+          }
+        ]
+      },
+      {
+        "name": "content",
+        "label": "模块内容描述",
+        "type": "textarea",
+        "placeholder": "模块内容描述",
+        "available": false,
+        "required": true,
+        "validateRules": [
+          {
+            "name": "REQUIRED_VALIDATE",
+            "errorMsg": "不能为空"
+          }
+        ]
+      },
+      {
+        "name": "dataUrl",
+        "label": "数据链接",
+        "type": "text",
+        "placeholder": "数据链接",
+        "available": false,
+        "required": true,
+        "validateRules": [
+          {
+            "name": "REQUIRED_VALIDATE",
+            "errorMsg": "不能为空"
+          }
+        ]
+      },
+      {
+        "name": "script",
+        "label": "自定义脚本",
+        "type": "textarea",
+        "placeholder": "自定义脚本",
+        "available": false,
+        "required": true,
+        "validateRules": [
+          {
+            "name": "REQUIRED_VALIDATE",
+            "errorMsg": "不能为空"
+          }
+        ]
+      },
+      {
+        "name": "newsType",
+        "label": "新闻类型",
+        "type": "select",
+        "placeholder": "新闻类型",
+        "available": false,
+        "required": true,
+        "validateRules": [
+          {
+            "name": "REQUIRED_VALIDATE",
+            "errorMsg": "不能为空"
+          }
+        ]
+      },
+      {
+        "name": "newsNumber",
+        "label": "新闻数目",
+        "type": "number",
+        "placeholder": "新闻数目",
+        "available": false,
+        "required": true,
+        "validateRules": [
+          {
+            "name": "REQUIRED_VALIDATE",
+            "errorMsg": "不能为空"
+          }
+        ]
+      },
+      {
+        "name": "poll",
+        "label": "投票",
+        "type": "select",
+        "placeholder": "投票",
+        "available": false,
+        "required": true,
+        "validateRules": [
+          {
+            "name": "REQUIRED_VALIDATE",
+            "errorMsg": "不能为空"
+          }
+        ]
+      },
+      {
+        "name": "fileLibraryType",
+        "label": "媒体库",
+        "type": "select",
+        "placeholder": "媒体库",
+        "available": false,
+        "required": true,
+        "validateRules": [
+          {
+            "name": "REQUIRED_VALIDATE",
+            "errorMsg": "不能为空"
+          }
+        ]
+      },
+      {
+        "name": "fileLibraryNumber",
+        "label": "媒体文件数",
+        "type": "number",
+        "placeholder": "媒体文件数",
+        "available": false,
+        "required": true,
+        "validateRules": [
+          {
+            "name": "REQUIRED_VALIDATE",
+            "errorMsg": "不能为空"
+          }
+        ]
+      },
+      {
+        "name": "id",
+        "type": "hidden",
+        "available": false
+      }
+    ],
+    "submit": {
+      "label": "保存"
+    },
+    "reset": {
+      "label": "重置"
+    }
+  },
+  "newsupdate": {
+    "structure": [
+      {
+        "name": "title",
+        "label": "标题",
+        "type": "text",
+        "placeholder": "标题",
+        "required": true,
+        "validateRules": [
+          {
+            "name": "REQUIRED_VALIDATE",
+            "errorMsg": "不能为空"
+          }
+        ]
+      },{
+        "name": "subtitle",
+        "label": "副标题",
+        "type": "text",
+        "placeholder": "副标题",
+        "required": true
+      },
+      {
+        "name": "website",
+        "label": "所属网站",
+        "type": "select",
+        "dataType": "number",
+        "required": true,
+        "updatable": true
+      },
+      {
+        "name": "newsType",
+        "label": "新闻类型",
+        "type": "select",
+        "required": true,
+        "validateRules": [
+          {
+            "name": "REQUIRED_VALIDATE",
+            "errorMsg": "不能为空"
+          }
+        ]
+      },
+      {
+        "name": "clickTimes",
+        "label": "点击次数",
+        "type": "number",
+        "placeholder": "点击次数",
+        "required": true,
+        "readonly": true,
+        "validateRules": [
+          {
+            "name": "REQUIRED_VALIDATE",
+            "errorMsg": "不能为空"
+          }
+        ]
+      },
+      {
+        "name": "isPublished",
+        "label": "已发布",
+        "type": "checkbox",
+        "updatable": true,
+        "dataType": "boolean",
+        "items": [
+          {
+            "label": "是",
+            "value": true
+          }
+        ]
+      },
+      {
+        "name": "publishDate",
+        "label": "发布时间",
+        "available": false,
+        "required": true,
+        "type": "date",
+        "placeholder": "发布时间",
+        "dateFormat": "YYYY-MM-DD"
+      },
+      {
+        "name": "id",
+        "type": "hidden",
+        "available": false
+      }
+    ],
+    "submit": {
+      "label": "保存"
+    },
+    "reset": {
+      "label": "重置"
+    },
+    "actions": [
+      {
+        "extraClassName": "btn-default",
+        "action": "backup",
+        "label": "返回"
+      }
+    ]
+  },
+  "newsadd": {
+    "structure": [
+      {
+        "name": "title",
+        "label": "标题",
+        "type": "text",
+        "placeholder": "标题",
+        "required": true,
+        "validateRules": [
+          {
+            "name": "REQUIRED_VALIDATE",
+            "errorMsg": "不能为空"
+          }
+        ]
+      },{
+        "name": "subtitle",
+        "label": "副标题",
+        "type": "text",
+        "placeholder": "副标题",
+        "required": true
+      },
+      {
+        "name": "website",
+        "label": "所属网站",
+        "type": "select",
+        "dataType": "number",
+        "required": true,
+        "updatable": true
+      },
+      {
+        "name": "newsType",
+        "label": "新闻类型",
+        "type": "select",
+        "required": true,
+        "validateRules": [
+          {
+            "name": "REQUIRED_VALIDATE",
+            "errorMsg": "不能为空"
+          }
+        ]
+      },
+      {
+        "name": "clickTimes",
+        "label": "点击次数",
+        "type": "number",
+        "placeholder": "点击次数",
+        "required": true,
+        "readonly": true,
+        "validateRules": [
+          {
+            "name": "REQUIRED_VALIDATE",
+            "errorMsg": "不能为空"
+          }
+        ]
+      },
+      {
+        "name": "isPublished",
+        "label": "已发布",
+        "type": "checkbox",
+        "updatable": true,
+        "dataType": "boolean",
+        "items": [
+          {
+            "label": "是",
+            "value": true
+          }
+        ]
+      },
+      {
+        "name": "publishDate",
+        "label": "发布时间",
+        "available": false,
+        "required": true,
+        "type": "date",
+        "placeholder": "发布时间",
+        "dateFormat": "YYYY-MM-DD"
+      },
+      {
+        "name": "id",
+        "type": "hidden",
+        "available": false
+      }
+    ],
+    "submit": {
+      "label": "保存"
+    },
+    "reset": {
+      "label": "重置"
+    }
+  },
+  "newstypeupdate": {
+    "structure": [
+      {
+        "name": "title",
+        "label": "标题",
+        "type": "text",
+        "placeholder": "标题",
+        "required": true,
+        "validateRules": [
+          {
+            "name": "REQUIRED_VALIDATE",
+            "errorMsg": "不能为空"
+          }
+        ]
+      },
+      {
+        "name": "website",
+        "label": "所属网站",
+        "type": "select",
+        "required": true,
+        "updatable": true,
+        "dataType": "number"
+      },
+      {
+        "name": "newsListTemplate",
+        "label": "新闻列表模板",
+        "type": "select",
+        "required": true,
+        "validateRules": [
+          {
+            "name": "REQUIRED_VALIDATE",
+            "errorMsg": "不能为空"
+          }
+        ]
+      },
+      {
+        "name": "newsTemplate",
+        "label": "新闻模板",
+        "type": "select",
+        "required": true,
+        "validateRules": [
+          {
+            "name": "REQUIRED_VALIDATE",
+            "errorMsg": "不能为空"
+          }
+        ]
+      },
+      {
+        "name": "id",
+        "type": "hidden",
+        "available": false
+      }
+    ],
+    "submit": {
+      "label": "保存"
+    },
+    "reset": {
+      "label": "重置"
+    },
+    "actions": [
+      {
+        "extraClassName": "btn-default",
+        "action": "backup",
+        "label": "返回"
+      }
+    ]
+  },
+  "newstypeadd": {
+    "structure": [
+      {
+        "name": "title",
+        "label": "标题",
+        "type": "text",
+        "placeholder": "标题",
+        "required": true,
+        "validateRules": [
+          {
+            "name": "REQUIRED_VALIDATE",
+            "errorMsg": "不能为空"
+          }
+        ]
+      },
+      {
+        "name": "website",
+        "label": "所属网站",
+        "type": "select",
+        "required": true,
+        "updatable": true,
+        "dataType": "number"
+      },
+      {
+        "name": "newsListTemplate",
+        "label": "新闻列表模板",
+        "type": "select",
+        "required": true,
+        "validateRules": [
+          {
+            "name": "REQUIRED_VALIDATE",
+            "errorMsg": "不能为空"
+          }
+        ]
+      },
+      {
+        "name": "newsTemplate",
+        "label": "新闻模板",
+        "type": "select",
+        "required": true,
+        "validateRules": [
+          {
+            "name": "REQUIRED_VALIDATE",
+            "errorMsg": "不能为空"
+          }
+        ]
+      },
+      {
+        "name": "id",
+        "type": "hidden",
+        "available": false
+      }
+    ],
+    "submit": {
+      "label": "保存"
+    },
+    "reset": {
+      "label": "重置"
+    }
+  },
+  "pollupdate": {
+    "structure": [
+      {
+        "name": "title",
+        "label": "标题",
+        "type": "text",
+        "placeholder": "标题",
+        "required": true,
+        "validateRules": [
+          {
+            "name": "REQUIRED_VALIDATE",
+            "errorMsg": "不能为空"
+          }
+        ]
+      },
+      {
+        "name": "website",
+        "label": "所属网站",
+        "type": "select",
+        "required": true,
+        "dataType": "number"
+      },
+      {
+        "name": "id",
+        "type": "hidden",
+        "available": false
+      }
+    ],
+    "submit": {
+      "label": "保存"
+    },
+    "reset": {
+      "label": "重置"
+    },
+    "actions": [
+      {
+        "extraClassName": "btn-default",
+        "action": "backup",
+        "label": "返回"
+      }
+    ]
+  },
+  "polladd": {
+    "structure": [
+      {
+        "name": "title",
+        "label": "标题",
+        "type": "text",
+        "placeholder": "标题",
+        "required": true,
+        "validateRules": [
+          {
+            "name": "REQUIRED_VALIDATE",
+            "errorMsg": "不能为空"
+          }
+        ]
+      },
+      {
+        "name": "website",
+        "label": "所属网站",
+        "type": "select",
+        "required": true,
+        "dataType": "number"
+      },
+      {
+        "name": "id",
+        "type": "hidden",
+        "available": false
+      }
+    ],
+    "submit": {
+      "label": "保存"
+    },
+    "reset": {
+      "label": "重置"
+    }
+  },
+  "polloptionupdate": {
+    "structure": [
+      {
+        "name": "title",
+        "label": "标题",
+        "type": "text",
+        "placeholder": "标题",
+        "required": true,
+        "validateRules": [
+          {
+            "name": "REQUIRED_VALIDATE",
+            "errorMsg": "不能为空"
+          }
+        ]
+      },
+      {
+        "name": "voteTimes",
+        "label": "投票次数",
+        "type": "text",
+        "placeholder": "投票次数",
+        "required": true
+      },
+      {
+        "name": "poll",
+        "label": "所属投票",
+        "type": "select",
+        "required": true,
+        "dataType": "number"
+      },
+      {
+        "name": "id",
+        "type": "hidden",
+        "available": false
+      }
+    ],
+    "submit": {
+      "label": "保存"
+    },
+    "reset": {
+      "label": "重置"
+    },
+    "actions": [
+      {
+        "extraClassName": "btn-default",
+        "action": "backup",
+        "label": "返回"
+      }
+    ]
+  },
+  "polloptionadd": {
+    "structure": [
+      {
+        "name": "title",
+        "label": "标题",
+        "type": "text",
+        "placeholder": "标题",
+        "required": true,
+        "validateRules": [
+          {
+            "name": "REQUIRED_VALIDATE",
+            "errorMsg": "不能为空"
+          }
+        ]
+      },
+      {
+        "name": "poll",
+        "label": "所属投票",
+        "type": "select",
+        "required": true,
+        "dataType": "number"
+      },
+      {
+        "name": "id",
+        "type": "hidden",
+        "available": false
+      }
+    ],
+    "submit": {
+      "label": "保存"
+    },
+    "reset": {
+      "label": "重置"
+    }
+  },
+  "operationupdate": {
+    "structure": [
+      {
+        "name": "relatedOperation",
+        "label": "关联操作",
+        "type": "text",
+        "readonly": true
+      },{
+        "name": "ip",
+        "label": "IP地址",
+        "type": "text",
+        "readonly": true
+      },{
+        "name": "operationUser",
+        "label": "操作员",
+        "type": "text",
+        "readonly": true
+      },{
+        "name": "operationDate",
+        "label": "操作时间",
+        "type": "text",
+        "readonly": true
+      },{
+        "name": "website",
+        "label": "所属网站",
+        "type": "text",
+        "readonly": true
+      },
+      {
+        "name": "id",
+        "type": "hidden",
+        "available": false
+      }
+    ],
+    "submit": {
+      "label": "保存"
+    },
+    "reset": {
+      "label": "重置"
+    },
+    "actions": [
+      {
+        "extraClassName": "btn-default",
+        "action": "backup",
+        "label": "返回"
+      }
+    ]
+  },
+  "navigateupdate": {
+    "structure": [
+      {
+        "name": "title",
+        "label": "标题",
+        "type": "text",
+        "placeholder": "标题",
+        "required": true,
+        "validateRules": [
+          {
+            "name": "REQUIRED_VALIDATE",
+            "errorMsg": "不能为空"
+          }
+        ]
+      },
+      {
+        "name": "website",
+        "label": "所属网站",
+        "type": "select",
+        "required": true,
+        "updatable": true,
+        "dataType": "number"
+      },
+      {
+        "name": "parent",
+        "label": "父导航",
+        "type": "select",
+        "required": true,
+        "dataType": "number"
+      },
+      {
+        "name": "orderNum",
+        "label": "排序",
+        "type": "number",
+        "placeholder": "排序",
+        "required": true
+      },
+      {
+        "name": "type",
+        "label": "导航类型",
+        "type": "select",
+        "required": true,
+        "updatable": true,
+        "dataType": "number"
+      },
+      {
+        "name": "article",
+        "label": "文章",
+        "type": "select",
+        "available": false,
+        "required": true,
+        "dataType": "number"
+      },
+      {
+        "name": "newsType",
+        "label": "新闻",
+        "type": "select",
+        "available": false,
+        "required": true,
+        "dataType": "number"
+      },
+      {
+        "name": "fileLibraryType",
+        "label": "多媒体",
+        "type": "select",
+        "available": false,
+        "required": true,
+        "dataType": "number"
+      },
+      {
+        "name": "id",
+        "type": "hidden",
+        "available": false
+      }
+    ],
+    "submit": {
+      "label": "保存"
+    },
+    "reset": {
+      "label": "重置"
+    },
+    "actions": [
+      {
+        "extraClassName": "btn-default",
+        "action": "backup",
+        "label": "返回"
+      }
+    ]
+  },
+  "navigateadd": {
+    "structure": [
+      {
+        "name": "title",
+        "label": "标题",
+        "type": "text",
+        "placeholder": "标题",
+        "required": true,
+        "validateRules": [
+          {
+            "name": "REQUIRED_VALIDATE",
+            "errorMsg": "不能为空"
+          }
+        ]
+      },
+      {
+        "name": "website",
+        "label": "所属网站",
+        "type": "select",
+        "required": true,
+        "dataType": "number"
+      },
+      {
+        "name": "parent",
+        "label": "父导航",
+        "type": "select",
+        "required": true,
+        "dataType": "number"
+      },
+      {
+        "name": "orderNum",
+        "label": "排序",
+        "type": "number",
+        "placeholder": "排序",
+        "required": true
+      },
+      {
+        "name": "type",
+        "label": "导航类型",
+        "type": "select",
+        "required": true,
+        "updatable": true,
+        "dataType": "number"
+      },
+      {
+        "name": "article",
+        "label": "文章",
+        "type": "select",
+        "available": false,
+        "required": true,
+        "dataType": "number"
+      },
+      {
+        "name": "newsType",
+        "label": "新闻",
+        "type": "select",
+        "available": false,
+        "required": true,
+        "dataType": "number"
+      },
+      {
+        "name": "fileLibraryType",
+        "label": "多媒体",
+        "type": "select",
+        "available": false,
+        "required": true,
+        "dataType": "number"
+      },
+      {
+        "name": "id",
+        "type": "hidden",
+        "available": false
+      }
+    ],
+    "submit": {
+      "label": "保存"
+    },
+    "reset": {
+      "label": "重置"
+    }
+  },
+  "filelibraryupdate": {
+    "structure": [
+      {
+        "name": "title",
+        "label": "标题",
+        "type": "text",
+        "placeholder": "标题",
+        "required": true,
+        "validateRules": [
+          {
+            "name": "REQUIRED_VALIDATE",
+            "errorMsg": "不能为空"
+          }
+        ]
+      },
+      {
+        "name": "website",
+        "label": "所属网站",
+        "type": "select",
+        "required": true,
+        "updatable": true,
+        "dataType": "number"
+      },
+      {
+        "name": "fileLibraryType",
+        "label": "文件分类",
+        "type": "select",
+        "required": true,
+        "dataType": "number"
+      },
+      {
+        "name": "url",
+        "label": "文件地址",
+        "type": "text",
+        "placeholder": "文件地址",
+        "required": true
+      },
+      {
+        "name": "isPublished",
+        "label": "已发布",
+        "type": "checkbox",
+        "updatable": true,
+        "dataType": "boolean",
+        "items": [
+          {
+            "label": "是",
+            "value": true
+          }
+        ]
+      },
+      {
+        "name": "publishDate",
+        "label": "发布时间",
+        "available": false,
+        "required": true,
+        "type": "date",
+        "placeholder": "发布时间",
+        "dateFormat": "YYYY-MM-DD"
+      },
+      {
+        "name": "createUser",
+        "label": "创建人",
+        "type": "text",
+        "placeholder": "创建人",
+        "readonly": true
+      },
+      {
+        "name": "createDate",
+        "label": "创建日期",
+        "type": "text",
+        "placeholder": "创建日期",
+        "readonly": true
+      },
+      {
+        "name": "id",
+        "type": "hidden",
+        "available": false
+      }
+    ],
+    "submit": {
+      "label": "保存"
+    },
+    "reset": {
+      "label": "重置"
+    },
+    "actions": [
+      {
+        "extraClassName": "btn-default",
+        "action": "backup",
+        "label": "返回"
+      }
+    ]
+  },
+  "filelibraryadd": {
+    "structure": [
+      {
+        "name": "title",
+        "label": "标题",
+        "type": "text",
+        "placeholder": "标题",
+        "required": true,
+        "validateRules": [
+          {
+            "name": "REQUIRED_VALIDATE",
+            "errorMsg": "不能为空"
+          }
+        ]
+      },
+      {
+        "name": "website",
+        "label": "所属网站",
+        "type": "select",
+        "required": true,
+        "updatable": true,
+        "dataType": "number"
+      },
+      {
+        "name": "fileLibraryType",
+        "label": "文件分类",
+        "type": "select",
+        "required": true,
+        "dataType": "number"
+      },
+      {
+        "name": "url",
+        "label": "文件地址",
+        "type": "text",
+        "placeholder": "文件地址",
+        "required": true
+      },
+      {
+        "name": "isPublished",
+        "label": "已发布",
+        "type": "checkbox",
+        "updatable": true,
+        "dataType": "boolean",
+        "items": [
+          {
+            "label": "是",
+            "value": true
+          }
+        ]
+      },
+      {
+        "name": "publishDate",
+        "label": "发布时间",
+        "available": false,
+        "required": true,
+        "type": "date",
+        "placeholder": "发布时间",
+        "dateFormat": "YYYY-MM-DD"
+      },
+      {
+        "name": "id",
+        "type": "hidden",
+        "available": false
+      }
+    ],
+    "submit": {
+      "label": "保存"
+    },
+    "reset": {
+      "label": "重置"
+    }
+  },
+  "filelibrarytypeupdate": {
+    "structure": [
+      {
+        "name": "title",
+        "label": "标题",
+        "type": "text",
+        "placeholder": "标题",
+        "required": true,
+        "validateRules": [
+          {
+            "name": "REQUIRED_VALIDATE",
+            "errorMsg": "不能为空"
+          }
+        ]
+      },
+      {
+        "name": "website",
+        "label": "所属网站",
+        "type": "select",
+        "required": true,
+        "updatable": true,
+        "dataType": "number"
+      },
+      {
+        "name": "template",
+        "label": "使用模板",
+        "type": "select",
+        "required": true,
+        "dataType": "number"
+      },
+      {
+        "name": "id",
+        "type": "hidden",
+        "available": false
+      }
+    ],
+    "submit": {
+      "label": "保存"
+    },
+    "reset": {
+      "label": "重置"
+    },
+    "actions": [
+      {
+        "extraClassName": "btn-default",
+        "action": "backup",
+        "label": "返回"
+      }
+    ]
+  },
+  "filelibrarytypeadd": {
+    "structure": [
+      {
+        "name": "title",
+        "label": "标题",
+        "type": "text",
+        "placeholder": "标题",
+        "required": true,
+        "validateRules": [
+          {
+            "name": "REQUIRED_VALIDATE",
+            "errorMsg": "不能为空"
+          }
+        ]
+      },
+      {
+        "name": "website",
+        "label": "所属网站",
+        "type": "select",
+        "required": true,
+        "updatable": true,
+        "dataType": "number"
+      },
+      {
+        "name": "template",
+        "label": "使用模板",
+        "type": "select",
+        "required": true,
+        "dataType": "number"
+      },
+      {
+        "name": "id",
+        "type": "hidden",
+        "available": false
+      }
+    ],
+    "submit": {
+      "label": "保存"
+    },
+    "reset": {
+      "label": "重置"
+    }
+  },
+  "articleupdate": {
+    "structure": [
+      {
+        "name": "title",
+        "label": "标题",
+        "type": "text",
+        "placeholder": "标题",
+        "required": true,
+        "validateRules": [
+          {
+            "name": "REQUIRED_VALIDATE",
+            "errorMsg": "不能为空"
+          }
+        ]
+      },
+      {
+        "name": "content",
+        "label": "文章内容",
+        "type": "text",
+        "placeholder": "文章内容",
+        "required": true
+      },
+      {
+        "name": "website",
+        "label": "所属网站",
+        "type": "select",
+        "required": true,
+        "updatable": true,
+        "dataType": "number"
+      },
+      {
+        "name": "template",
+        "label": "使用模板",
+        "type": "select",
+        "required": true,
+        "dataType": "number"
+      },
+      {
+        "name": "isPublished",
+        "label": "已发布",
+        "type": "checkbox",
+        "updatable": true,
+        "dataType": "boolean",
+        "items": [
+          {
+            "label": "是",
+            "value": true
+          }
+        ]
+      },
+      {
+        "name": "publishDate",
+        "label": "发布时间",
+        "available": false,
+        "required": true,
+        "type": "date",
+        "placeholder": "发布时间",
+        "dateFormat": "YYYY-MM-DD"
+      },
+      {
+        "name": "createUser",
+        "label": "创建人",
+        "type": "text",
+        "placeholder": "创建人",
+        "readonly": true
+      },
+      {
+        "name": "createDate",
+        "label": "创建日期",
+        "type": "text",
+        "placeholder": "创建日期",
+        "readonly": true
+      },
+      {
+        "name": "id",
+        "type": "hidden",
+        "available": false
+      }
+    ],
+    "submit": {
+      "label": "保存"
+    },
+    "reset": {
+      "label": "重置"
+    },
+    "actions": [
+      {
+        "extraClassName": "btn-default",
+        "action": "backup",
+        "label": "返回"
+      }
+    ]
+  },
+  "articleadd": {
+    "structure": [
+      {
+        "name": "title",
+        "label": "标题",
+        "type": "text",
+        "placeholder": "标题",
+        "required": true,
+        "validateRules": [
+          {
+            "name": "REQUIRED_VALIDATE",
+            "errorMsg": "不能为空"
+          }
+        ]
+      },
+      {
+        "name": "content",
+        "label": "文章内容",
+        "type": "text",
+        "placeholder": "文章内容",
+        "required": true
+      },
+      {
+        "name": "website",
+        "label": "所属网站",
+        "type": "select",
+        "required": true,
+        "updatable": true,
+        "dataType": "number"
+      },
+      {
+        "name": "template",
+        "label": "使用模板",
+        "type": "select",
+        "required": true,
+        "dataType": "number"
+      },
+      {
+        "name": "isPublished",
+        "label": "已发布",
+        "type": "checkbox",
+        "updatable": true,
+        "dataType": "boolean",
+        "items": [
+          {
+            "label": "是",
+            "value": true
+          }
+        ]
+      },
+      {
+        "name": "publishDate",
+        "label": "发布时间",
+        "available": false,
+        "required": true,
+        "type": "date",
+        "placeholder": "发布时间",
+        "dateFormat": "YYYY-MM-DD"
+      },
+      {
+        "name": "createUser",
+        "label": "创建人",
+        "type": "text",
+        "placeholder": "创建人",
+        "readonly": true
+      },
+      {
+        "name": "createDate",
+        "label": "创建日期",
+        "type": "text",
+        "placeholder": "创建日期",
+        "readonly": true
+      },
+      {
+        "name": "id",
+        "type": "hidden",
+        "available": false
+      }
+    ],
+    "submit": {
+      "label": "保存"
+    },
+    "reset": {
+      "label": "重置"
+    }
+  }
 }

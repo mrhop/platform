@@ -26,4 +26,7 @@ public interface UserTableRepository extends PagingAndSortingRepository<UserTabl
     @Modifying
     @Query("update UserTable u set u.createUser = ?1 where u.createUser = ?2")
     int updateCreateUser(UserTable userTable, UserTable userTablePrev);
+
+    public List<UserTable> findByAuthoritiesInAndClientsIn(Collection<RoleTable> authorities, Collection<ClientTable> clients);
+
 }

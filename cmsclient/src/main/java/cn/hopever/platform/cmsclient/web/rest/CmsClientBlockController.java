@@ -87,51 +87,26 @@ public class CmsClientBlockController {
         Map<String, Object> rule = baseConfig.getFormRule("clientupdate");
         List<Map> list = (List<Map>) rule.get("structure");
 
-        //注意后台的处理需要进行modulerole和是否内部角色以及授权类型的处理
+        //注意是否需要有相关的处理
         if (CommonResultStatus.SUCCESS.toString().equals(c.getStatus())) {
             if (c.getResponseData() != null) {
                 if (c.getResponseData().get("data") != null) {
                     Map<String, Object> mapData = (Map) c.getResponseData().get("data");
                     // List<Map> listReturn = new ArrayList<>();
                     for (Map map : list) {
-                        if ("internalClient".equals(map.get("name")) && (boolean) mapData.get(map.get("name"))) {
-                            map.put("defaultValue", new Object[]{mapData.get(map.get("name"))});
-                            continue;
-                        }
-                        if ("scope".equals(map.get("name"))) {
-                            Object o = mapData.get(map.get("name"));
-                            String defaultValue = null;
-                            if (o != null) {
-                                defaultValue = "";
-                                for (int i = 0; i < ((List) o).size(); i++) {
-                                    if (i < ((List) o).size() - 1) {
-                                        defaultValue = defaultValue + (((List) o).get(i)).toString() + ",";
-                                    } else {
-                                        defaultValue = defaultValue + (((List) o).get(i)).toString();
-                                    }
-                                }
+                        if ("type".equals(map.get("name")) ) {
+                            //map.put("items", mapItems.get("clients"));
+                            if(mapData.get(map.get("name"))!=null){
+                                map.put("defaultValue", mapData.get(map.get("name")));
+                                //关联type的处理
                             }
-                            map.put("defaultValue", defaultValue);
                             continue;
                         }
-                        if ("authorities".equals(map.get("name")) || "moduleRoles".equals(map.get("name"))) {
-                            Object o = mapData.get(map.get("name"));
-                            String defaultValue = null;
-                            if (o != null) {
-                                defaultValue = "";
-                                for (int i = 0; i < ((List) o).size(); i++) {
-                                    if (i < ((List) o).size() - 1) {
-                                        defaultValue = defaultValue + ((Map) ((List) o).get(i)).get("name") + ",";
-                                    } else {
-                                        defaultValue = defaultValue + ((Map) ((List) o).get(i)).get("name");
-                                    }
-                                }
+                        if ("website".equals(map.get("name")) ) {
+                            //map.put("items", mapItems.get("clients"));
+                            if(mapData.get(map.get("name"))!=null){
+                                map.put("defaultValue", mapData.get(map.get("name")));
                             }
-                            map.put("defaultValue", defaultValue);
-                            continue;
-                        }
-                        if ("id".equals(map.get("name"))) {
-                            map.put("defaultValue", mapData.get("internalId"));
                             continue;
                         }
                         if (mapData.get(map.get("name")) != null) {
@@ -163,7 +138,16 @@ public class CmsClientBlockController {
         CommonResult c = new CommonResult();
         Map<String, Object> rule = baseConfig.getFormRule("websiteadd");
         List<Map> list = (List<Map>) rule.get("structure");
-        //注意后台的处理需要进行modulerole和是否内部角色以及授权类型的处理
+        for (Map map : list) {
+            if ("type".equals(map.get("name")) ) {
+                //map.put("items", mapItems.get("clients"));
+                continue;
+            }
+            if ("website".equals(map.get("name")) ) {
+                //map.put("items", mapItems.get("clients"));
+                continue;
+            }
+        }
         c.setResponseData(rule);
         c.setStatus(CommonResultStatus.SUCCESS.toString());
         return c;

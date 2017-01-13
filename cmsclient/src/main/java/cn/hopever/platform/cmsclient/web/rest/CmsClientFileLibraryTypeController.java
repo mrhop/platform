@@ -89,7 +89,7 @@ public class CmsClientFileLibraryTypeController {
     public CommonResult getFileLibraryType(HttpServletRequest request) throws Exception {
         request.setAttribute("resourceUrl", baseConfig.getWebsiteinfo() + "?id=" + request.getParameter("key"));
         CommonResult c = commonMethods.getResource(request);
-        Map<String, Object> rule = baseConfig.getFormRule("clientupdate");
+        Map<String, Object> rule = baseConfig.getFormRule("filelibrarytypeupdate");
         List<Map> list = (List<Map>) rule.get("structure");
 
         //注意后台的处理需要进行modulerole和是否内部角色以及授权类型的处理
@@ -99,44 +99,19 @@ public class CmsClientFileLibraryTypeController {
                     Map<String, Object> mapData = (Map) c.getResponseData().get("data");
                     // List<Map> listReturn = new ArrayList<>();
                     for (Map map : list) {
-                        if ("internalClient".equals(map.get("name")) && (boolean) mapData.get(map.get("name"))) {
-                            map.put("defaultValue", new Object[]{mapData.get(map.get("name"))});
-                            continue;
-                        }
-                        if ("scope".equals(map.get("name"))) {
-                            Object o = mapData.get(map.get("name"));
-                            String defaultValue = null;
-                            if (o != null) {
-                                defaultValue = "";
-                                for (int i = 0; i < ((List) o).size(); i++) {
-                                    if (i < ((List) o).size() - 1) {
-                                        defaultValue = defaultValue + (((List) o).get(i)).toString() + ",";
-                                    } else {
-                                        defaultValue = defaultValue + (((List) o).get(i)).toString();
-                                    }
-                                }
+                        if ("website".equals(map.get("name")) ) {
+                            //map.put("items", mapItems.get("clients"));
+                            if(mapData.get(map.get("name"))!=null){
+                                map.put("defaultValue", mapData.get(map.get("name")));
                             }
-                            map.put("defaultValue", defaultValue);
                             continue;
                         }
-                        if ("authorities".equals(map.get("name")) || "moduleRoles".equals(map.get("name"))) {
-                            Object o = mapData.get(map.get("name"));
-                            String defaultValue = null;
-                            if (o != null) {
-                                defaultValue = "";
-                                for (int i = 0; i < ((List) o).size(); i++) {
-                                    if (i < ((List) o).size() - 1) {
-                                        defaultValue = defaultValue + ((Map) ((List) o).get(i)).get("name") + ",";
-                                    } else {
-                                        defaultValue = defaultValue + ((Map) ((List) o).get(i)).get("name");
-                                    }
-                                }
+                        if ("template".equals(map.get("name")) ) {
+                            //map.put("items", mapItems.get("clients"));
+                            if(mapData.get(map.get("name"))!=null){
+                                map.put("defaultValue", mapData.get(map.get("name")));
+                                //关联newsListTemplate的处理
                             }
-                            map.put("defaultValue", defaultValue);
-                            continue;
-                        }
-                        if ("id".equals(map.get("name"))) {
-                            map.put("defaultValue", mapData.get("internalId"));
                             continue;
                         }
                         if (mapData.get(map.get("name")) != null) {
@@ -166,9 +141,14 @@ public class CmsClientFileLibraryTypeController {
     @RequestMapping(value = "/filelibrarytype/add", method = {RequestMethod.GET})
     public CommonResult addFileLibraryType(HttpServletRequest request) throws Exception {
         CommonResult c = new CommonResult();
-        Map<String, Object> rule = baseConfig.getFormRule("websiteadd");
+        Map<String, Object> rule = baseConfig.getFormRule("filelibrarytypeadd");
         List<Map> list = (List<Map>) rule.get("structure");
-        //注意后台的处理需要进行modulerole和是否内部角色以及授权类型的处理
+        for (Map map : list) {
+            if ("website".equals(map.get("name")) ) {
+                //map.put("items", mapItems.get("clients"));
+                continue;
+            }
+        }
         c.setResponseData(rule);
         c.setStatus(CommonResultStatus.SUCCESS.toString());
         return c;

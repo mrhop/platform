@@ -33,6 +33,9 @@ public class FileLibraryTable {
     @Column(name = "is_published", nullable = false)
     private boolean isPublished = true;
 
+    @Column(name = "publish_date")
+    private Date publishDate;
+
     @Column(name = "create_date")
     private Date createDate;
 

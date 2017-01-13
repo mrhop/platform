@@ -17,10 +17,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by Donghui Huo on 2016/8/29.
@@ -66,7 +63,7 @@ public class ArticleController {
                 listTmp.add("");
                 listTmp.add(at.getTitle());
                 listTmp.add(at.isPublished() ? "Y" : "F");
-                listTmp.add(at.getPublishedDate() != null ? DateFormat.sdf.format(at.getPublishedDate()) : null);
+                listTmp.add(at.getPublishDate() != null ? DateFormat.sdf.format(at.getPublishDate()) : null);
                 if (at.getWebsite() != null) {
                     listTmp.add(at.getWebsite().getTitle());
                 } else {
@@ -113,15 +110,6 @@ public class ArticleController {
             map.put("id", at.getId());
             map.put("title", at.getTitle());
             map.put("content", at.getContent());
-            map.put("isPublished", at.isPublished());
-            if (at.getTemplate() != null) {
-                HashMap<String, Object> mapTemplate = new HashMap<>();
-                mapTemplate.put("id", at.getTemplate().getId());
-                mapTemplate.put("name", at.getTemplate().getName());
-                map.put("template", mapTemplate);
-            } else {
-                map.put("template", null);
-            }
             if (at.getWebsite() != null) {
                 HashMap<String, Object> mapWebsite = new HashMap<>();
                 mapWebsite.put("id", at.getWebsite().getId());
@@ -130,8 +118,18 @@ public class ArticleController {
             } else {
                 map.put("website", null);
             }
+            if (at.getTemplate() != null) {
+                HashMap<String, Object> mapTemplate = new HashMap<>();
+                mapTemplate.put("id", at.getTemplate().getId());
+                mapTemplate.put("name", at.getTemplate().getName());
+                map.put("template", mapTemplate);
+            } else {
+                map.put("template", null);
+            }
+            map.put("isPublished", at.isPublished());
+            map.put("publishDate", at.getPublishDate());
             map.put("createUser", at.getCreateUser());
-            map.put("createDate", at.getCreateDate());
+            map.put("createDate", DateFormat.sdf.format(at.getCreateDate()));
             return map;
         }
         return null;
@@ -154,6 +152,9 @@ public class ArticleController {
                 articleTable.setPublished(true);
             } else {
                 articleTable.setPublished(false);
+            }
+            if (body.get("publishDate") != null) {
+                articleTable.setPublishDate(new Date(Long.valueOf(body.get("publishDate").toString())));
             }
             if (body.get("template") != null) {
                 articleTable.setTemplate(templateTableService.get(Long.valueOf(body.get("website").toString())));
@@ -180,6 +181,9 @@ public class ArticleController {
             articleTable.setPublished(true);
         } else {
             articleTable.setPublished(false);
+        }
+        if (body.get("publishDate") != null) {
+            articleTable.setPublishDate(new Date(Long.valueOf(body.get("publishDate").toString())));
         }
         if (body.get("template") != null) {
             articleTable.setTemplate(templateTableService.get(Long.valueOf(body.get("website").toString())));

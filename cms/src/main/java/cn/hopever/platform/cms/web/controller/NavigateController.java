@@ -140,7 +140,22 @@ public class NavigateController {
             Map<String, Object> map = new HashMap<>();
             map.put("id", nt.getId());
             map.put("title", nt.getTitle());
-            map.put("level", nt.getLevel());
+            if (nt.getWebsite() != null) {
+                HashMap<String, Object> mapWebsite = new HashMap<>();
+                mapWebsite.put("id", nt.getWebsite().getId());
+                mapWebsite.put("title", nt.getWebsite().getTitle());
+                map.put("website", mapWebsite);
+            } else {
+                map.put("website", null);
+            }
+            if (nt.getParent() != null) {
+                HashMap<String, Object> mapParent = new HashMap<>();
+                mapParent.put("id", nt.getParent().getId());
+                mapParent.put("title", nt.getParent().getTitle());
+                map.put("parent", mapParent);
+            } else {
+                map.put("parent", null);
+            }
             map.put("orderNum", nt.getOrderNum());
             map.put("type", nt.getType());
             if (nt.getArticle() != null) {
@@ -159,14 +174,15 @@ public class NavigateController {
             } else {
                 map.put("newsType", null);
             }
-            if (nt.getWebsite() != null) {
-                HashMap<String, Object> mapWebsite = new HashMap<>();
-                mapWebsite.put("id", nt.getWebsite().getId());
-                mapWebsite.put("title", nt.getWebsite().getTitle());
-                map.put("website", mapWebsite);
+            if (nt.getFileLibraryType() != null) {
+                HashMap<String, Object> mapFileLibraryType = new HashMap<>();
+                mapFileLibraryType.put("id", nt.getNewsType().getId());
+                mapFileLibraryType.put("title", nt.getNewsType().getTitle());
+                map.put("fileLibraryType", mapFileLibraryType);
             } else {
-                map.put("website", null);
+                map.put("fileLibraryType", null);
             }
+
             return map;
         }
         return null;

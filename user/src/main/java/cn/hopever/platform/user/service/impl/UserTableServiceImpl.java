@@ -3,6 +3,7 @@ package cn.hopever.platform.user.service.impl;
 import cn.hopever.platform.user.domain.ClientTable;
 import cn.hopever.platform.user.domain.RoleTable;
 import cn.hopever.platform.user.domain.UserTable;
+import cn.hopever.platform.user.repository.ClientTableRepository;
 import cn.hopever.platform.user.repository.CustomUserTableRepository;
 import cn.hopever.platform.user.repository.RoleTableRepository;
 import cn.hopever.platform.user.repository.UserTableRepository;
@@ -37,6 +38,9 @@ public class UserTableServiceImpl implements UserTableService {
 
     @Autowired
     private RoleTableRepository roleTableRepository;
+
+    @Autowired
+    private ClientTableRepository clientTableRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -109,6 +113,15 @@ public class UserTableServiceImpl implements UserTableService {
             return customUserTableRepository.findByCreateUserAndAuthoritiesInAndClientsInAndFilters(ut, list1, list2, listUpdate, filterMap, pageable);
         }
         return null;
+    }
+
+    @Override
+    public List<UserTable> getListByClientId(String clientId) {
+        List<RoleTable> list1 = new ArrayList<>();
+        list1.add(roleTableRepository.findOneByAuthority("ROLE_common_user"));
+        List<ClientTable> list2 = new ArrayList<>();
+        list2.add(clientTableRepository.findOneByClientId(clientId));
+        return userTableRepository.findByAuthoritiesInAndClientsIn(list1,list2);
     }
 
     @Override

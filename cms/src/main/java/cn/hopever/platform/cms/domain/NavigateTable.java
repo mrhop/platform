@@ -51,6 +51,10 @@ public class NavigateTable {
     private NewsTypeTable newsType;
 
     @ManyToOne
+    @JoinColumn(name = "file_library_type_id")
+    private FileLibraryTypeTable fileLibraryType;
+
+    @ManyToOne
     @JoinColumn(name = "website_id", nullable = false)
     private WebsiteTable website;
 

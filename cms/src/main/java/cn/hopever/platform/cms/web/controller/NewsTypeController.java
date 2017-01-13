@@ -131,6 +131,14 @@ public class NewsTypeController {
             Map<String, Object> map = new HashMap<>();
             map.put("id", ntt.getId());
             map.put("title", ntt.getTitle());
+            if (ntt.getWebsite() != null) {
+                HashMap<String, Object> mapWebsite = new HashMap<>();
+                mapWebsite.put("id", ntt.getWebsite().getId());
+                mapWebsite.put("title", ntt.getWebsite().getTitle());
+                map.put("website", mapWebsite);
+            } else {
+                map.put("website", null);
+            }
             if (ntt.getNewsListTemplate() != null) {
                 HashMap<String, Object> mapNewsListTemplate = new HashMap<>();
                 mapNewsListTemplate.put("id", ntt.getNewsListTemplate().getId());
@@ -146,14 +154,6 @@ public class NewsTypeController {
                 map.put("newsTemplate", mapNewsTemplate);
             } else {
                 map.put("newsTemplate", null);
-            }
-            if (ntt.getWebsite() != null) {
-                HashMap<String, Object> mapWebsite = new HashMap<>();
-                mapWebsite.put("id", ntt.getWebsite().getId());
-                mapWebsite.put("title", ntt.getWebsite().getTitle());
-                map.put("website", mapWebsite);
-            } else {
-                map.put("website", null);
             }
             return map;
         }

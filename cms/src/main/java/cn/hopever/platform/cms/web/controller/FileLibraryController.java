@@ -65,10 +65,11 @@ public class FileLibraryController {
                 List<Object> listTmp = new ArrayList<>();
                 listTmp.add("");
                 listTmp.add(flt.getFileName());
-                listTmp.add(flt.getWebsite()!=null?flt.getWebsite().getTitle():null);
-                listTmp.add(flt.getFileLibraryType()!=null?flt.getFileLibraryType().getTitle():null);
+                listTmp.add(flt.getWebsite() != null ? flt.getWebsite().getTitle() : null);
+                listTmp.add(flt.getFileLibraryType() != null ? flt.getFileLibraryType().getTitle() : null);
                 listTmp.add(flt.getUrl());
-                listTmp.add(flt.isPublished()?"Y":"N");
+                listTmp.add(flt.isPublished() ? "Y" : "N");
+                listTmp.add(flt.isPublished() ? DateFormat.sdf.format(flt.getPublishDate()) :DateFormat.sdf.format(flt.getPublishDate()));
                 listTmp.add(flt.getCreateUser());
                 listTmp.add(DateFormat.sdf.format(flt.getCreateDate()));
                 mapTemp.put("value", listTmp);
@@ -104,24 +105,25 @@ public class FileLibraryController {
         map.put("title", flt.getFileName());
         if (flt.getWebsite() != null) {
             HashMap<String, Object> mapWebsite = new HashMap<>();
-            mapWebsite.put("id",flt.getWebsite().getId());
-            mapWebsite.put("title",flt.getWebsite().getTitle());
+            mapWebsite.put("id", flt.getWebsite().getId());
+            mapWebsite.put("title", flt.getWebsite().getTitle());
             map.put("website", mapWebsite);
         } else {
             map.put("website", null);
         }
-        if(flt.getFileLibraryType()!=null){
+        if (flt.getFileLibraryType() != null) {
             HashMap<String, Object> mapFileLibraryType = new HashMap<>();
-            mapFileLibraryType.put("id",flt.getFileLibraryType().getId());
-            mapFileLibraryType.put("title",flt.getFileLibraryType().getTitle());
+            mapFileLibraryType.put("id", flt.getFileLibraryType().getId());
+            mapFileLibraryType.put("title", flt.getFileLibraryType().getTitle());
             map.put("fileLibraryType", mapFileLibraryType);
-        }else{
+        } else {
             map.put("fileLibraryType", null);
         }
         map.put("url", flt.getUrl());
         map.put("isPublished", flt.isPublished());
-        map.put("createUser",flt.getCreateUser());
-        map.put("createDate",flt.getCreateDate());
+        map.put("publishDate", flt.getPublishDate());
+        map.put("createUser", flt.getCreateUser());
+        map.put("createDate", DateFormat.sdf.format(flt.getCreateDate()));
         return map;
     }
 
@@ -138,19 +140,22 @@ public class FileLibraryController {
             WebsiteTable websiteTable = websiteTableService.get(Long.valueOf(body.get("website").toString()));
             fileLibraryTable.setWebsite(websiteTable);
         }
-        if (body.get("fileLibraryType") != null ) {
+        if (body.get("fileLibraryType") != null) {
             fileLibraryTable.setFileLibraryType(fileLibraryTypeTableService.get(Long.valueOf(body.get("fileLibraryType").toString())));
         }
-        if (body.get("url") != null ) {
+        if (body.get("url") != null) {
             fileLibraryTable.setUrl(body.get("url").toString());
         }
-        if (body.get("url") != null ) {
+        if (body.get("url") != null) {
             fileLibraryTable.setUrl(body.get("url").toString());
         }
-        if (body.get("isPublished") != null &&((List)body.get("isPublished")).size()>0) {
+        if (body.get("isPublished") != null && ((List) body.get("isPublished")).size() > 0) {
             fileLibraryTable.setPublished(true);
-        }else{
+        } else {
             fileLibraryTable.setPublished(false);
+        }
+        if (body.get("publishDate") != null) {
+            fileLibraryTable.setPublishDate(new Date(Long.valueOf(body.get("publishDate").toString())));
         }
         this.fileLibraryTableService.save(fileLibraryTable);
         return null;
@@ -168,19 +173,22 @@ public class FileLibraryController {
             WebsiteTable websiteTable = websiteTableService.get(Long.valueOf(body.get("website").toString()));
             fileLibraryTable.setWebsite(websiteTable);
         }
-        if (body.get("fileLibraryType") != null ) {
+        if (body.get("fileLibraryType") != null) {
             fileLibraryTable.setFileLibraryType(fileLibraryTypeTableService.get(Long.valueOf(body.get("fileLibraryType").toString())));
         }
-        if (body.get("url") != null ) {
+        if (body.get("url") != null) {
             fileLibraryTable.setUrl(body.get("url").toString());
         }
-        if (body.get("url") != null ) {
+        if (body.get("url") != null) {
             fileLibraryTable.setUrl(body.get("url").toString());
         }
-        if (body.get("isPublished") != null &&((List)body.get("isPublished")).size()>0) {
+        if (body.get("isPublished") != null && ((List) body.get("isPublished")).size() > 0) {
             fileLibraryTable.setPublished(true);
-        }else{
+        } else {
             fileLibraryTable.setPublished(false);
+        }
+        if (body.get("publishDate") != null) {
+            fileLibraryTable.setPublishDate(new Date(Long.valueOf(body.get("publishDate").toString())));
         }
         fileLibraryTable.setCreateUser(principal.getName());
         fileLibraryTable.setCreateDate(new Date());

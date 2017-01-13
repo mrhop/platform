@@ -101,10 +101,7 @@ public class OperationController {
         map.put("operationUser", ot.getIp());
         map.put("operationDate", DateFormat.sdf.format(ot.getOperationDate()));
         if (ot.getWebsite() != null) {
-            HashMap<String, Object> mapWebsite = new HashMap<>();
-            mapWebsite.put("id", ot.getWebsite().getId());
-            mapWebsite.put("title", ot.getWebsite().getTitle());
-            map.put("website", mapWebsite);
+            map.put("website",  ot.getWebsite().getTitle());
         } else {
             map.put("website", null);
         }

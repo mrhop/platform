@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -20,6 +21,7 @@ public interface UserTableService extends UserDetailsService {
     public UserTable getUserByUsername(String username);
 
     public UserTable getUserByEmail(String email);
+
     public UserTable getUserByPhone(String phone);
 
     public Iterable<UserTable> getList();
@@ -28,6 +30,7 @@ public interface UserTableService extends UserDetailsService {
 
     public Page<UserTable> getSubList(String username, Pageable pageable, Map<String, Object> filterMap);
 
+    public List<UserTable> getListByClientId(String clientId);
 
     public void delete(Long id);
 

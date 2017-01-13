@@ -20,6 +20,7 @@ import java.util.Map;
 public class CommonProperties {
     public static Logger logger = LoggerFactory.getLogger(CommonProperties.class);
     private int pageSize;
+    private String relatedusers;
     private String imageUpload;
     private String fileUpload;
     private String docUpload;

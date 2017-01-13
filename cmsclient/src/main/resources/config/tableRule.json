@@ -411,7 +411,7 @@
       }
     ]
   },
-  "optionList": {
+  "operationList": {
     "thead": [
       {
         "className": "td-id",
@@ -453,7 +453,7 @@
       }
     ]
   },
-  "optionListAdditionalFeature": {
+  "operationListAdditionalFeature": {
     "sortAvailable": true,
     "filterAvailable": true,
     "editable": true,
@@ -563,6 +563,10 @@
         "editType": "select"
       },
       {
+        "title": "发布时间",
+        "value": "publishDate"
+      },
+      {
         "title": "创建人",
         "value": "createUser"
       },
@@ -664,7 +668,7 @@
       },
       {
         "title": "发布时间",
-        "value": "publishedDate"
+        "value": "publishDate"
       },
       {
         "title": "所属网站",

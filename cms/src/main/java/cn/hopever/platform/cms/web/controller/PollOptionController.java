@@ -74,7 +74,7 @@ public class PollOptionController {
             mapPoll.put("title", pot.getPoll().getTitle());
             map.put("poll", mapPoll);
         } else {
-            map.put("website", null);
+            map.put("poll", null);
         }
         return map;
     }
@@ -108,6 +108,8 @@ public class PollOptionController {
         }
         if (body.get("voteTimes") != null) {
             pollOptionTable.setVoteTimes(Integer.valueOf(body.get("voteTimes").toString()));
+        }else{
+            pollOptionTable.setVoteTimes(0);
         }
         if (body.get("poll") != null) {
             pollOptionTable.setPoll(pollTableService.get(Long.valueOf(body.get("poll").toString())));
