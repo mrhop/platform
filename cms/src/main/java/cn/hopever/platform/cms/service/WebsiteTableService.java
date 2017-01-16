@@ -29,7 +29,7 @@ public interface WebsiteTableService {
 
     public WebsiteTable get(Long id);
 
-    public List<WebsiteTable> getList(Principal principal);
+    public Iterable<WebsiteTable> getList(Principal principal);
 
     public boolean validatePermission(Principal principal, WebsiteTable websiteTable);
 

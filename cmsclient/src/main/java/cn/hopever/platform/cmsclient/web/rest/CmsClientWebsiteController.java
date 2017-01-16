@@ -124,7 +124,11 @@ public class CmsClientWebsiteController {
         //注意后台的处理需要进行modulerole和是否内部角色以及授权类型的处理
         for (Map map : list) {
             if ("relatedUsernames".equals(map.get("name"))) {
-                //map.put("items", mapItems.get("clients"));
+                request.setAttribute("resourceUrl", commonProperties.getRelatedusers() + "?clientId=" + oauth2Properties.getClientID());
+                CommonResult usernamesResult = commonMethods.getResource(request);
+                if (CommonResultStatus.SUCCESS.toString().equals(usernamesResult.getStatus()) && usernamesResult.getResponseData().get("data") != null) {
+                    map.put("items", usernamesResult.getResponseData().get("data"));
+                }
                 continue;
             }
         }

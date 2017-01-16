@@ -3,6 +3,7 @@ package cn.hopever.platform.cms.service.impl;
 import cn.hopever.platform.cms.domain.ResourceTable;
 import cn.hopever.platform.cms.repository.CustomResourceTableRepository;
 import cn.hopever.platform.cms.repository.ResourceTableRepository;
+import cn.hopever.platform.cms.repository.WebsiteTableRepository;
 import cn.hopever.platform.cms.service.ResourceTableService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Map;
 
 @Service("resourceTableService")
@@ -23,6 +25,8 @@ public class ResourceTableServiceImpl implements ResourceTableService {
     private ResourceTableRepository resourceTableRepository;
     @Autowired
     private CustomResourceTableRepository customResourceTableRepository;
+    @Autowired
+    private WebsiteTableRepository websiteTableRepository;
 
     @Override
     public Page<ResourceTable> getList( Pageable pageable, Map<String, Object> filterMap) {
@@ -42,5 +46,10 @@ public class ResourceTableServiceImpl implements ResourceTableService {
     @Override
     public ResourceTable get(Long id) {
         return this.resourceTableRepository.findOne(id);
+    }
+
+    @Override
+    public List<ResourceTable> getListByWebsite(Long websiteId) {
+        return resourceTableRepository.findByWebsite(websiteTableRepository.findOne(websiteId));
     }
 }

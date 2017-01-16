@@ -75,8 +75,8 @@ public class WebsiteController {
     @RequestMapping(value = "/options", method = {RequestMethod.GET})
     public List getOptionList(Principal principal) {
         List<Map> listOptions = null;
-        List<WebsiteTable> list = websiteTableService.getList(principal);
-        if (list != null && list.size() > 0) {
+        Iterable<WebsiteTable> list = websiteTableService.getList(principal);
+        if (list != null && list.iterator().hasNext()) {
             listOptions = new ArrayList<>();
             for (WebsiteTable wt : list) {
                 Map mapOption = new HashMap<>();

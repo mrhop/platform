@@ -3,6 +3,7 @@ package cn.hopever.platform.cmsclient.web.rest;
 import cn.hopever.platform.cmsclient.config.BaseConfig;
 import cn.hopever.platform.oauth2client.config.CommonProperties;
 import cn.hopever.platform.oauth2client.web.common.CommonMethods;
+import cn.hopever.platform.utils.json.JacksonUtil;
 import cn.hopever.platform.utils.web.CommonResult;
 import cn.hopever.platform.utils.web.CommonResultStatus;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -108,26 +109,35 @@ public class CmsClientFileLibraryController {
             if (c.getResponseData() != null) {
                 if (c.getResponseData().get("data") != null) {
                     Map<String, Object> mapData = (Map) c.getResponseData().get("data");
-                    // List<Map> listReturn = new ArrayList<>();
+                    String websiteId = null;
                     for (Map map : list) {
                         if ("website".equals(map.get("name"))) {
-                            //map.put("items", mapItems.get("clients"));
+                            request.setAttribute("resourceUrl", baseConfig.getWebsiteoptions());
+                            CommonResult usernamesResult = commonMethods.getResource(request);
+                            if (CommonResultStatus.SUCCESS.toString().equals(usernamesResult.getStatus()) && usernamesResult.getResponseData().get("data") != null) {
+                                map.put("items", usernamesResult.getResponseData().get("data"));
+                            }
                             if (mapData.get(map.get("name")) != null) {
                                 map.put("defaultValue", mapData.get(map.get("name")));
+                                websiteId = mapData.get(map.get("name")).toString();
                             }
                             continue;
                         }
                         if ("fileLibraryType".equals(map.get("name"))) {
-                            //map.put("items", mapItems.get("clients"));
+                            if (websiteId != null) {
+                                request.setAttribute("resourceUrl", baseConfig.getFilelibrarytypeoptionsofwebsite() + "?websiteId=" + websiteId);
+                                CommonResult usernamesResult = commonMethods.getResource(request);
+                                if (CommonResultStatus.SUCCESS.toString().equals(usernamesResult.getStatus()) && usernamesResult.getResponseData().get("data") != null) {
+                                    map.put("items", usernamesResult.getResponseData().get("data"));
+                                }
+                            }
                             if (mapData.get(map.get("name")) != null) {
                                 map.put("defaultValue", mapData.get(map.get("name")));
-                                //关联newsListTemplate的处理
                             }
                             continue;
                         }
                         if (mapData.get(map.get("name")) != null) {
                             map.put("defaultValue", mapData.get(map.get("name")));
-                            // listReturn.add(map);
                         }
                     }
                 }
@@ -156,7 +166,11 @@ public class CmsClientFileLibraryController {
         List<Map> list = (List<Map>) rule.get("structure");
         for (Map map : list) {
             if ("website".equals(map.get("name"))) {
-                //map.put("items", mapItems.get("clients"));
+                request.setAttribute("resourceUrl", baseConfig.getWebsiteoptions());
+                CommonResult usernamesResult = commonMethods.getResource(request);
+                if (CommonResultStatus.SUCCESS.toString().equals(usernamesResult.getStatus()) && usernamesResult.getResponseData().get("data") != null) {
+                    map.put("items", usernamesResult.getResponseData().get("data"));
+                }
                 continue;
             }
         }
@@ -169,6 +183,36 @@ public class CmsClientFileLibraryController {
     public CommonResult saveFileLibrary(HttpServletRequest request, @RequestBody JsonNode body) throws Exception {
         request.setAttribute("resourceUrl", baseConfig.getWebsitesave());
         return commonMethods.postResource(body, request);
+    }
+
+    @RequestMapping(value = "/filelibrary/rule/update", method = {RequestMethod.POST})
+    public CommonResult updateRule(HttpServletRequest request, @RequestBody JsonNode body) throws Exception {
+        CommonResult c = new CommonResult();
+        Map<String, Object> rule = JacksonUtil.mapper.convertValue(body.get("rule"), Map.class);
+        List<Map> list = (List<Map>) rule.get("structure");
+        Long websiteId = null;
+        for (Map map : list) {
+            map.remove("changed");
+            if ("website".equals(map.get("name")) && "website".equals(body.get("updateElement").asText())) {
+                websiteId = body.get("updateData").asLong();
+                continue;
+            }
+            if ( "fileLibraryType".equals(map.get("name"))) {
+                if(websiteId != null){
+                    request.setAttribute("resourceUrl", baseConfig.getFilelibrarytypeoptionsofwebsite() + "?websiteId=" + websiteId);
+                    CommonResult usernamesResult = commonMethods.getResource(request);
+                    if (CommonResultStatus.SUCCESS.toString().equals(usernamesResult.getStatus()) && usernamesResult.getResponseData().get("data") != null) {
+                        map.put("items", usernamesResult.getResponseData().get("data"));
+                    }
+                }else{
+                    map.put("items",null);
+                }
+                map.put("changed", true);
+                continue;
+            }
+        }
+        c.setResponseData(rule);
+        return c;
     }
 
 }

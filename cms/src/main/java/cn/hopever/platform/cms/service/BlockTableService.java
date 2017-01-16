@@ -4,6 +4,7 @@ import cn.hopever.platform.cms.domain.BlockTable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -12,6 +13,8 @@ import java.util.Map;
 public interface BlockTableService {
 
     public Page<BlockTable> getList(Pageable pageable, Map<String, Object> filterMap);
+
+    public List<BlockTable> getListByWebsite(Long websiteId);
 
     public BlockTable save(BlockTable blockTable);
 

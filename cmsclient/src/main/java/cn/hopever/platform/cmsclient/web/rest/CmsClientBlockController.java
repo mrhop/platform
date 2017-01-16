@@ -3,6 +3,7 @@ package cn.hopever.platform.cmsclient.web.rest;
 import cn.hopever.platform.cmsclient.config.BaseConfig;
 import cn.hopever.platform.oauth2client.config.CommonProperties;
 import cn.hopever.platform.oauth2client.web.common.CommonMethods;
+import cn.hopever.platform.utils.json.JacksonUtil;
 import cn.hopever.platform.utils.web.CommonResult;
 import cn.hopever.platform.utils.web.CommonResultStatus;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -93,25 +94,88 @@ public class CmsClientBlockController {
                 if (c.getResponseData().get("data") != null) {
                     Map<String, Object> mapData = (Map) c.getResponseData().get("data");
                     // List<Map> listReturn = new ArrayList<>();
+                    String blockTypeSelected = null;
+                    String websiteId = null;
                     for (Map map : list) {
-                        if ("type".equals(map.get("name")) ) {
-                            //map.put("items", mapItems.get("clients"));
-                            if(mapData.get(map.get("name"))!=null){
+                        if ("type".equals(map.get("name"))) {
+                            List<String> blockTypes = baseConfig.getBlockTypes();
+                            List<Map> listOptions = new ArrayList<>();
+                            for (String blockType : blockTypes) {
+                                Map mapOption = new HashMap<>();
+                                mapOption.put("label", blockType);
+                                mapOption.put("value", blockType);
+                                listOptions.add(mapOption);
+                            }
+                            map.put("items", listOptions);
+                            if (mapData.get(map.get("name")) != null) {
                                 map.put("defaultValue", mapData.get(map.get("name")));
-                                //关联type的处理
+                                blockTypeSelected = mapData.get(map.get("name")).toString();
                             }
                             continue;
                         }
-                        if ("website".equals(map.get("name")) ) {
-                            //map.put("items", mapItems.get("clients"));
-                            if(mapData.get(map.get("name"))!=null){
-                                map.put("defaultValue", mapData.get(map.get("name")));
+                        if ("website".equals(map.get("name"))) {
+                            request.setAttribute("resourceUrl", baseConfig.getWebsiteoptions());
+                            CommonResult usernamesResult = commonMethods.getResource(request);
+                            if (CommonResultStatus.SUCCESS.toString().equals(usernamesResult.getStatus()) && usernamesResult.getResponseData().get("data") != null) {
+                                map.put("items", usernamesResult.getResponseData().get("data"));
                             }
+                            if (mapData.get(map.get("name")) != null) {
+                                map.put("defaultValue", mapData.get(map.get("name")));
+                                websiteId = mapData.get(map.get("name")).toString();
+                            }
+                            continue;
+                        }
+                        if ("content".equals(map.get("name")) && blockTypeSelected != null && "静态内容".equals(blockTypeSelected)) {
+                            map.put("defaultValue", mapData.get(map.get("name")));
+                            map.remove("available");
+                            continue;
+                        }
+                        if ("dataUrl".equals(map.get("name")) && blockTypeSelected != null && "自定义内容".equals(blockTypeSelected)) {
+                            map.put("defaultValue", mapData.get(map.get("name")));
+                            map.remove("available");
+                            continue;
+                        }
+                        if ("script".equals(map.get("name")) && blockTypeSelected != null && "自定义内容".equals(blockTypeSelected)) {
+                            map.put("defaultValue", mapData.get(map.get("name")));
+                            map.remove("available");
+                            continue;
+                        }
+                        if ("newsType".equals(map.get("name")) && blockTypeSelected != null && ("热点新闻".equals(blockTypeSelected) || "最新新闻".equals(blockTypeSelected))) {
+                            if (websiteId != null) {
+                                request.setAttribute("resourceUrl", baseConfig.getNewstypeoptionsofwebsite() + "?websiteId=" + websiteId);
+                                CommonResult usernamesResult = commonMethods.getResource(request);
+                                if (CommonResultStatus.SUCCESS.toString().equals(usernamesResult.getStatus()) && usernamesResult.getResponseData().get("data") != null) {
+                                    map.put("items", usernamesResult.getResponseData().get("data"));
+                                }
+                            }
+                            map.put("defaultValue", mapData.get(map.get("name")));
+                            map.remove("available");
+                            continue;
+                        }
+                        if ("newsNumber".equals(map.get("name")) && blockTypeSelected != null && ("热点新闻".equals(blockTypeSelected) || "最新新闻".equals(blockTypeSelected))) {
+                            map.put("defaultValue", mapData.get(map.get("name")));
+                            map.remove("available");
+                            continue;
+                        }
+                        if ("fileLibraryType".equals(map.get("name")) && blockTypeSelected != null && "文件库".equals(blockTypeSelected)) {
+                            if (websiteId != null) {
+                                request.setAttribute("resourceUrl", baseConfig.getFilelibrarytypeoptionsofwebsite() + "?websiteId=" + websiteId);
+                                CommonResult usernamesResult = commonMethods.getResource(request);
+                                if (CommonResultStatus.SUCCESS.toString().equals(usernamesResult.getStatus()) && usernamesResult.getResponseData().get("data") != null) {
+                                    map.put("items", usernamesResult.getResponseData().get("data"));
+                                }
+                            }
+                            map.put("defaultValue", mapData.get(map.get("name")));
+                            map.remove("available");
+                            continue;
+                        }
+                        if ("fileLibraryNumber".equals(map.get("name")) && blockTypeSelected != null && "文件库".equals(blockTypeSelected)) {
+                            map.put("defaultValue", mapData.get(map.get("name")));
+                            map.remove("available");
                             continue;
                         }
                         if (mapData.get(map.get("name")) != null) {
                             map.put("defaultValue", mapData.get(map.get("name")));
-                            // listReturn.add(map);
                         }
                     }
                 }
@@ -139,12 +203,24 @@ public class CmsClientBlockController {
         Map<String, Object> rule = baseConfig.getFormRule("websiteadd");
         List<Map> list = (List<Map>) rule.get("structure");
         for (Map map : list) {
-            if ("type".equals(map.get("name")) ) {
-                //map.put("items", mapItems.get("clients"));
+            if ("type".equals(map.get("name"))) {
+                List<String> blockTypes = baseConfig.getBlockTypes();
+                List<Map> listOptions = new ArrayList<>();
+                for (String blockType : blockTypes) {
+                    Map mapOption = new HashMap<>();
+                    mapOption.put("label", blockType);
+                    mapOption.put("value", blockType);
+                    listOptions.add(mapOption);
+                }
+                map.put("items", listOptions);
                 continue;
             }
-            if ("website".equals(map.get("name")) ) {
-                //map.put("items", mapItems.get("clients"));
+            if ("website".equals(map.get("name"))) {
+                request.setAttribute("resourceUrl", baseConfig.getWebsiteoptions());
+                CommonResult usernamesResult = commonMethods.getResource(request);
+                if (CommonResultStatus.SUCCESS.toString().equals(usernamesResult.getStatus()) && usernamesResult.getResponseData().get("data") != null) {
+                    map.put("items", usernamesResult.getResponseData().get("data"));
+                }
                 continue;
             }
         }
@@ -157,5 +233,79 @@ public class CmsClientBlockController {
     public CommonResult saveBlock(HttpServletRequest request, @RequestBody JsonNode body) throws Exception {
         request.setAttribute("resourceUrl", baseConfig.getWebsitesave());
         return commonMethods.postResource(body, request);
+    }
+
+    @RequestMapping(value = "/block/rule/update", method = {RequestMethod.POST})
+    public CommonResult updateRule(HttpServletRequest request, @RequestBody JsonNode body) throws Exception {
+        CommonResult c = new CommonResult();
+        Map<String, Object> rule = JacksonUtil.mapper.convertValue(body.get("rule"), Map.class);
+        List<Map> list = (List<Map>) rule.get("structure");
+        String blockTypeSelected = null;
+        String websiteId = null;
+        for (Map map : list) {
+            map.remove("changed");
+            if ("website".equals(map.get("name"))) {
+                if (map.get("defaultValue") != null) {
+                    websiteId = map.get("defaultValue").toString();
+                }
+                continue;
+            }
+            if ("type".equals(map.get("name")) && "type".equals(body.get("updateElement").asText())) {
+                blockTypeSelected = body.get("updateData").textValue();
+                continue;
+            }
+            if ("content".equals(map.get("name"))) {
+                if (blockTypeSelected != null && "静态内容".equals(blockTypeSelected)) {
+                    map.remove("available");
+                } else {
+                    map.put("available", false);
+                }
+                map.put("changed", true);
+                continue;
+            }
+            if ("dataUrl".equals(map.get("name")) || "script".equals(map.get("name"))) {
+                if (blockTypeSelected != null && "自定义内容".equals(blockTypeSelected)) {
+                    map.remove("available");
+                } else {
+                    map.put("available", false);
+                }
+                map.put("changed", true);
+                continue;
+            }
+            if ("newsType".equals(map.get("name")) || "newsNumber".equals(map.get("name"))) {
+                if (blockTypeSelected != null && ("热点新闻".equals(blockTypeSelected) || "最新新闻".equals(blockTypeSelected))) {
+                    if (websiteId != null && "newsType".equals(map.get("name"))) {
+                        request.setAttribute("resourceUrl", baseConfig.getNewstypeoptionsofwebsite() + "?websiteId=" + websiteId);
+                        CommonResult usernamesResult = commonMethods.getResource(request);
+                        if (CommonResultStatus.SUCCESS.toString().equals(usernamesResult.getStatus()) && usernamesResult.getResponseData().get("data") != null) {
+                            map.put("items", usernamesResult.getResponseData().get("data"));
+                        }
+                    }
+                    map.remove("available");
+                } else {
+                    map.put("available", false);
+                }
+                map.put("changed", true);
+                continue;
+            }
+            if ("fileLibraryType".equals(map.get("name")) || "fileLibraryNumber".equals(map.get("name"))) {
+                if (blockTypeSelected != null && "文件库".equals(blockTypeSelected)) {
+                    if (websiteId != null&& "fileLibraryType".equals(map.get("name"))) {
+                        request.setAttribute("resourceUrl", baseConfig.getFilelibrarytypeoptionsofwebsite() + "?websiteId=" + websiteId);
+                        CommonResult usernamesResult = commonMethods.getResource(request);
+                        if (CommonResultStatus.SUCCESS.toString().equals(usernamesResult.getStatus()) && usernamesResult.getResponseData().get("data") != null) {
+                            map.put("items", usernamesResult.getResponseData().get("data"));
+                        }
+                    }
+                    map.remove("available");
+                } else {
+                    map.put("available", false);
+                }
+                map.put("changed", true);
+                continue;
+            }
+        }
+        c.setResponseData(rule);
+        return c;
     }
 }

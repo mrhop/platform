@@ -211,5 +211,4 @@ public class NewsTypeController {
         //需要根据resource，news，template等结合获取，并展示
         return null;
     }
-
 }

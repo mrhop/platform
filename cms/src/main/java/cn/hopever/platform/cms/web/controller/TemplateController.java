@@ -131,39 +131,23 @@ public class TemplateController {
             map.put("contentPosition", tt.getContentPosition());
             map.put("contentScript", tt.getContentScript());
             if (tt.getWebsite() != null) {
-                HashMap<String, Object> mapWebsite = new HashMap<>();
-                mapWebsite.put("id", tt.getWebsite().getId());
-                mapWebsite.put("title", tt.getWebsite().getTitle());
-                map.put("website", mapWebsite);
+                map.put("website", tt.getWebsite().getId());
             } else {
                 map.put("website", null);
             }
             if (tt.getTemplateBlocks() != null) {
-                List<Map<String, Object>> templateBlocks = new ArrayList<>();
+                List<Long> templateBlocks = new ArrayList<>();
                 for (TemplateBlockTable tbt : tt.getTemplateBlocks()) {
-                    Map<String, Object> mapTmp = new HashMap<>();
-                    Map<String, Object> mapBlock = new HashMap<>();
-                    mapBlock.put("id", tbt.getBlock().getId());
-                    mapBlock.put("name", tbt.getBlock().getName());
-                    mapTmp.put("block", mapBlock);
-                    mapTmp.put("blockPosition", tbt.getBlockPosition());
-                    templateBlocks.add(mapTmp);
+                    templateBlocks.add(tbt.getBlock().getId());
                 }
                 map.put("templateBlocks", templateBlocks);
             } else {
                 map.put("templateBlocks", null);
             }
             if (tt.getTemplateResources() != null) {
-                List<Map<String, Object>> templateResources = new ArrayList<>();
+                List<Long> templateResources = new ArrayList<>();
                 for (TemplateResourceTable trt : tt.getTemplateResources()) {
-                    Map<String, Object> mapTmp = new HashMap<>();
-                    Map<String, Object> mapResource = new HashMap<>();
-                    mapResource.put("id", trt.getResource().getId());
-                    mapResource.put("name", trt.getResource().getName());
-                    mapTmp.put("resource", mapResource);
-                    mapTmp.put("top", trt.isTop());
-                    mapTmp.put("orderNum", trt.getOrderNum());
-                    templateResources.add(mapTmp);
+                    templateResources.add(trt.getResource().getId());
                 }
                 map.put("templateResources", templateResources);
             } else {

@@ -106,10 +106,7 @@ public class ResourceController {
             map.put("url", rt.getUrl());
             map.put("type", rt.getType());
             if(rt.getWebsite()!=null){
-                HashMap<String, Object> mapWebsite = new HashMap<>();
-                mapWebsite.put("id",rt.getWebsite().getId());
-                mapWebsite.put("title",rt.getWebsite().getTitle());
-                map.put("website", mapWebsite);
+                map.put("website", rt.getWebsite().getId());
             }else{
                 map.put("website", null);
             }
@@ -160,6 +157,23 @@ public class ResourceController {
         }
         this.resourceTableService.save(resourceTable);
         return null;
+    }
+
+    @PreAuthorize("#oauth2.hasScope('cms_admin_client')")
+    @RequestMapping(value = "/options", method = {RequestMethod.GET})
+    public List getOptionList(@RequestParam Long websiteId,Principal principal) {
+        List<Map> listOptions = null;
+        Iterable<ResourceTable> list = resourceTableService.getListByWebsite(websiteId);
+        if (list != null && list.iterator().hasNext()) {
+            listOptions = new ArrayList<>();
+            for (ResourceTable rt : list) {
+                Map mapOption = new HashMap<>();
+                mapOption.put("label", rt.getName());
+                mapOption.put("value", rt.getId());
+                listOptions.add(mapOption);
+            }
+        }
+        return listOptions;
     }
 
 }

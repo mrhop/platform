@@ -83,7 +83,11 @@ public class CmsClientPollController {
                     // List<Map> listReturn = new ArrayList<>();
                     for (Map map : list) {
                         if ("website".equals(map.get("name")) ) {
-                            //map.put("items", mapItems.get("clients"));
+                            request.setAttribute("resourceUrl", baseConfig.getWebsiteoptions());
+                            CommonResult usernamesResult = commonMethods.getResource(request);
+                            if (CommonResultStatus.SUCCESS.toString().equals(usernamesResult.getStatus()) && usernamesResult.getResponseData().get("data") != null) {
+                                map.put("items", usernamesResult.getResponseData().get("data"));
+                            }
                             if(mapData.get(map.get("name"))!=null){
                                 map.put("defaultValue", mapData.get(map.get("name")));
                             }
@@ -120,8 +124,11 @@ public class CmsClientPollController {
         List<Map> list = (List<Map>) rule.get("structure");
         for (Map map : list) {
             if ("website".equals(map.get("name")) ) {
-                //map.put("items", mapItems.get("clients"));
-
+                request.setAttribute("resourceUrl", baseConfig.getWebsiteoptions());
+                CommonResult usernamesResult = commonMethods.getResource(request);
+                if (CommonResultStatus.SUCCESS.toString().equals(usernamesResult.getStatus()) && usernamesResult.getResponseData().get("data") != null) {
+                    map.put("items", usernamesResult.getResponseData().get("data"));
+                }
                 continue;
             }
         }

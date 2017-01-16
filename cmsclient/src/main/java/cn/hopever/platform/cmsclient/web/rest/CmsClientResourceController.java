@@ -95,14 +95,26 @@ public class CmsClientResourceController {
                     // List<Map> listReturn = new ArrayList<>();
                     for (Map map : list) {
                         if ("type".equals(map.get("name")) ) {
-                            //map.put("items", mapItems.get("clients"));
+                            List<String> resourceTypes = baseConfig.getResourceTypes();
+                            List<Map> listOptions = new ArrayList<>();
+                            for (String resourceType : resourceTypes) {
+                                Map mapOption = new HashMap<>();
+                                mapOption.put("label", resourceType);
+                                mapOption.put("value", resourceType);
+                                listOptions.add(mapOption);
+                            }
+                            map.put("items", listOptions);
                             if(mapData.get(map.get("name"))!=null){
                                 map.put("defaultValue", mapData.get(map.get("name")));
                             }
                             continue;
                         }
                         if ("website".equals(map.get("name")) ) {
-                            //map.put("items", mapItems.get("clients"));
+                            request.setAttribute("resourceUrl", baseConfig.getWebsiteoptions());
+                            CommonResult usernamesResult = commonMethods.getResource(request);
+                            if (CommonResultStatus.SUCCESS.toString().equals(usernamesResult.getStatus()) && usernamesResult.getResponseData().get("data") != null) {
+                                map.put("items", usernamesResult.getResponseData().get("data"));
+                            }
                             if(mapData.get(map.get("name"))!=null){
                                 map.put("defaultValue", mapData.get(map.get("name")));
                             }
@@ -139,11 +151,23 @@ public class CmsClientResourceController {
         List<Map> list = (List<Map>) rule.get("structure");
         for (Map map : list) {
             if ("type".equals(map.get("name")) ) {
-                //map.put("items", mapItems.get("clients"));
+                List<String> resourceTypes = baseConfig.getResourceTypes();
+                List<Map> listOptions = new ArrayList<>();
+                for (String resourceType : resourceTypes) {
+                    Map mapOption = new HashMap<>();
+                    mapOption.put("label", resourceType);
+                    mapOption.put("value", resourceType);
+                    listOptions.add(mapOption);
+                }
+                map.put("items", listOptions);
                 continue;
             }
             if ("website".equals(map.get("name")) ) {
-                //map.put("items", mapItems.get("clients"));
+                request.setAttribute("resourceUrl", baseConfig.getWebsiteoptions());
+                CommonResult usernamesResult = commonMethods.getResource(request);
+                if (CommonResultStatus.SUCCESS.toString().equals(usernamesResult.getStatus()) && usernamesResult.getResponseData().get("data") != null) {
+                    map.put("items", usernamesResult.getResponseData().get("data"));
+                }
                 continue;
             }
         }

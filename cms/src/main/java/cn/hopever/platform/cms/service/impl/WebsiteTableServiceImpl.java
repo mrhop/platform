@@ -49,7 +49,17 @@ public class WebsiteTableServiceImpl implements WebsiteTableService {
     }
 
     @Override
-    public List<WebsiteTable> getList(Principal principal) {
+    public Iterable<WebsiteTable> getList(Principal principal) {
+        String authority = ((OAuth2Authentication) principal).getAuthorities().iterator().next().getAuthority();
+        if ("ROLE_super_admin".equals(authority) || "ROLE_admin".equals(authority)) {
+            return this.websiteTableRepository.findAll();
+        }
+        String username = principal.getName();
+        username = "[" + username + "]";
+        return this.websiteTableRepository.findByRelatedUsernamesLike(username);
+    }
+
+    private List<WebsiteTable> getListSub(Principal principal) {
         String username = principal.getName();
         username = "[" + username + "]";
         return this.websiteTableRepository.findByRelatedUsernamesLike(username);
@@ -62,8 +72,8 @@ public class WebsiteTableServiceImpl implements WebsiteTableService {
             return true;
         } else {
             boolean validated = false;
-            List<WebsiteTable> list = this.getList(principal);
-            if (websiteTable != null && list != null && list.size() > 0 && list.contains(websiteTable)) {
+            List<WebsiteTable> list = this.getListSub(principal);
+            if (websiteTable != null && list != null && list.size()>0 && list.contains(websiteTable)) {
                 validated = true;
             }
             return validated;

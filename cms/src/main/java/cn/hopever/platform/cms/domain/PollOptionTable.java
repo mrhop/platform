@@ -28,5 +28,9 @@ public class PollOptionTable {
 
     @ManyToOne
     @JoinColumn(name = "poll_id")
+    private WebsiteTable website;
+
+    @ManyToOne
+    @JoinColumn(name = "poll_id")
     private PollTable poll;
 }

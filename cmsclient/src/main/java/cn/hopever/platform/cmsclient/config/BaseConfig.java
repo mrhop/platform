@@ -38,6 +38,7 @@ public class BaseConfig {
     private String resourceupdate;
     private String resourcesave;
     private String resourcedelete;
+    private String resourceoptions;
     //    #template
     private List<String> templateLayoutTypes;
     private List<String> templateLayoutScales;
@@ -54,6 +55,7 @@ public class BaseConfig {
     private String blockupdate;
     private String blocksave;
     private String blockdelete;
+    private String blockoptions;
     //    #news
     private String newslist;
     private String newsinfo;
@@ -73,6 +75,7 @@ public class BaseConfig {
     private String pollupdate;
     private String pollsave;
     private String polldelete;
+    private String polloptions;
     //    #pollOption
     private String polloptionlist;
     private String polloptioninfo;
@@ -113,6 +116,7 @@ public class BaseConfig {
     private String articleupdate;
     private String articlesave;
     private String articledelete;
+    private String articleoptions;
 
     private Map<String, Object> mapRules;
 

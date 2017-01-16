@@ -4,6 +4,7 @@ import cn.hopever.platform.cms.domain.ResourceTable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -19,4 +20,7 @@ public interface ResourceTableService {
     public void delete(Long id);
 
     public ResourceTable get(Long id);
+
+    public List<ResourceTable> getListByWebsite(Long websiteId);
+
 }

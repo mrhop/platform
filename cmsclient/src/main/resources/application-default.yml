@@ -28,6 +28,7 @@ config:
         resourceupdate: http://localhost:9092/resource/update
         resourcesave: http://localhost:9092/resource/save
         resourcedelete: http://localhost:9092/resource/delete
+        resourceoptions: http://localhost:9092/resource/options
         #template
         templateLayoutTypes:
                 - static
@@ -57,6 +58,7 @@ config:
         blockupdate: http://localhost:9092/block/update
         blocksave: http://localhost:9092/block/save
         blockdelete: http://localhost:9092/block/delete
+        blockoptions: http://localhost:9092/block/options
         #news
         newslist: http://localhost:9092/news/list
         newsinfo: http://localhost:9092/news/info
@@ -76,6 +78,7 @@ config:
         pollupdate: http://localhost:9092/poll/update
         pollsave: http://localhost:9092/poll/save
         polldelete: http://localhost:9092/poll/delete
+        polloptions: http://localhost:9092/poll/options
         #pollOption
         polloptionlist: http://localhost:9092/polloption/list
         polloptioninfo: http://localhost:9092/polloption/info
@@ -122,3 +125,4 @@ config:
         articleupdate: http://localhost:9092/article/update
         articlesave: http://localhost:9092/article/save
         articledelete: http://localhost:9092/article/delete
+        articleoptions: http://localhost:9092/article/options

@@ -142,5 +142,22 @@ public class PollController {
         this.pollTableService.save(pollTable);
         return null;
     }
+    @PreAuthorize("#oauth2.hasScope('cms_admin_client')")
+    @RequestMapping(value = "/options", method = {RequestMethod.GET})
+    public List getOptionList(@RequestParam Long websiteId,Principal principal) {
+        List<Map> listOptions = null;
+        Iterable<PollTable> list = pollTableService.getListByWebsite(websiteId);
+        if (list != null && list.iterator().hasNext()) {
+            listOptions = new ArrayList<>();
+            for (PollTable pt : list) {
+                Map mapOption = new HashMap<>();
+                mapOption.put("label", pt.getTitle());
+                mapOption.put("value", pt.getId());
+                listOptions.add(mapOption);
+            }
+        }
+        return listOptions;
+    }
+
 
 }

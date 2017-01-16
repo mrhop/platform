@@ -111,18 +111,12 @@ public class ArticleController {
             map.put("title", at.getTitle());
             map.put("content", at.getContent());
             if (at.getWebsite() != null) {
-                HashMap<String, Object> mapWebsite = new HashMap<>();
-                mapWebsite.put("id", at.getWebsite().getId());
-                mapWebsite.put("title", at.getWebsite().getTitle());
-                map.put("website", mapWebsite);
+                map.put("website", at.getWebsite().getId());
             } else {
                 map.put("website", null);
             }
             if (at.getTemplate() != null) {
-                HashMap<String, Object> mapTemplate = new HashMap<>();
-                mapTemplate.put("id", at.getTemplate().getId());
-                mapTemplate.put("name", at.getTemplate().getName());
-                map.put("template", mapTemplate);
+                map.put("template", at.getTemplate().getId());
             } else {
                 map.put("template", null);
             }
@@ -200,5 +194,22 @@ public class ArticleController {
     public Map preview(@RequestParam Long id, Principal principal) {
         //根据template 获取到，然后进行 article的装配
         return null;
+    }
+
+    @PreAuthorize("#oauth2.hasScope('cms_admin_client')")
+    @RequestMapping(value = "/options", method = {RequestMethod.GET})
+    public List getOptionList(@RequestParam Long websiteId,Principal principal) {
+        List<Map> listOptions = null;
+        Iterable<ArticleTable> list = articleTableService.getListByWebsite(websiteId);
+        if (list != null && list.iterator().hasNext()) {
+            listOptions = new ArrayList<>();
+            for (ArticleTable at : list) {
+                Map mapOption = new HashMap<>();
+                mapOption.put("label", at.getTitle());
+                mapOption.put("value", at.getId());
+                listOptions.add(mapOption);
+            }
+        }
+        return listOptions;
     }
 }

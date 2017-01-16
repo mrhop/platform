@@ -104,10 +104,7 @@ public class BlockController {
             map.put("id", bt.getId());
             map.put("name", bt.getName());
             if (bt.getWebsite() != null) {
-                HashMap<String, Object> mapWebsite = new HashMap<>();
-                mapWebsite.put("id", bt.getWebsite().getId());
-                mapWebsite.put("title", bt.getWebsite().getTitle());
-                map.put("website", mapWebsite);
+                map.put("website",  bt.getWebsite().getId());
             } else {
                 map.put("website", null);
             }
@@ -116,27 +113,18 @@ public class BlockController {
             map.put("dataUrl", bt.getDataUrl());
             map.put("script", bt.getScript());
             if (bt.getNewsType() != null) {
-                HashMap<String, Object> mapNewsType = new HashMap<>();
-                mapNewsType.put("id", bt.getNewsType().getId());
-                mapNewsType.put("title", bt.getNewsType().getTitle());
-                map.put("newsType", mapNewsType);
+                map.put("newsType",  bt.getNewsType().getId());
             } else {
                 map.put("newsType", null);
             }
             map.put("newsNumber", bt.getNewsNumber());
             if (bt.getPoll() != null) {
-                HashMap<String, Object> mapPoll = new HashMap<>();
-                mapPoll.put("id", bt.getPoll().getId());
-                mapPoll.put("title", bt.getPoll().getTitle());
-                map.put("poll", mapPoll);
+                map.put("poll", bt.getPoll().getId());
             } else {
                 map.put("poll", null);
             }
             if (bt.getFileLibraryType() != null) {
-                HashMap<String, Object> mapFileLibraryType = new HashMap<>();
-                mapFileLibraryType.put("id", bt.getFileLibraryType().getId());
-                mapFileLibraryType.put("title", bt.getFileLibraryType().getTitle());
-                map.put("fileLibraryType", mapFileLibraryType);
+                map.put("fileLibraryType", bt.getFileLibraryType().getId());
             } else {
                 map.put("fileLibraryType", null);
             }
@@ -231,5 +219,22 @@ public class BlockController {
         }
         this.blockTableService.save(blockTable);
         return null;
+    }
+
+    @PreAuthorize("#oauth2.hasScope('cms_admin_client')")
+    @RequestMapping(value = "/options", method = {RequestMethod.GET})
+    public List getOptionList(@RequestParam Long websiteId,Principal principal) {
+        List<Map> listOptions = null;
+        Iterable<BlockTable> list = blockTableService.getListByWebsite(websiteId);
+        if (list != null && list.iterator().hasNext()) {
+            listOptions = new ArrayList<>();
+            for (BlockTable bt : list) {
+                Map mapOption = new HashMap<>();
+                mapOption.put("label", bt.getName());
+                mapOption.put("value", bt.getId());
+                listOptions.add(mapOption);
+            }
+        }
+        return listOptions;
     }
 }

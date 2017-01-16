@@ -1182,11 +1182,16 @@
         "required": true
       },
       {
+        "name": "website",
+        "label": "所属投票",
+        "type": "text",
+        "readonly": true
+      },
+      {
         "name": "poll",
         "label": "所属投票",
-        "type": "select",
-        "required": true,
-        "dataType": "number"
+        "type": "text",
+        "readonly": true
       },
       {
         "name": "id",
@@ -1222,6 +1227,14 @@
             "errorMsg": "不能为空"
           }
         ]
+      },
+      {
+        "name": "website",
+        "label": "所属网站",
+        "type": "select",
+        "required": true,
+        "updatable": true,
+        "dataType": "number"
       },
       {
         "name": "poll",

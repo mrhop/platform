@@ -3,6 +3,7 @@ package cn.hopever.platform.cms.service.impl;
 import cn.hopever.platform.cms.domain.BlockTable;
 import cn.hopever.platform.cms.repository.BlockTableRepository;
 import cn.hopever.platform.cms.repository.CustomBlockTableRepository;
+import cn.hopever.platform.cms.repository.WebsiteTableRepository;
 import cn.hopever.platform.cms.service.BlockTableService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Map;
 
 @Service("blockTableService")
@@ -23,10 +25,17 @@ public class BlockTableServiceImpl implements BlockTableService {
     private BlockTableRepository blockTableRepository;
     @Autowired
     private CustomBlockTableRepository customBlockTableRepository;
+    @Autowired
+    private WebsiteTableRepository websiteTableRepository;
 
     @Override
     public Page<BlockTable> getList(Pageable pageable, Map<String, Object> filterMap) {
         return customBlockTableRepository.findByFilters(filterMap,pageable);
+    }
+
+    @Override
+    public List<BlockTable> getListByWebsite(Long websiteId) {
+        return blockTableRepository.findByWebsite(websiteTableRepository.findOne(websiteId));
     }
 
     @Override

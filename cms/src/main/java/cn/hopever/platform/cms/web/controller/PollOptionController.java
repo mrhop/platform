@@ -3,6 +3,7 @@ package cn.hopever.platform.cms.web.controller;
 import cn.hopever.platform.cms.domain.PollOptionTable;
 import cn.hopever.platform.cms.service.PollOptionTableService;
 import cn.hopever.platform.cms.service.PollTableService;
+import cn.hopever.platform.cms.service.WebsiteTableService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,8 @@ import java.util.Map;
 public class PollOptionController {
     Logger logger = LoggerFactory.getLogger(PollOptionController.class);
     @Autowired
+    private WebsiteTableService websiteTableService;
+    @Autowired
     private PollTableService pollTableService;
     @Autowired
     private PollOptionTableService pollOptionTableService;
@@ -41,6 +44,11 @@ public class PollOptionController {
                 listTmp.add("");
                 listTmp.add(pot.getTitle());
                 listTmp.add(pot.getVoteTimes());
+                if (pot.getWebsite() != null) {
+                    listTmp.add(pot.getWebsite().getTitle());
+                } else {
+                    listTmp.add(null);
+                }
                 if (pot.getPoll() != null) {
                     listTmp.add(pot.getPoll().getTitle());
                 } else {
@@ -68,11 +76,13 @@ public class PollOptionController {
         map.put("id", pot.getId());
         map.put("title", pot.getTitle());
         map.put("voteTimes", pot.getVoteTimes());
+        if (pot.getWebsite() != null) {
+            map.put("website",  pot.getWebsite().getTitle());
+        } else {
+            map.put("website", null);
+        }
         if (pot.getPoll() != null) {
-            HashMap<String, Object> mapPoll = new HashMap<>();
-            mapPoll.put("id", pot.getPoll().getId());
-            mapPoll.put("title", pot.getPoll().getTitle());
-            map.put("poll", mapPoll);
+            map.put("poll",  pot.getPoll().getTitle());
         } else {
             map.put("poll", null);
         }
@@ -91,9 +101,6 @@ public class PollOptionController {
         if (body.get("voteTimes") != null) {
             pollOptionTable.setVoteTimes(Integer.valueOf(body.get("voteTimes").toString()));
         }
-        if (body.get("poll") != null) {
-            pollOptionTable.setPoll(pollTableService.get(Long.valueOf(body.get("poll").toString())));
-        }
         this.pollOptionTableService.save(pollOptionTable);
         return null;
     }
@@ -106,10 +113,9 @@ public class PollOptionController {
         if (body.get("title") != null) {
             pollOptionTable.setTitle(body.get("title").toString());
         }
-        if (body.get("voteTimes") != null) {
-            pollOptionTable.setVoteTimes(Integer.valueOf(body.get("voteTimes").toString()));
-        }else{
-            pollOptionTable.setVoteTimes(0);
+        pollOptionTable.setVoteTimes(0);
+        if (body.get("website") != null) {
+            pollOptionTable.setWebsite(websiteTableService.get(Long.valueOf(body.get("website").toString())));
         }
         if (body.get("poll") != null) {
             pollOptionTable.setPoll(pollTableService.get(Long.valueOf(body.get("poll").toString())));
