@@ -12,5 +12,5 @@ import java.util.List;
  * 全部采用
  */
 public interface NavigateTableRepository extends PagingAndSortingRepository<NavigateTable, Long> {
-    List<NavigateTable> findByWebsiteAndParentIsNullAndSort(WebsiteTable websiteTable,Sort sort);
+    List<NavigateTable> findByWebsiteAndParentIsNull(WebsiteTable websiteTable,Sort sort);
 }

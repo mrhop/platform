@@ -27,7 +27,7 @@ public class PollOptionTable {
     private int voteTimes = 0;
 
     @ManyToOne
-    @JoinColumn(name = "poll_id")
+    @JoinColumn(name = "website_id")
     private WebsiteTable website;
 
     @ManyToOne

@@ -48,7 +48,7 @@ public class TemplateTableServiceImpl implements TemplateTableService {
     }
 
     @Override
-    public List<TemplateTable> getListByWebsiteAndNull(WebsiteTable websiteTable) {
+    public List<TemplateTable> getListByWebsiteOrNull(WebsiteTable websiteTable) {
         return templateTableRepository.findByWebsiteOrWebsiteIsNull(websiteTable);
     }
 }

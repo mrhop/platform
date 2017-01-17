@@ -49,6 +49,6 @@ public class NavigateTableServiceImpl implements NavigateTableService {
 
     @Override
     public List<NavigateTable> getListByWebsite(WebsiteTable websiteTable) {
-        return navigateTableRepository.findByWebsiteAndParentIsNullAndSort(websiteTable,new Sort(Sort.Direction.ASC,"orderNum"));
+        return navigateTableRepository.findByWebsiteAndParentIsNull(websiteTable,new Sort(Sort.Direction.ASC,"orderNum"));
     }
 }
