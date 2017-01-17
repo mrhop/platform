@@ -141,44 +141,29 @@ public class NavigateController {
             map.put("id", nt.getId());
             map.put("title", nt.getTitle());
             if (nt.getWebsite() != null) {
-                HashMap<String, Object> mapWebsite = new HashMap<>();
-                mapWebsite.put("id", nt.getWebsite().getId());
-                mapWebsite.put("title", nt.getWebsite().getTitle());
-                map.put("website", mapWebsite);
+                map.put("website", nt.getWebsite().getId());
             } else {
                 map.put("website", null);
             }
             if (nt.getParent() != null) {
-                HashMap<String, Object> mapParent = new HashMap<>();
-                mapParent.put("id", nt.getParent().getId());
-                mapParent.put("title", nt.getParent().getTitle());
-                map.put("parent", mapParent);
+                map.put("parent", nt.getParent().getId());
             } else {
                 map.put("parent", null);
             }
             map.put("orderNum", nt.getOrderNum());
             map.put("type", nt.getType());
             if (nt.getArticle() != null) {
-                HashMap<String, Object> mapArticle = new HashMap<>();
-                mapArticle.put("id", nt.getArticle().getId());
-                mapArticle.put("title", nt.getArticle().getTitle());
-                map.put("article", mapArticle);
+                map.put("article", nt.getArticle().getId());
             } else {
                 map.put("article", null);
             }
             if (nt.getNewsType() != null) {
-                HashMap<String, Object> mapNewsType = new HashMap<>();
-                mapNewsType.put("id", nt.getNewsType().getId());
-                mapNewsType.put("title", nt.getNewsType().getTitle());
-                map.put("newsType", mapNewsType);
+                map.put("newsType", nt.getNewsType().getId());
             } else {
                 map.put("newsType", null);
             }
             if (nt.getFileLibraryType() != null) {
-                HashMap<String, Object> mapFileLibraryType = new HashMap<>();
-                mapFileLibraryType.put("id", nt.getNewsType().getId());
-                mapFileLibraryType.put("title", nt.getNewsType().getTitle());
-                map.put("fileLibraryType", mapFileLibraryType);
+                map.put("fileLibraryType", nt.getNewsType().getId());
             } else {
                 map.put("fileLibraryType", null);
             }

@@ -102,18 +102,12 @@ public class NewsController {
         map.put("id", nt.getId());
         map.put("title", nt.getTitle());
         if (nt.getWebsite() != null) {
-            HashMap<String, Object> mapWebsite = new HashMap<>();
-            mapWebsite.put("id",nt.getWebsite().getId());
-            mapWebsite.put("title",nt.getWebsite().getTitle());
-            map.put("website", mapWebsite);
+            map.put("website", nt.getWebsite().getId());
         } else {
             map.put("website", null);
         }
         if (nt.getNewsType() != null) {
-            HashMap<String, Object> mapNewsType = new HashMap<>();
-            mapNewsType.put("id", nt.getNewsType().getId());
-            mapNewsType.put("title", nt.getNewsType().getTitle());
-            map.put("newsType", mapNewsType);
+            map.put("newsType", nt.getNewsType().getId());
         } else {
             map.put("newsType", null);
         }
@@ -142,7 +136,7 @@ public class NewsController {
             newsTable.setWebsite(websiteTable);
         }
         if (body.get("newsType") != null) {
-            NewsTypeTable newsTypeTable = newsTypeTableService.get(Long.valueOf(body.get("website").toString()));
+            NewsTypeTable newsTypeTable = newsTypeTableService.get(Long.valueOf(body.get("newsType").toString()));
             newsTable.setNewsType(newsTypeTable);
         }
         if (body.get("clickTimes") != null) {
@@ -173,7 +167,7 @@ public class NewsController {
             newsTable.setWebsite(websiteTable);
         }
         if (body.get("newsType") != null) {
-            NewsTypeTable newsTypeTable = newsTypeTableService.get(Long.valueOf(body.get("website").toString()));
+            NewsTypeTable newsTypeTable = newsTypeTableService.get(Long.valueOf(body.get("newsType").toString()));
             newsTable.setNewsType(newsTypeTable);
         }
         if (body.get("clickTimes") != null) {

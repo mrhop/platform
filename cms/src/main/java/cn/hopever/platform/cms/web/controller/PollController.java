@@ -98,10 +98,7 @@ public class PollController {
             map.put("id", pt.getId());
             map.put("title", pt.getTitle());
             if(pt.getWebsite()!=null){
-                HashMap<String, Object> mapWebsite = new HashMap<>();
-                mapWebsite.put("id",pt.getWebsite().getId());
-                mapWebsite.put("title",pt.getWebsite().getTitle());
-                map.put("website", mapWebsite);
+                map.put("website", pt.getWebsite().getId());
             }else{
                 map.put("website", null);
             }

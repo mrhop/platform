@@ -129,18 +129,12 @@ public class FileLibraryTypeController {
             map.put("id", fltt.getId());
             map.put("title", fltt.getTitle());
             if(fltt.getWebsite()!=null){
-                HashMap<String, Object> mapWebsite = new HashMap<>();
-                mapWebsite.put("id",fltt.getWebsite().getId());
-                mapWebsite.put("title",fltt.getWebsite().getTitle());
-                map.put("website", mapWebsite);
+                map.put("website", fltt.getWebsite().getId());
             }else{
                 map.put("website", null);
             }
             if(fltt.getTemplate()!=null){
-                HashMap<String, Object> mapTemplate = new HashMap<>();
-                mapTemplate.put("id",fltt.getTemplate().getId());
-                mapTemplate.put("title",fltt.getTemplate().getName());
-                map.put("template", mapTemplate);
+                map.put("template", fltt.getTemplate().getId());
             }else{
                 map.put("template", null);
             }

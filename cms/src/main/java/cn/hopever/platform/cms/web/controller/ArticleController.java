@@ -151,7 +151,7 @@ public class ArticleController {
                 articleTable.setPublishDate(new Date(Long.valueOf(body.get("publishDate").toString())));
             }
             if (body.get("template") != null) {
-                articleTable.setTemplate(templateTableService.get(Long.valueOf(body.get("website").toString())));
+                articleTable.setTemplate(templateTableService.get(Long.valueOf(body.get("template").toString())));
             }
             if (body.get("website") != null) {
                 articleTable.setWebsite(websiteTableService.get(Long.valueOf(body.get("website").toString())));
@@ -180,7 +180,7 @@ public class ArticleController {
             articleTable.setPublishDate(new Date(Long.valueOf(body.get("publishDate").toString())));
         }
         if (body.get("template") != null) {
-            articleTable.setTemplate(templateTableService.get(Long.valueOf(body.get("website").toString())));
+            articleTable.setTemplate(templateTableService.get(Long.valueOf(body.get("template").toString())));
         }
         if (body.get("website") != null) {
             articleTable.setWebsite(websiteTableService.get(Long.valueOf(body.get("website").toString())));
