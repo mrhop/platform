@@ -85,7 +85,7 @@ public class CmsClientBlockController {
     public CommonResult getBlock(HttpServletRequest request) throws Exception {
         request.setAttribute("resourceUrl", baseConfig.getWebsiteinfo() + "?id=" + request.getParameter("key"));
         CommonResult c = commonMethods.getResource(request);
-        Map<String, Object> rule = baseConfig.getFormRule("clientupdate");
+        Map<String, Object> rule = baseConfig.getFormRule("blockupdate");
         List<Map> list = (List<Map>) rule.get("structure");
 
         //注意是否需要有相关的处理
@@ -157,6 +157,21 @@ public class CmsClientBlockController {
                             map.remove("available");
                             continue;
                         }
+
+                        if ("poll".equals(map.get("name"))) {
+                            if (blockTypeSelected != null && "投票".equals(blockTypeSelected)) {
+                                if (websiteId != null) {
+                                    request.setAttribute("resourceUrl", baseConfig.getPolloptions() + "?websiteId=" + websiteId);
+                                    CommonResult usernamesResult = commonMethods.getResource(request);
+                                    if (CommonResultStatus.SUCCESS.toString().equals(usernamesResult.getStatus()) && usernamesResult.getResponseData().get("data") != null) {
+                                        map.put("items", usernamesResult.getResponseData().get("data"));
+                                    }
+                                }
+                                map.put("defaultValue", mapData.get(map.get("name")));
+                                map.remove("available");
+                            }
+                            continue;
+                        }
                         if ("fileLibraryType".equals(map.get("name")) && blockTypeSelected != null && "文件库".equals(blockTypeSelected)) {
                             if (websiteId != null) {
                                 request.setAttribute("resourceUrl", baseConfig.getFilelibrarytypeoptionsofwebsite() + "?websiteId=" + websiteId);
@@ -200,7 +215,7 @@ public class CmsClientBlockController {
     @RequestMapping(value = "/block/add", method = {RequestMethod.GET})
     public CommonResult addBlock(HttpServletRequest request) throws Exception {
         CommonResult c = new CommonResult();
-        Map<String, Object> rule = baseConfig.getFormRule("websiteadd");
+        Map<String, Object> rule = baseConfig.getFormRule("blockadd");
         List<Map> list = (List<Map>) rule.get("structure");
         for (Map map : list) {
             if ("type".equals(map.get("name"))) {
@@ -276,6 +291,22 @@ public class CmsClientBlockController {
                 if (blockTypeSelected != null && ("热点新闻".equals(blockTypeSelected) || "最新新闻".equals(blockTypeSelected))) {
                     if (websiteId != null && "newsType".equals(map.get("name"))) {
                         request.setAttribute("resourceUrl", baseConfig.getNewstypeoptionsofwebsite() + "?websiteId=" + websiteId);
+                        CommonResult usernamesResult = commonMethods.getResource(request);
+                        if (CommonResultStatus.SUCCESS.toString().equals(usernamesResult.getStatus()) && usernamesResult.getResponseData().get("data") != null) {
+                            map.put("items", usernamesResult.getResponseData().get("data"));
+                        }
+                    }
+                    map.remove("available");
+                } else {
+                    map.put("available", false);
+                }
+                map.put("changed", true);
+                continue;
+            }
+            if ("poll".equals(map.get("name"))) {
+                if (blockTypeSelected != null && "投票".equals(blockTypeSelected)) {
+                    if (websiteId != null) {
+                        request.setAttribute("resourceUrl", baseConfig.getPolloptions() + "?websiteId=" + websiteId);
                         CommonResult usernamesResult = commonMethods.getResource(request);
                         if (CommonResultStatus.SUCCESS.toString().equals(usernamesResult.getStatus()) && usernamesResult.getResponseData().get("data") != null) {
                             map.put("items", usernamesResult.getResponseData().get("data"));

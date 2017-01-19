@@ -9,7 +9,7 @@ config:
         moduleList: http://localhost:9091/user/hateoas/module/list/
     common:
         pageSize: 10
-        relatedusers: http://localhost:9091/user/list/relatedusers/options
+        relatedusers: http://localhost:9091/user/user/list/relatedusers/options
 #        imageUpload: http://localhost:8084/utilsweb/upload/image
 #        fileUpload: http://localhost:8084/utilsweb/upload/file
 #        docUpload: http://localhost:8084/utilsweb/upload/doc

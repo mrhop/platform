@@ -33,7 +33,8 @@
             "value": true
           }
         ]
-      },{
+      },
+      {
         "name": "relatedUsernames",
         "label": "关联用户",
         "type": "checkbox",
@@ -107,7 +108,8 @@
             "value": true
           }
         ]
-      },{
+      },
+      {
         "name": "relatedUsernames",
         "label": "关联用户",
         "type": "checkbox",
@@ -782,11 +784,19 @@
             "errorMsg": "不能为空"
           }
         ]
-      },{
+      },
+      {
         "name": "subtitle",
         "label": "副标题",
         "type": "text",
         "placeholder": "副标题",
+        "required": true
+      },
+      {
+        "name": "content",
+        "label": "新闻内容",
+        "type": "textarea",
+        "placeholder": "新闻内容",
         "required": true
       },
       {
@@ -879,11 +889,19 @@
             "errorMsg": "不能为空"
           }
         ]
-      },{
+      },
+      {
         "name": "subtitle",
         "label": "副标题",
         "type": "text",
         "placeholder": "副标题",
+        "required": true
+      },
+      {
+        "name": "content",
+        "label": "新闻内容",
+        "type": "textarea",
+        "placeholder": "新闻内容",
         "required": true
       },
       {
@@ -899,20 +917,6 @@
         "label": "新闻类型",
         "type": "select",
         "required": true,
-        "validateRules": [
-          {
-            "name": "REQUIRED_VALIDATE",
-            "errorMsg": "不能为空"
-          }
-        ]
-      },
-      {
-        "name": "clickTimes",
-        "label": "点击次数",
-        "type": "number",
-        "placeholder": "点击次数",
-        "required": true,
-        "readonly": true,
         "validateRules": [
           {
             "name": "REQUIRED_VALIDATE",
@@ -1263,22 +1267,26 @@
         "label": "关联操作",
         "type": "text",
         "readonly": true
-      },{
+      },
+      {
         "name": "ip",
         "label": "IP地址",
         "type": "text",
         "readonly": true
-      },{
+      },
+      {
         "name": "operationUser",
         "label": "操作员",
         "type": "text",
         "readonly": true
-      },{
+      },
+      {
         "name": "operationDate",
         "label": "操作时间",
         "type": "text",
         "readonly": true
-      },{
+      },
+      {
         "name": "website",
         "label": "所属网站",
         "type": "text",
@@ -1505,11 +1513,10 @@
         "dataType": "number"
       },
       {
-        "name": "url",
-        "label": "文件地址",
-        "type": "text",
-        "placeholder": "文件地址",
-        "required": true
+        "name": "file",
+        "label": "媒体文件",
+        "type": "file",
+        "placeholder": "媒体文件"
       },
       {
         "name": "isPublished",
@@ -1598,10 +1605,10 @@
         "dataType": "number"
       },
       {
-        "name": "url",
-        "label": "文件地址",
-        "type": "text",
-        "placeholder": "文件地址",
+        "name": "file",
+        "label": "媒体文件",
+        "type": "file",
+        "placeholder": "媒体文件",
         "required": true
       },
       {
@@ -1883,20 +1890,6 @@
         "type": "date",
         "placeholder": "发布时间",
         "dateFormat": "YYYY-MM-DD"
-      },
-      {
-        "name": "createUser",
-        "label": "创建人",
-        "type": "text",
-        "placeholder": "创建人",
-        "readonly": true
-      },
-      {
-        "name": "createDate",
-        "label": "创建日期",
-        "type": "text",
-        "placeholder": "创建日期",
-        "readonly": true
       },
       {
         "name": "id",

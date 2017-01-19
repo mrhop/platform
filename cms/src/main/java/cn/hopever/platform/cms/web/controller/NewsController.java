@@ -52,8 +52,12 @@ public class NewsController {
         if (body.get("filters") != null && !body.get("filters").isNull()) {
             filterMap = JacksonUtil.mapper.convertValue(body.get("filters"), Map.class);
         }
-        filterMap.put("newsType", filterMap.get("newsType") != null ? newsTypeTableService.get(Long.valueOf(filterMap.get("newsType").toString())) : null);
-        filterMap.put("website", filterMap.get("website") != null ? websiteTableService.get(Long.valueOf(filterMap.get("website").toString())) : null);
+        if(filterMap.get("newsType") != null){
+            filterMap.put("newsType", newsTypeTableService.get(Long.valueOf(filterMap.get("newsType").toString())));
+        }
+        if(filterMap.get("website") != null){
+            filterMap.put("website", websiteTableService.getWebsiteAsFilter(principal, filterMap.get("website").toString()));
+        }
         list = newsTableService.getList(pageRequest, filterMap);
         if (list != null && list.iterator().hasNext()) {
             listReturn = new ArrayList<>();
@@ -131,6 +135,12 @@ public class NewsController {
         if (body.get("title") != null) {
             newsTable.setTitle(body.get("title").toString());
         }
+        if (body.get("subtitle") != null) {
+            newsTable.setSubtitle(body.get("subtitle").toString());
+        }
+        if (body.get("content") != null) {
+            newsTable.setContent(body.get("content").toString());
+        }
         if (body.get("website") != null) {
             WebsiteTable websiteTable = websiteTableService.get(Long.valueOf(body.get("website").toString()));
             newsTable.setWebsite(websiteTable);
@@ -161,6 +171,12 @@ public class NewsController {
         NewsTable newsTable = new NewsTable();
         if (body.get("title") != null) {
             newsTable.setTitle(body.get("title").toString());
+        }
+        if (body.get("subtitle") != null) {
+            newsTable.setSubtitle(body.get("subtitle").toString());
+        }
+        if (body.get("content") != null) {
+            newsTable.setContent(body.get("content").toString());
         }
         if (body.get("website") != null) {
             WebsiteTable websiteTable = websiteTableService.get(Long.valueOf(body.get("website").toString()));

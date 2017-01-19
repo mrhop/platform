@@ -43,7 +43,6 @@ public class WebsiteController {
             filterMap = JacksonUtil.mapper.convertValue(body.get("filters"), Map.class);
         }
         list = websiteTableService.getList(pageRequest, filterMap);
-
         if (list != null && list.iterator().hasNext()) {
             listReturn = new ArrayList<>();
             for (WebsiteTable wt : list) {

@@ -92,7 +92,7 @@ public class CmsClientNewsController {
                         }
                     }
                     c.getResponseData().put("rules", mapNewsList);
-                    c.getResponseData().put("additionalFeature", ((Map) baseConfig.getMapRules().get("tableRules")).get("clientListAdditionalFeature"));
+                    c.getResponseData().put("additionalFeature", ((Map) baseConfig.getMapRules().get("tableRules")).get("newsListAdditionalFeature"));
                 }
             }
         }
@@ -173,7 +173,7 @@ public class CmsClientNewsController {
     @RequestMapping(value = "/news/add", method = {RequestMethod.GET})
     public CommonResult addNews(HttpServletRequest request) throws Exception {
         CommonResult c = new CommonResult();
-        Map<String, Object> rule = baseConfig.getFormRule("websiteadd");
+        Map<String, Object> rule = baseConfig.getFormRule("newsadd");
         List<Map> list = (List<Map>) rule.get("structure");
         for (Map map : list) {
             if ("website".equals(map.get("name"))) {

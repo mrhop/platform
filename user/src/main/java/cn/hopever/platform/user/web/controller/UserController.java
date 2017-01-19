@@ -342,7 +342,7 @@ public class UserController {
                 listOptions.add(mapOption);
             }
         }
-        return list;
+        return listOptions;
     }
 
     private static boolean validateUserOperation(UserTable ut1, UserTable ut2) {

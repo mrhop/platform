@@ -269,7 +269,7 @@ public class CmsClientNavigateController {
                 if ("website".equals(body.get("updateElement").asText())) {
                     websiteId = body.get("updateData").textValue();
                 } else {
-                    websiteId = map.get("defaultValue").toString();
+                    websiteId = map.get("defaultValue")!=null? map.get("defaultValue").toString():null;
                 }
                 continue;
             }

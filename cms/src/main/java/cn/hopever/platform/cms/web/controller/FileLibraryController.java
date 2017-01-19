@@ -52,9 +52,12 @@ public class FileLibraryController {
         if (body.get("filters") != null && !body.get("filters").isNull()) {
             filterMap = JacksonUtil.mapper.convertValue(body.get("filters"), Map.class);
         }
-        filterMap.put("fileLibraryType", filterMap.get("fileLibraryType") != null ? fileLibraryTypeTableService.get(Long.valueOf(filterMap.get("fileLibraryType").toString())) : null);
-        filterMap.put("website", filterMap.get("website") != null ? websiteTableService.get(Long.valueOf(filterMap.get("website").toString())) : null);
-
+        if(filterMap.get("fileLibraryType") != null){
+            filterMap.put("fileLibraryType", fileLibraryTypeTableService.get(Long.valueOf(filterMap.get("fileLibraryType").toString())));
+        }
+        if(filterMap.get("website") != null){
+            filterMap.put("website", websiteTableService.getWebsiteAsFilter(principal, filterMap.get("website").toString()));
+        }
         list = fileLibraryTableService.getList(pageRequest, filterMap);
 
         if (list != null && list.iterator().hasNext()) {

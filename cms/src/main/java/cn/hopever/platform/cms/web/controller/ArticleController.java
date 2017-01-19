@@ -51,8 +51,12 @@ public class ArticleController {
         if (body.get("filters") != null && !body.get("filters").isNull()) {
             filterMap = JacksonUtil.mapper.convertValue(body.get("filters"), Map.class);
         }
-        filterMap.put("website", websiteTableService.getWebsiteAsFilter(principal, filterMap.get("website") != null ? filterMap.get("website").toString() : null));
-        filterMap.put("template", filterMap.get("template") != null ? templateTableService.get(Long.valueOf(filterMap.get("template").toString())) : null);
+        if(filterMap.get("website") != null){
+            filterMap.put("website", websiteTableService.getWebsiteAsFilter(principal, filterMap.get("website").toString()));
+        }
+        if(filterMap.get("template") != null){
+            filterMap.put("template", templateTableService.get(Long.valueOf(filterMap.get("template").toString())));
+        }
         list = articleTableService.getList(pageRequest, filterMap);
         if (list != null && list.iterator().hasNext()) {
             listReturn = new ArrayList<>();
@@ -185,6 +189,8 @@ public class ArticleController {
         if (body.get("website") != null) {
             articleTable.setWebsite(websiteTableService.get(Long.valueOf(body.get("website").toString())));
         }
+        articleTable.setCreateDate(new Date());
+        articleTable.setCreateUser(principal.getName());
         this.articleTableService.save(articleTable);
         return null;
     }

@@ -60,8 +60,12 @@ public class NavigateController {
         }
         Long websiteId = filterMap.get("website") != null ? Long.valueOf(filterMap.get("website").toString()) : null;
         if (websiteId != null) {
-            filterMap.put("website", websiteTableService.getWebsiteAsFilter(principal, filterMap.get("website") != null ? filterMap.get("website").toString() : null));
-            filterMap.put("parent", filterMap.get("parent") != null ? navigateTableService.get(Long.valueOf(filterMap.get("parent").toString())) : null);
+            if (filterMap.get("website") != null) {
+                filterMap.put("website", websiteTableService.getWebsiteAsFilter(principal, filterMap.get("website").toString()));
+            }
+            if (filterMap.get("parent") != null) {
+                filterMap.put("parent", navigateTableService.get(Long.valueOf(filterMap.get("parent").toString())));
+            }
             list = navigateTableService.getList(pageRequest, filterMap);
         }
         if (list != null && list.iterator().hasNext()) {

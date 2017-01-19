@@ -412,7 +412,7 @@
     "tfoot": [
       {
         "className": "td-foot",
-        "colSpan": 3,
+        "colSpan": 7,
         "title": "投票选项列表基础信息"
       }
     ]
@@ -454,7 +454,7 @@
     "tfoot": [
       {
         "className": "td-foot",
-        "colSpan": 3,
+        "colSpan": 7,
         "title": "操作列表基础信息"
       }
     ]
@@ -513,7 +513,7 @@
     "tfoot": [
       {
         "className": "td-foot",
-        "colSpan": 3,
+        "colSpan": 7,
         "title": "导航列表基础信息"
       }
     ]
