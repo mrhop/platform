@@ -171,7 +171,8 @@ public class TemplateController {
 
     @PreAuthorize("#oauth2.hasScope('cms_admin_client')")
     @RequestMapping(value = "/update", method = {RequestMethod.POST})
-    public Map updateTemplate(@RequestBody Map<String, Object> body, Principal principal) {
+    public Map updateTemplate(@RequestBody Map<String, Object> bodyOriginal, Principal principal) {
+        Map body = JacksonUtil.mapper.convertValue(bodyOriginal.get("data"), Map.class);
         if (websiteTableService.validatePermission(principal, templateTableService.get(Long.valueOf(body.get("id").toString())).getWebsite())) {
             //do update
             long id = Long.valueOf(body.get("id").toString());
@@ -248,7 +249,8 @@ public class TemplateController {
 
     @PreAuthorize("#oauth2.hasScope('cms_admin_client')")
     @RequestMapping(value = "/save", method = {RequestMethod.POST})
-    public Map saveTemplate(@RequestBody Map<String, Object> body, Principal principal) {
+    public Map saveTemplate(@RequestBody Map<String, Object> bodyOriginal, Principal principal) {
+        Map body = JacksonUtil.mapper.convertValue(bodyOriginal.get("data"), Map.class);
         TemplateTable templateTable = new TemplateTable();
         if (body.get("name") != null) {
             templateTable.setName(body.get("name").toString());

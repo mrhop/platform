@@ -112,8 +112,8 @@ public class OperationController {
 
     @PreAuthorize("#oauth2.hasScope('cms_admin_client') and ( hasRole('ROLE_super_admin') or hasRole('ROLE_admin'))")
     @RequestMapping(value = "/update", method = {RequestMethod.POST})
-    public Map updateOperation(@RequestBody Map<String, Object> body, Principal principal) {
-        //不可执行更新处理
+    public Map updateOperation(@RequestBody Map<String, Object> bodyOriginal, Principal principal) {
+        Map body = JacksonUtil.mapper.convertValue(bodyOriginal.get("data"), Map.class);
         long id = Long.valueOf(body.get("id").toString());
         OperationTable operationTable = this.operationTableService.get(id);
         this.operationTableService.save(operationTable);
@@ -122,8 +122,8 @@ public class OperationController {
 
     @PreAuthorize("#oauth2.hasScope('cms_admin_client')")
     @RequestMapping(value = "/save", method = {RequestMethod.POST})
-    public Map saveOperation(@RequestBody Map<String, Object> body, Principal principal) {
-        //
+    public Map saveOperation(@RequestBody Map<String, Object> bodyOriginal, Principal principal) {
+        Map body = JacksonUtil.mapper.convertValue(bodyOriginal.get("data"), Map.class);
         OperationTable operationTable = new OperationTable();
         if (body.get("relatedOperation") != null) {
             operationTable.setRelatedOperation(body.get("relatedOperation").toString());

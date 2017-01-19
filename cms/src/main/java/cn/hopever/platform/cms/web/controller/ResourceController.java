@@ -119,7 +119,8 @@ public class ResourceController {
 
     @PreAuthorize("#oauth2.hasScope('cms_admin_client')")
     @RequestMapping(value = "/update", method = {RequestMethod.POST})
-    public Map updateResource(@RequestBody Map<String, Object> body, Principal principal) {
+    public Map updateResource(@RequestBody Map<String, Object> bodyOriginal, Principal principal) {
+        Map body = JacksonUtil.mapper.convertValue(bodyOriginal.get("data"), Map.class);
         if (websiteTableService.validatePermission(principal, resourceTableService.get(Long.valueOf(body.get("id").toString())).getWebsite())) {
             long id = Long.valueOf(body.get("id").toString());
             ResourceTable resourceTable = this.resourceTableService.get(id);
@@ -142,7 +143,8 @@ public class ResourceController {
 
     @PreAuthorize("#oauth2.hasScope('cms_admin_client')")
     @RequestMapping(value = "/save", method = {RequestMethod.POST})
-    public Map saveResource(@RequestBody Map<String, Object> body, Principal principal) {
+    public Map saveResource(@RequestBody Map<String, Object> bodyOriginal, Principal principal) {
+        Map body = JacksonUtil.mapper.convertValue(bodyOriginal.get("data"), Map.class);
         long id = Long.valueOf(body.get("id").toString());
         ResourceTable resourceTable = new ResourceTable();
         if (body.get("name") != null) {

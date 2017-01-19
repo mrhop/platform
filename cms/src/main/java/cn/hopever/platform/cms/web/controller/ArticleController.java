@@ -135,7 +135,8 @@ public class ArticleController {
 
     @PreAuthorize("#oauth2.hasScope('cms_admin_client')")
     @RequestMapping(value = "/update", method = {RequestMethod.POST})
-    public Map updateArticle(@RequestBody Map<String, Object> body, Principal principal) {
+    public Map updateArticle(@RequestBody Map<String, Object> bodyOriginal, Principal principal) {
+        Map body = JacksonUtil.mapper.convertValue(bodyOriginal.get("data"), Map.class);
         if (websiteTableService.validatePermission(principal, articleTableService.get(Long.valueOf(body.get("id").toString())).getWebsite())) {
             //do update
             long id = Long.valueOf(body.get("id").toString());
@@ -167,7 +168,8 @@ public class ArticleController {
 
     @PreAuthorize("#oauth2.hasScope('cms_admin_client')")
     @RequestMapping(value = "/save", method = {RequestMethod.POST})
-    public Map saveArticle(@RequestBody Map<String, Object> body, Principal principal) {
+    public Map saveArticle(@RequestBody Map<String, Object> bodyOriginal, Principal principal) {
+        Map body = JacksonUtil.mapper.convertValue(bodyOriginal.get("data"), Map.class);
         ArticleTable articleTable = new ArticleTable();
         if (body.get("title") != null) {
             articleTable.setTitle(body.get("title").toString());

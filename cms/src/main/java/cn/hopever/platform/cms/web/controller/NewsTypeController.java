@@ -155,7 +155,8 @@ public class NewsTypeController {
 
     @PreAuthorize("#oauth2.hasScope('cms_admin_client')")
     @RequestMapping(value = "/update", method = {RequestMethod.POST})
-    public Map updateNewsType(@RequestBody Map<String, Object> body, Principal principal) {
+    public Map updateNewsType(@RequestBody Map<String, Object> bodyOriginal, Principal principal) {
+        Map body = JacksonUtil.mapper.convertValue(bodyOriginal.get("data"), Map.class);
         if (websiteTableService.validatePermission(principal, newsTypeTableService.get(Long.valueOf(body.get("id").toString())).getWebsite())) {
             //do update
             //this.newsTypeTableService.save()
@@ -180,7 +181,8 @@ public class NewsTypeController {
 
     @PreAuthorize("#oauth2.hasScope('cms_admin_client')")
     @RequestMapping(value = "/save", method = {RequestMethod.POST})
-    public Map saveNewsType(@RequestBody Map<String, Object> body, Principal principal) {
+    public Map saveNewsType(@RequestBody Map<String, Object> bodyOriginal, Principal principal) {
+        Map body = JacksonUtil.mapper.convertValue(bodyOriginal.get("data"), Map.class);
         NewsTypeTable newsTypeTable = new NewsTypeTable();
         if (body.get("title") != null) {
             newsTypeTable.setTitle(body.get("title").toString());

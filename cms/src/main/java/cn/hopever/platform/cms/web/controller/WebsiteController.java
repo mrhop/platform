@@ -113,36 +113,37 @@ public class WebsiteController {
     @PreAuthorize("#oauth2.hasScope('cms_admin_client') and ( hasRole('ROLE_super_admin') or hasRole('ROLE_admin'))")
     @RequestMapping(value = "/update", method = {RequestMethod.POST})
     public Map updateWebsite(@RequestBody Map<String, Object> body, Principal principal) {
-        long id = Long.valueOf(body.get("id").toString());
+        Map map = JacksonUtil.mapper.convertValue(body.get("data"), Map.class);
+        long id = Long.valueOf(map.get("id").toString());
         WebsiteTable websiteTable = this.websiteTableService.get(id);
-        if (body.get("title") != null) {
-            websiteTable.setTitle(body.get("title").toString());
+        if (map.get("title") != null) {
+            websiteTable.setTitle(map.get("title").toString());
         }
-        if (body.get("keywords") != null) {
-            websiteTable.setKeywords(body.get("keywords").toString());
+        if (map.get("keywords") != null) {
+            websiteTable.setKeywords(map.get("keywords").toString());
         }
-        if (body.get("description") != null) {
-            websiteTable.setDescription(body.get("description").toString());
+        if (map.get("description") != null) {
+            websiteTable.setDescription(map.get("description").toString());
         }
-        if (body.get("enabled") != null && ((List) body.get("enabled")).size() > 0) {
+        if (map.get("enabled") != null && ((List) map.get("enabled")).size() > 0) {
             websiteTable.setEnabled(true);
         } else {
             websiteTable.setEnabled(false);
         }
-        if (body.get("relatedUsernames") != null && ((List) body.get("relatedUsernames")).size() > 0) {
+        if (map.get("relatedUsernames") != null && ((List) map.get("relatedUsernames")).size() > 0) {
             StringBuilder str = new StringBuilder();
-            for (Object username : (List) body.get("relatedUsernames")) {
+            for (Object username : (List) map.get("relatedUsernames")) {
                 str.append(username.toString()).append(",");
             }
             websiteTable.setRelatedUsernames(str.substring(0, str.length() - 1));
         } else {
             websiteTable.setRelatedUsernames(null);
         }
-        if (body.get("resourceAddress") != null) {
-            websiteTable.setResourceAddress(body.get("resourceAddress").toString());
+        if (map.get("resourceAddress") != null) {
+            websiteTable.setResourceAddress(map.get("resourceAddress").toString());
         }
-        if (body.get("resourceUrlPrefix") != null) {
-            websiteTable.setResourceUrlPrefix(body.get("resourceUrlPrefix").toString());
+        if (map.get("resourceUrlPrefix") != null) {
+            websiteTable.setResourceUrlPrefix(map.get("resourceUrlPrefix").toString());
         }
         this.websiteTableService.save(websiteTable);
         return null;
@@ -151,36 +152,36 @@ public class WebsiteController {
     @PreAuthorize("#oauth2.hasScope('cms_admin_client') and ( hasRole('ROLE_super_admin') or hasRole('ROLE_admin'))")
     @RequestMapping(value = "/save", method = {RequestMethod.POST})
     public Map saveWebsite(@RequestBody Map<String, Object> body, Principal principal) {
-        long id = Long.valueOf(body.get("id").toString());
+        Map map = JacksonUtil.mapper.convertValue(body.get("data"), Map.class);
         WebsiteTable websiteTable = new WebsiteTable();
-        if (body.get("title") != null) {
-            websiteTable.setTitle(body.get("title").toString());
+        if (map.get("title") != null) {
+            websiteTable.setTitle(map.get("title").toString());
         }
-        if (body.get("keywords") != null) {
-            websiteTable.setKeywords(body.get("keywords").toString());
+        if (map.get("keywords") != null) {
+            websiteTable.setKeywords(map.get("keywords").toString());
         }
-        if (body.get("description") != null) {
-            websiteTable.setDescription(body.get("description").toString());
+        if (map.get("description") != null) {
+            websiteTable.setDescription(map.get("description").toString());
         }
-        if (body.get("enabled") != null && ((List) body.get("enabled")).size() > 0) {
+        if (map.get("enabled") != null && ((List) map.get("enabled")).size() > 0) {
             websiteTable.setEnabled(true);
         } else {
             websiteTable.setEnabled(false);
         }
-        if (body.get("relatedUsernames") != null && ((List) body.get("relatedUsernames")).size() > 0) {
+        if (map.get("relatedUsernames") != null && ((List) map.get("relatedUsernames")).size() > 0) {
             StringBuilder str = new StringBuilder();
-            for (Object username : (List) body.get("relatedUsernames")) {
+            for (Object username : (List) map.get("relatedUsernames")) {
                 str.append(username.toString()).append(",");
             }
             websiteTable.setRelatedUsernames(str.substring(0, str.length() - 1));
         } else {
             websiteTable.setRelatedUsernames(null);
         }
-        if (body.get("resourceAddress") != null) {
-            websiteTable.setResourceAddress(body.get("resourceAddress").toString());
+        if (map.get("resourceAddress") != null) {
+            websiteTable.setResourceAddress(map.get("resourceAddress").toString());
         }
-        if (body.get("resourceUrlPrefix") != null) {
-            websiteTable.setResourceUrlPrefix(body.get("resourceUrlPrefix").toString());
+        if (map.get("resourceUrlPrefix") != null) {
+            websiteTable.setResourceUrlPrefix(map.get("resourceUrlPrefix").toString());
         }
         this.websiteTableService.save(websiteTable);
         return null;

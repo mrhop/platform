@@ -139,7 +139,8 @@ public class BlockController {
 
     @PreAuthorize("#oauth2.hasScope('cms_admin_client')")
     @RequestMapping(value = "/update", method = {RequestMethod.POST})
-    public Map updateBlock(@RequestBody Map<String, Object> body, Principal principal) {
+    public Map updateBlock(@RequestBody Map<String, Object> bodyOriginal, Principal principal) {
+        Map body = JacksonUtil.mapper.convertValue(bodyOriginal.get("data"), Map.class);
         if (websiteTableService.validatePermission(principal, blockTableService.get(Long.valueOf(body.get("id").toString())).getWebsite())) {
             //do update
             long id = Long.valueOf(body.get("id").toString());
@@ -184,7 +185,8 @@ public class BlockController {
 
     @PreAuthorize("#oauth2.hasScope('cms_admin_client')")
     @RequestMapping(value = "/save", method = {RequestMethod.POST})
-    public Map saveBlock(@RequestBody Map<String, Object> body, Principal principal) {
+    public Map saveBlock(@RequestBody Map<String, Object> bodyOriginal, Principal principal) {
+        Map body = JacksonUtil.mapper.convertValue(bodyOriginal.get("data"), Map.class);
         BlockTable blockTable = new BlockTable();
         if (body.get("name") != null) {
             blockTable.setName(body.get("name").toString());

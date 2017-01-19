@@ -111,7 +111,8 @@ public class PollController {
 
     @PreAuthorize("#oauth2.hasScope('cms_admin_client')")
     @RequestMapping(value = "/update", method = {RequestMethod.POST})
-    public Map updatePoll(@RequestBody Map<String,Object> body, Principal principal) {
+    public Map updatePoll(@RequestBody Map<String,Object> bodyOriginal, Principal principal) {
+        Map body = JacksonUtil.mapper.convertValue(bodyOriginal.get("data"), Map.class);
         if (websiteTableService.validatePermission(principal, pollTableService.get(Long.valueOf(body.get("id").toString())).getWebsite())) {
             //do update
             //this.pollTableService.save()
@@ -130,7 +131,8 @@ public class PollController {
 
     @PreAuthorize("#oauth2.hasScope('cms_admin_client')")
     @RequestMapping(value = "/save", method = {RequestMethod.POST})
-    public Map savePoll(@RequestBody Map<String,Object> body, Principal principal) {
+    public Map savePoll(@RequestBody Map<String,Object> bodyOriginal, Principal principal) {
+        Map body = JacksonUtil.mapper.convertValue(bodyOriginal.get("data"), Map.class);
         PollTable pollTable = new PollTable();
         if (body.get("title") != null) {
             pollTable.setTitle(body.get("title").toString());

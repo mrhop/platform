@@ -179,7 +179,8 @@ public class NavigateController {
 
     @PreAuthorize("#oauth2.hasScope('cms_admin_client')")
     @RequestMapping(value = "/update", method = {RequestMethod.POST})
-    public Map updateNavigate(@RequestBody Map<String, Object> body, Principal principal) {
+    public Map updateNavigate(@RequestBody Map<String, Object> bodyOriginal, Principal principal) {
+        Map body = JacksonUtil.mapper.convertValue(bodyOriginal.get("data"), Map.class);
         if (websiteTableService.validatePermission(principal, navigateTableService.get(Long.valueOf(body.get("id").toString())).getWebsite())) {
             //do update
             long id = Long.valueOf(body.get("id").toString());
@@ -212,7 +213,8 @@ public class NavigateController {
 
     @PreAuthorize("#oauth2.hasScope('cms_admin_client')")
     @RequestMapping(value = "/save", method = {RequestMethod.POST})
-    public Map saveNavigate(@RequestBody Map<String, Object> body, Principal principal) {
+    public Map saveNavigate(@RequestBody Map<String, Object> bodyOriginal, Principal principal) {
+        Map body = JacksonUtil.mapper.convertValue(bodyOriginal.get("data"), Map.class);
         NavigateTable navigateTable = new NavigateTable();
         if (body.get("title") != null) {
             navigateTable.setTitle(body.get("title").toString());

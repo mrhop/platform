@@ -4,6 +4,7 @@ import cn.hopever.platform.cms.domain.PollOptionTable;
 import cn.hopever.platform.cms.service.PollOptionTableService;
 import cn.hopever.platform.cms.service.PollTableService;
 import cn.hopever.platform.cms.service.WebsiteTableService;
+import cn.hopever.platform.utils.json.JacksonUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,8 +92,8 @@ public class PollOptionController {
 
     @PreAuthorize("#oauth2.hasScope('cms_admin_client')")
     @RequestMapping(value = "/update", method = {RequestMethod.POST})
-    public Map updatePollOption(@RequestBody Map<String, Object> body, Principal principal) {
-        //this.pollOptionTableService.save();
+    public Map updatePollOption(@RequestBody Map<String, Object> bodyOriginal, Principal principal) {
+        Map body = JacksonUtil.mapper.convertValue(bodyOriginal.get("data"), Map.class);
         long id = Long.valueOf(body.get("id").toString());
         PollOptionTable pollOptionTable = this.pollOptionTableService.get(id);
         if (body.get("title") != null) {
@@ -107,8 +108,8 @@ public class PollOptionController {
 
     @PreAuthorize("#oauth2.hasScope('cms_admin_client')")
     @RequestMapping(value = "/save", method = {RequestMethod.POST})
-    public Map savePollOption(@RequestBody Map<String, Object> body, Principal principal) {
-        //this.pollOptionTableService.save();
+    public Map savePollOption(@RequestBody Map<String, Object> bodyOriginal, Principal principal) {
+        Map body = JacksonUtil.mapper.convertValue(bodyOriginal.get("data"), Map.class);
         PollOptionTable pollOptionTable = new PollOptionTable();
         if (body.get("title") != null) {
             pollOptionTable.setTitle(body.get("title").toString());

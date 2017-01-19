@@ -148,10 +148,9 @@ public class FileLibraryTypeController {
 
     @PreAuthorize("#oauth2.hasScope('cms_admin_client')")
     @RequestMapping(value = "/update", method = {RequestMethod.POST})
-    public Map updateFileLibraryType(@RequestBody Map<String,Object> body, Principal principal) {
+    public Map updateFileLibraryType(@RequestBody Map<String,Object> bodyOriginal, Principal principal) {
+        Map body = JacksonUtil.mapper.convertValue(bodyOriginal.get("data"), Map.class);
         if (websiteTableService.validatePermission(principal, fileLibraryTypeTableService.get(Long.valueOf(body.get("id").toString())).getWebsite())) {
-            //do update
-            //this.fileLibraryTypeTableService.save()
             long id = Long.valueOf(body.get("id").toString());
             FileLibraryTypeTable fileLibraryTypeTable = this.fileLibraryTypeTableService.get(id);
             if (body.get("title") != null) {
@@ -170,7 +169,8 @@ public class FileLibraryTypeController {
 
     @PreAuthorize("#oauth2.hasScope('cms_admin_client')")
     @RequestMapping(value = "/save", method = {RequestMethod.POST})
-    public Map saveFileLibraryType(@RequestBody Map<String,Object> body, Principal principal) {
+    public Map saveFileLibraryType(@RequestBody Map<String,Object> bodyOriginal, Principal principal) {
+        Map body = JacksonUtil.mapper.convertValue(bodyOriginal.get("data"), Map.class);
         FileLibraryTypeTable fileLibraryTypeTable = new FileLibraryTypeTable();
         if (body.get("title") != null) {
             fileLibraryTypeTable.setTitle(body.get("title").toString());
