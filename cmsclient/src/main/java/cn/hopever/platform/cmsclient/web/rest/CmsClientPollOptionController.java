@@ -49,7 +49,7 @@ public class CmsClientPollOptionController {
 
     @RequestMapping(value = "/polloption/info", method = {RequestMethod.GET})
     public CommonResult getPollOption(HttpServletRequest request) throws Exception {
-        request.setAttribute("resourceUrl", baseConfig.getWebsiteinfo() + "?id=" + request.getParameter("key"));
+        request.setAttribute("resourceUrl", baseConfig.getPolloptioninfo() + "?id=" + request.getParameter("key"));
         CommonResult c = commonMethods.getResource(request);
         Map<String, Object> rule = baseConfig.getFormRule("polloptionupdate");
         List<Map> list = (List<Map>) rule.get("structure");
@@ -74,13 +74,13 @@ public class CmsClientPollOptionController {
 
     @RequestMapping(value = "/polloption/delete", method = {RequestMethod.DELETE})
     public CommonResult deletePollOption(HttpServletRequest request) throws Exception {
-        request.setAttribute("resourceUrl", baseConfig.getWebsitedelete() + "?id=" + request.getParameter("key"));
+        request.setAttribute("resourceUrl", baseConfig.getPolloptiondelete() + "?id=" + request.getParameter("key"));
         return commonMethods.getResource(request);
     }
 
     @RequestMapping(value = "/polloption/update", method = {RequestMethod.POST})
     public CommonResult updatePollOption(HttpServletRequest request, @RequestBody JsonNode body) throws Exception {
-        request.setAttribute("resourceUrl", baseConfig.getWebsiteupdate());
+        request.setAttribute("resourceUrl", baseConfig.getPolloptionupdate());
         return commonMethods.postResource(body, request);
     }
 
@@ -106,7 +106,7 @@ public class CmsClientPollOptionController {
 
     @RequestMapping(value = "/polloption/save", method = {RequestMethod.POST})
     public CommonResult savePollOption(HttpServletRequest request, @RequestBody JsonNode body) throws Exception {
-        request.setAttribute("resourceUrl", baseConfig.getWebsitesave());
+        request.setAttribute("resourceUrl", baseConfig.getPolloptionsave());
         return commonMethods.postResource(body, request);
     }
 
@@ -119,7 +119,7 @@ public class CmsClientPollOptionController {
         for (Map map : list) {
             map.remove("changed");
             if ("website".equals(map.get("name")) && "website".equals(body.get("updateElement").asText())) {
-                websiteId = body.get("updateData").asLong();
+                websiteId = body.get("updateData") != null && !body.get("updateData").isNull() ? body.get("updateData").asLong() : null;
                 continue;
             }
             if ( "poll".equals(map.get("name"))) {

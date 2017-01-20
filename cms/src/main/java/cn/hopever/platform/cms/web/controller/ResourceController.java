@@ -53,8 +53,9 @@ public class ResourceController {
         if (body.get("filters") != null && !body.get("filters").isNull()) {
             filterMap = JacksonUtil.mapper.convertValue(body.get("filters"), Map.class);
         }
-        if(filterMap.get("website") != null){
-            filterMap.put("website", websiteTableService.getWebsiteAsFilter(principal, filterMap.get("website").toString()));
+        List listWebsite = websiteTableService.getWebsiteAsFilter(principal, filterMap.get("website") != null ? filterMap.get("website").toString() : null);
+        if(listWebsite!=null){
+            filterMap.put("website", listWebsite);
         }
         list = resourceTableService.getList(pageRequest, filterMap);
 
@@ -68,9 +69,9 @@ public class ResourceController {
                 listTmp.add(rt.getName());
                 listTmp.add(rt.getUrl());
                 listTmp.add(rt.getType());
-                if(rt.getWebsite()!=null){
+                if (rt.getWebsite() != null) {
                     listTmp.add(rt.getWebsite().getTitle());
-                }else{
+                } else {
                     listTmp.add(null);
                 }
                 mapTemp.put("value", listTmp);
@@ -107,9 +108,9 @@ public class ResourceController {
             map.put("name", rt.getName());
             map.put("url", rt.getUrl());
             map.put("type", rt.getType());
-            if(rt.getWebsite()!=null){
-                map.put("website", rt.getWebsite().getId());
-            }else{
+            if (rt.getWebsite() != null) {
+                map.put("website", rt.getWebsite().getTitle());
+            } else {
                 map.put("website", null);
             }
             return map;
@@ -121,23 +122,15 @@ public class ResourceController {
     @RequestMapping(value = "/update", method = {RequestMethod.POST})
     public Map updateResource(@RequestBody Map<String, Object> bodyOriginal, Principal principal) {
         Map body = JacksonUtil.mapper.convertValue(bodyOriginal.get("data"), Map.class);
-        if (websiteTableService.validatePermission(principal, resourceTableService.get(Long.valueOf(body.get("id").toString())).getWebsite())) {
-            long id = Long.valueOf(body.get("id").toString());
-            ResourceTable resourceTable = this.resourceTableService.get(id);
-            if (body.get("name") != null) {
-                resourceTable.setName(body.get("name").toString());
-            }
-            if (body.get("url") != null) {
-                resourceTable.setUrl(body.get("url").toString());
-            }
-            if (body.get("type") != null) {
-                resourceTable.setType(body.get("type").toString());
-            }
-            if (body.get("website") != null ) {
-                resourceTable.setWebsite(websiteTableService.get(Long.valueOf(body.get("website").toString())));
-            }
-            this.resourceTableService.save(resourceTable);
+        long id = Long.valueOf(body.get("id").toString());
+        ResourceTable resourceTable = this.resourceTableService.get(id);
+        if (body.get("name") != null) {
+            resourceTable.setName(body.get("name").toString());
         }
+        if (body.get("url") != null) {
+            resourceTable.setUrl(body.get("url").toString());
+        }
+        this.resourceTableService.save(resourceTable);
         return null;
     }
 
@@ -145,7 +138,6 @@ public class ResourceController {
     @RequestMapping(value = "/save", method = {RequestMethod.POST})
     public Map saveResource(@RequestBody Map<String, Object> bodyOriginal, Principal principal) {
         Map body = JacksonUtil.mapper.convertValue(bodyOriginal.get("data"), Map.class);
-        long id = Long.valueOf(body.get("id").toString());
         ResourceTable resourceTable = new ResourceTable();
         if (body.get("name") != null) {
             resourceTable.setName(body.get("name").toString());
@@ -156,7 +148,7 @@ public class ResourceController {
         if (body.get("type") != null) {
             resourceTable.setType(body.get("type").toString());
         }
-        if (body.get("website") != null ) {
+        if (body.get("website") != null) {
             resourceTable.setWebsite(websiteTableService.get(Long.valueOf(body.get("website").toString())));
         }
         this.resourceTableService.save(resourceTable);
@@ -165,7 +157,7 @@ public class ResourceController {
 
     @PreAuthorize("#oauth2.hasScope('cms_admin_client')")
     @RequestMapping(value = "/options", method = {RequestMethod.GET})
-    public List getOptionList(@RequestParam Long websiteId,Principal principal) {
+    public List getOptionList(@RequestParam Long websiteId, Principal principal) {
         List<Map> listOptions = null;
         Iterable<ResourceTable> list = resourceTableService.getListByWebsite(websiteId);
         if (list != null && list.iterator().hasNext()) {

@@ -45,8 +45,8 @@ public class CustomNewsTableRepositoryImpl extends SimpleJpaRepository<NewsTable
                     for (String key : mapFilter.keySet()) {
                         Predicate predicateInternal = null;
                         if (key.equals("website")) {
-                            predicateInternal = root.join("website").in( mapFilter.get(key));
-                        }else if (key.equals("newsType")) {
+                            predicateInternal = root.join("website").in(mapFilter.get(key));
+                        } else if (key.equals("newsType") || key.equals("isPublished")) {
                             predicateInternal = builder.equal(root.get(key), mapFilter.get(key));
                         } else {
                             predicateInternal = builder.like(root.get(key), "%" + mapFilter.get(key) + "%");

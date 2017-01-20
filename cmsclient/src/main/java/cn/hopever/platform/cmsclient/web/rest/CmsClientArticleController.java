@@ -58,12 +58,12 @@ public class CmsClientArticleController {
                     JsonNode website = body.get("filters").get("website");
                     if (website != null && !website.isNull()) {
                         String websiteId = website.asText();
-                        request.setAttribute("resourceUrl", baseConfig.getTemplateoptionsofwebsite()+ "?websiteId=" + websiteId);
+                        request.setAttribute("resourceUrl", baseConfig.getTemplateoptionsofwebsite() + "?websiteId=" + websiteId);
                         CommonResult templateoptions = commonMethods.getResource(request);
                         List<Map> updateRules = new ArrayList<>();
                         Map map = new HashMap<>();
-                        map.put("value","template");
-                        map.put("editValue",templateoptions.getResponseData().get("data"));
+                        map.put("value", "template");
+                        map.put("editValue", templateoptions.getResponseData().get("data"));
                         updateRules.add(map);
                         c.getResponseData().put("updateRules", updateRules);
                     }
@@ -99,7 +99,7 @@ public class CmsClientArticleController {
 
     @RequestMapping(value = "/article/info", method = {RequestMethod.GET})
     public CommonResult getArticle(HttpServletRequest request) throws Exception {
-        request.setAttribute("resourceUrl", baseConfig.getWebsiteinfo() + "?id=" + request.getParameter("key"));
+        request.setAttribute("resourceUrl", baseConfig.getArticleinfo() + "?id=" + request.getParameter("key"));
         CommonResult c = commonMethods.getResource(request);
         Map<String, Object> rule = baseConfig.getFormRule("articleupdate");
         List<Map> list = (List<Map>) rule.get("structure");
@@ -111,7 +111,7 @@ public class CmsClientArticleController {
                     Map<String, Object> mapData = (Map) c.getResponseData().get("data");
                     String websiteId = null;
                     for (Map map : list) {
-                        if ("website".equals(map.get("name")) ) {
+                        if ("website".equals(map.get("name"))) {
                             request.setAttribute("resourceUrl", baseConfig.getWebsiteoptions());
                             CommonResult usernamesResult = commonMethods.getResource(request);
                             if (CommonResultStatus.SUCCESS.toString().equals(usernamesResult.getStatus()) && usernamesResult.getResponseData().get("data") != null) {
@@ -149,13 +149,13 @@ public class CmsClientArticleController {
 
     @RequestMapping(value = "/article/delete", method = {RequestMethod.DELETE})
     public CommonResult deleteArticle(HttpServletRequest request) throws Exception {
-        request.setAttribute("resourceUrl", baseConfig.getWebsitedelete() + "?id=" + request.getParameter("key"));
+        request.setAttribute("resourceUrl", baseConfig.getArticledelete() + "?id=" + request.getParameter("key"));
         return commonMethods.getResource(request);
     }
 
     @RequestMapping(value = "/article/update", method = {RequestMethod.POST})
     public CommonResult updateArticle(HttpServletRequest request, @RequestBody JsonNode body) throws Exception {
-        request.setAttribute("resourceUrl", baseConfig.getWebsiteupdate());
+        request.setAttribute("resourceUrl", baseConfig.getArticleupdate());
         return commonMethods.postResource(body, request);
     }
 
@@ -165,7 +165,7 @@ public class CmsClientArticleController {
         Map<String, Object> rule = baseConfig.getFormRule("articleadd");
         List<Map> list = (List<Map>) rule.get("structure");
         for (Map map : list) {
-            if ("website".equals(map.get("name")) ) {
+            if ("website".equals(map.get("name"))) {
                 request.setAttribute("resourceUrl", baseConfig.getWebsiteoptions());
                 CommonResult usernamesResult = commonMethods.getResource(request);
                 if (CommonResultStatus.SUCCESS.toString().equals(usernamesResult.getStatus()) && usernamesResult.getResponseData().get("data") != null) {
@@ -181,7 +181,7 @@ public class CmsClientArticleController {
 
     @RequestMapping(value = "/article/save", method = {RequestMethod.POST})
     public CommonResult saveArticle(HttpServletRequest request, @RequestBody JsonNode body) throws Exception {
-        request.setAttribute("resourceUrl", baseConfig.getWebsitesave());
+        request.setAttribute("resourceUrl", baseConfig.getArticlesave());
         return commonMethods.postResource(body, request);
     }
 
@@ -191,13 +191,14 @@ public class CmsClientArticleController {
         Map<String, Object> rule = JacksonUtil.mapper.convertValue(body.get("rule"), Map.class);
         List<Map> list = (List<Map>) rule.get("structure");
         Long websiteId = null;
+        Boolean isPublished = null;
         for (Map map : list) {
             map.remove("changed");
             if ("website".equals(map.get("name")) && "website".equals(body.get("updateElement").asText())) {
-                websiteId = body.get("updateData").asLong();
+                websiteId = body.get("updateData") != null && !body.get("updateData").isNull() ? body.get("updateData").asLong() : null;
                 continue;
             }
-            if ("template".equals(map.get("name"))) {
+            if ("template".equals(map.get("name")) && "website".equals(body.get("updateElement").asText())) {
                 if (websiteId != null) {
                     request.setAttribute("resourceUrl", baseConfig.getTemplateoptionsofwebsite() + "?websiteId=" + websiteId);
                     CommonResult usernamesResult = commonMethods.getResource(request);
@@ -206,6 +207,20 @@ public class CmsClientArticleController {
                     }
                 } else {
                     map.put("items", null);
+                }
+                map.put("changed", true);
+                continue;
+            }
+
+            if ("isPublished".equals(map.get("name")) && "isPublished".equals(body.get("updateElement").asText())) {
+                isPublished = (body.get("updateData") != null && !body.get("updateData").isNull()) ? true : false;
+                continue;
+            }
+            if ("publishDate".equals(map.get("name")) && "isPublished".equals(body.get("updateElement").asText())) {
+                if (isPublished) {
+                    map.remove("available");
+                } else {
+                    map.put("available", false);
                 }
                 map.put("changed", true);
                 continue;

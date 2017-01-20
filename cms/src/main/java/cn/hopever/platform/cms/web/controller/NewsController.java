@@ -52,11 +52,15 @@ public class NewsController {
         if (body.get("filters") != null && !body.get("filters").isNull()) {
             filterMap = JacksonUtil.mapper.convertValue(body.get("filters"), Map.class);
         }
-        if(filterMap.get("newsType") != null){
+        if (filterMap.get("isPublished") != null) {
+            filterMap.put("isPublished", Boolean.valueOf(filterMap.get("isPublished").toString()));
+        }
+        if (filterMap.get("newsType") != null) {
             filterMap.put("newsType", newsTypeTableService.get(Long.valueOf(filterMap.get("newsType").toString())));
         }
-        if(filterMap.get("website") != null){
-            filterMap.put("website", websiteTableService.getWebsiteAsFilter(principal, filterMap.get("website").toString()));
+        List listWebsite = websiteTableService.getWebsiteAsFilter(principal, filterMap.get("website") != null ? filterMap.get("website").toString() : null);
+        if (listWebsite != null) {
+            filterMap.put("website", listWebsite);
         }
         list = newsTableService.getList(pageRequest, filterMap);
         if (list != null && list.iterator().hasNext()) {
@@ -68,13 +72,13 @@ public class NewsController {
                 listTmp.add("");
                 listTmp.add(nt.getTitle());
                 listTmp.add(nt.getSubtitle());
-                listTmp.add(nt.getWebsite()!=null?nt.getWebsite().getTitle():null);
-                listTmp.add(nt.getNewsType()!=null?nt.getNewsType().getTitle():null);
+                listTmp.add(nt.getWebsite() != null ? nt.getWebsite().getTitle() : null);
+                listTmp.add(nt.getNewsType() != null ? nt.getNewsType().getTitle() : null);
                 listTmp.add(nt.getClickTimes());
                 listTmp.add(nt.isPublished() ? "Y" : "N");
                 listTmp.add(nt.getPublishDate() != null ? DateFormat.sdf.format(nt.getPublishDate()) : null);
-                listTmp.add(nt.getCreateUser());
-                listTmp.add(DateFormat.sdf.format(nt.getCreateDate()));
+//                listTmp.add(nt.getCreateUser());
+//                listTmp.add(DateFormat.sdf.format(nt.getCreateDate()));
                 mapTemp.put("value", listTmp);
                 listReturn.add(mapTemp);
             }
@@ -105,6 +109,8 @@ public class NewsController {
         Map<String, Object> map = new HashMap<>();
         map.put("id", nt.getId());
         map.put("title", nt.getTitle());
+        map.put("content", nt.getContent());
+        map.put("subtitle", nt.getSubtitle());
         if (nt.getWebsite() != null) {
             map.put("website", nt.getWebsite().getId());
         } else {

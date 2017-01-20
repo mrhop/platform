@@ -241,7 +241,6 @@
         "title": "点击率",
         "value": "clickTimes",
         "filter": true,
-        "editType": "text",
         "sortable": "true"
       },
       {
@@ -255,21 +254,12 @@
         "title": "发布日期",
         "value": "publishDate",
         "sortable": "true"
-      },
-      {
-        "title": "创建人",
-        "value": "createUser"
-      },
-      {
-        "title": "创建日期",
-        "value": "createDate",
-        "sortable": "true"
       }
     ],
     "tfoot": [
       {
         "className": "td-foot",
-        "colSpan": 10,
+        "colSpan": 8,
         "title": "新闻列表基础信息"
       }
     ]
@@ -571,20 +561,12 @@
       {
         "title": "发布时间",
         "value": "publishDate"
-      },
-      {
-        "title": "创建人",
-        "value": "createUser"
-      },
-      {
-        "title": "创建时间",
-        "value": "createDate"
       }
     ],
     "tfoot": [
       {
         "className": "td-foot",
-        "colSpan": 3,
+        "colSpan": 8,
         "title": "多媒体文件列表基础信息"
       }
     ]
@@ -700,7 +682,7 @@
     "tfoot": [
       {
         "className": "td-foot",
-        "colSpan": 3,
+        "colSpan": 9,
         "title": "文章分类列表基础信息"
       }
     ]

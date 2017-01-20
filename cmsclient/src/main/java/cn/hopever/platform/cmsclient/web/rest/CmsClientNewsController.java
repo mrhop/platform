@@ -78,11 +78,11 @@ public class CmsClientNewsController {
                             List<Map> listOptions = new ArrayList<>();
                             Map mapOptionY = new HashMap<>();
                             mapOptionY.put("label", "Y");
-                            mapOptionY.put("value", true);
+                            mapOptionY.put("value", "true");
                             listOptions.add(mapOptionY);
                             Map mapOptionN = new HashMap<>();
                             mapOptionN.put("label", "N");
-                            mapOptionN.put("value", false);
+                            mapOptionN.put("value", "false");
                             listOptions.add(mapOptionN);
                             map.put("editValue", listOptions);
                         } else if (map.get("value").equals("website")) {
@@ -101,9 +101,9 @@ public class CmsClientNewsController {
 
     @RequestMapping(value = "/news/info", method = {RequestMethod.GET})
     public CommonResult getNews(HttpServletRequest request) throws Exception {
-        request.setAttribute("resourceUrl", baseConfig.getWebsiteinfo() + "?id=" + request.getParameter("key"));
+        request.setAttribute("resourceUrl", baseConfig.getNewsinfo() + "?id=" + request.getParameter("key"));
         CommonResult c = commonMethods.getResource(request);
-        Map<String, Object> rule = baseConfig.getFormRule("clientupdate");
+        Map<String, Object> rule = baseConfig.getFormRule("newsupdate");
         List<Map> list = (List<Map>) rule.get("structure");
 
         if (CommonResultStatus.SUCCESS.toString().equals(c.getStatus())) {
@@ -160,13 +160,13 @@ public class CmsClientNewsController {
 
     @RequestMapping(value = "/news/delete", method = {RequestMethod.DELETE})
     public CommonResult deleteNews(HttpServletRequest request) throws Exception {
-        request.setAttribute("resourceUrl", baseConfig.getWebsitedelete() + "?id=" + request.getParameter("key"));
+        request.setAttribute("resourceUrl", baseConfig.getNewsdelete() + "?id=" + request.getParameter("key"));
         return commonMethods.getResource(request);
     }
 
     @RequestMapping(value = "/news/update", method = {RequestMethod.POST})
     public CommonResult updateNews(HttpServletRequest request, @RequestBody JsonNode body) throws Exception {
-        request.setAttribute("resourceUrl", baseConfig.getWebsiteupdate());
+        request.setAttribute("resourceUrl", baseConfig.getNewsupdate());
         return commonMethods.postResource(body, request);
     }
 
@@ -198,7 +198,7 @@ public class CmsClientNewsController {
 
     @RequestMapping(value = "/news/save", method = {RequestMethod.POST})
     public CommonResult saveNews(HttpServletRequest request, @RequestBody JsonNode body) throws Exception {
-        request.setAttribute("resourceUrl", baseConfig.getWebsitesave());
+        request.setAttribute("resourceUrl", baseConfig.getNewssave());
         return commonMethods.postResource(body, request);
     }
 
@@ -208,13 +208,14 @@ public class CmsClientNewsController {
         Map<String, Object> rule = JacksonUtil.mapper.convertValue(body.get("rule"), Map.class);
         List<Map> list = (List<Map>) rule.get("structure");
         Long websiteId = null;
+        Boolean isPublished = null;
         for (Map map : list) {
             map.remove("changed");
             if ("website".equals(map.get("name")) && "website".equals(body.get("updateElement").asText())) {
-                websiteId = body.get("updateData").asLong();
+                websiteId = body.get("updateData") != null && !body.get("updateData").isNull() ? body.get("updateData").asLong() : null;
                 continue;
             }
-            if ("newsType".equals(map.get("name"))) {
+            if ("newsType".equals(map.get("name")) && "website".equals(body.get("updateElement").asText())) {
                 if (websiteId != null) {
                     request.setAttribute("resourceUrl", baseConfig.getNewstypeoptionsofwebsite() + "?websiteId=" + websiteId);
                     CommonResult usernamesResult = commonMethods.getResource(request);
@@ -223,6 +224,19 @@ public class CmsClientNewsController {
                     }
                 } else {
                     map.put("items", null);
+                }
+                map.put("changed", true);
+                continue;
+            }
+            if ("isPublished".equals(map.get("name")) && "isPublished".equals(body.get("updateElement").asText())) {
+                isPublished = (body.get("updateData") != null && !body.get("updateData").isNull()) ? true : false;
+                continue;
+            }
+            if ("publishDate".equals(map.get("name")) && "isPublished".equals(body.get("updateElement").asText())) {
+                if (isPublished) {
+                    map.remove("available");
+                } else {
+                    map.put("available", false);
                 }
                 map.put("changed", true);
                 continue;

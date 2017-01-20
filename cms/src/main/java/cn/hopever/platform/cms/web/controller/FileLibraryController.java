@@ -55,8 +55,9 @@ public class FileLibraryController {
         if(filterMap.get("fileLibraryType") != null){
             filterMap.put("fileLibraryType", fileLibraryTypeTableService.get(Long.valueOf(filterMap.get("fileLibraryType").toString())));
         }
-        if(filterMap.get("website") != null){
-            filterMap.put("website", websiteTableService.getWebsiteAsFilter(principal, filterMap.get("website").toString()));
+        List listWebsite = websiteTableService.getWebsiteAsFilter(principal, filterMap.get("website") != null ? filterMap.get("website").toString() : null);
+        if(listWebsite!=null){
+            filterMap.put("website", listWebsite);
         }
         list = fileLibraryTableService.getList(pageRequest, filterMap);
 
@@ -73,8 +74,8 @@ public class FileLibraryController {
                 listTmp.add(flt.getUrl());
                 listTmp.add(flt.isPublished() ? "Y" : "N");
                 listTmp.add(flt.isPublished() ? DateFormat.sdf.format(flt.getPublishDate()) :DateFormat.sdf.format(flt.getPublishDate()));
-                listTmp.add(flt.getCreateUser());
-                listTmp.add(DateFormat.sdf.format(flt.getCreateDate()));
+//                listTmp.add(flt.getCreateUser());
+//                listTmp.add(DateFormat.sdf.format(flt.getCreateDate()));
                 mapTemp.put("value", listTmp);
                 listReturn.add(mapTemp);
             }

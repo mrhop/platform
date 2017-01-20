@@ -88,7 +88,7 @@ public class CmsClientFileLibraryTypeController {
 
     @RequestMapping(value = "/filelibrarytype/info", method = {RequestMethod.GET})
     public CommonResult getFileLibraryType(HttpServletRequest request) throws Exception {
-        request.setAttribute("resourceUrl", baseConfig.getWebsiteinfo() + "?id=" + request.getParameter("key"));
+        request.setAttribute("resourceUrl", baseConfig.getFilelibrarytypeinfo() + "?id=" + request.getParameter("key"));
         CommonResult c = commonMethods.getResource(request);
         Map<String, Object> rule = baseConfig.getFormRule("filelibrarytypeupdate");
         List<Map> list = (List<Map>) rule.get("structure");
@@ -139,13 +139,13 @@ public class CmsClientFileLibraryTypeController {
 
     @RequestMapping(value = "/filelibrarytype/delete", method = {RequestMethod.DELETE})
     public CommonResult deleteFileLibraryType(HttpServletRequest request) throws Exception {
-        request.setAttribute("resourceUrl", baseConfig.getWebsitedelete() + "?id=" + request.getParameter("key"));
+        request.setAttribute("resourceUrl", baseConfig.getFilelibrarytypedelete() + "?id=" + request.getParameter("key"));
         return commonMethods.getResource(request);
     }
 
     @RequestMapping(value = "/filelibrarytype/update", method = {RequestMethod.POST})
     public CommonResult updateFileLibraryType(HttpServletRequest request, @RequestBody JsonNode body) throws Exception {
-        request.setAttribute("resourceUrl", baseConfig.getWebsiteupdate());
+        request.setAttribute("resourceUrl", baseConfig.getFilelibrarytypeupdate());
         return commonMethods.postResource(body, request);
     }
 
@@ -171,7 +171,7 @@ public class CmsClientFileLibraryTypeController {
 
     @RequestMapping(value = "/filelibrarytype/save", method = {RequestMethod.POST})
     public CommonResult saveFileLibraryType(HttpServletRequest request, @RequestBody JsonNode body) throws Exception {
-        request.setAttribute("resourceUrl", baseConfig.getWebsitesave());
+        request.setAttribute("resourceUrl", baseConfig.getFilelibrarytypesave());
         return commonMethods.postResource(body, request);
     }
 
@@ -185,7 +185,7 @@ public class CmsClientFileLibraryTypeController {
         for (Map map : list) {
             map.remove("changed");
             if ("website".equals(map.get("name")) && "website".equals(body.get("updateElement").asText())) {
-                websiteId = body.get("updateData").asLong();
+                websiteId = body.get("updateData") != null && !body.get("updateData").isNull() ? body.get("updateData").asLong() : null;
                 continue;
             }
             if ("template".equals(map.get("name"))) {

@@ -82,7 +82,7 @@ public class CmsClientResourceController {
 
     @RequestMapping(value = "/resource/info", method = {RequestMethod.GET})
     public CommonResult getResource(HttpServletRequest request) throws Exception {
-        request.setAttribute("resourceUrl", baseConfig.getWebsiteinfo() + "?id=" + request.getParameter("key"));
+        request.setAttribute("resourceUrl", baseConfig.getResourceinfo() + "?id=" + request.getParameter("key"));
         CommonResult c = commonMethods.getResource(request);
         Map<String, Object> rule = baseConfig.getFormRule("resourceupdate");
         List<Map> list = (List<Map>) rule.get("structure");
@@ -134,13 +134,13 @@ public class CmsClientResourceController {
 
     @RequestMapping(value = "/resource/delete", method = {RequestMethod.DELETE})
     public CommonResult deleteResource(HttpServletRequest request) throws Exception {
-        request.setAttribute("resourceUrl", baseConfig.getWebsitedelete() + "?id=" + request.getParameter("key"));
+        request.setAttribute("resourceUrl", baseConfig.getResourcedelete() + "?id=" + request.getParameter("key"));
         return commonMethods.getResource(request);
     }
 
     @RequestMapping(value = "/resource/update", method = {RequestMethod.POST})
     public CommonResult updateResource(HttpServletRequest request, @RequestBody JsonNode body) throws Exception {
-        request.setAttribute("resourceUrl", baseConfig.getWebsiteupdate());
+        request.setAttribute("resourceUrl", baseConfig.getResourceupdate());
         return commonMethods.postResource(body, request);
     }
 
@@ -179,7 +179,7 @@ public class CmsClientResourceController {
 
     @RequestMapping(value = "/resource/save", method = {RequestMethod.POST})
     public CommonResult saveResource(HttpServletRequest request, @RequestBody JsonNode body) throws Exception {
-        request.setAttribute("resourceUrl", baseConfig.getWebsitesave());
+        request.setAttribute("resourceUrl", baseConfig.getResourcesave());
         return commonMethods.postResource(body, request);
     }
 }

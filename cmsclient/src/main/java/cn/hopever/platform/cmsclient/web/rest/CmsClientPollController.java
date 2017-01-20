@@ -70,7 +70,7 @@ public class CmsClientPollController {
 
     @RequestMapping(value = "/poll/info", method = {RequestMethod.GET})
     public CommonResult getPoll(HttpServletRequest request) throws Exception {
-        request.setAttribute("resourceUrl", baseConfig.getWebsiteinfo() + "?id=" + request.getParameter("key"));
+        request.setAttribute("resourceUrl", baseConfig.getPollinfo() + "?id=" + request.getParameter("key"));
         CommonResult c = commonMethods.getResource(request);
         Map<String, Object> rule = baseConfig.getFormRule("pollupdate");
         List<Map> list = (List<Map>) rule.get("structure");
@@ -107,13 +107,13 @@ public class CmsClientPollController {
 
     @RequestMapping(value = "/poll/delete", method = {RequestMethod.DELETE})
     public CommonResult deletePoll(HttpServletRequest request) throws Exception {
-        request.setAttribute("resourceUrl", baseConfig.getWebsitedelete() + "?id=" + request.getParameter("key"));
+        request.setAttribute("resourceUrl", baseConfig.getPolldelete() + "?id=" + request.getParameter("key"));
         return commonMethods.getResource(request);
     }
 
     @RequestMapping(value = "/poll/update", method = {RequestMethod.POST})
     public CommonResult updatePoll(HttpServletRequest request, @RequestBody JsonNode body) throws Exception {
-        request.setAttribute("resourceUrl", baseConfig.getWebsiteupdate());
+        request.setAttribute("resourceUrl", baseConfig.getPollupdate());
         return commonMethods.postResource(body, request);
     }
 
@@ -140,7 +140,7 @@ public class CmsClientPollController {
 
     @RequestMapping(value = "/poll/save", method = {RequestMethod.POST})
     public CommonResult savePoll(HttpServletRequest request, @RequestBody JsonNode body) throws Exception {
-        request.setAttribute("resourceUrl", baseConfig.getWebsitesave());
+        request.setAttribute("resourceUrl", baseConfig.getPollsave());
         return commonMethods.postResource(body, request);
     }
 }

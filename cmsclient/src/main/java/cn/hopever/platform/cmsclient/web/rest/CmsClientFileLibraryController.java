@@ -76,11 +76,11 @@ public class CmsClientFileLibraryController {
                             List<Map> listOptions = new ArrayList<>();
                             Map mapOptionY = new HashMap<>();
                             mapOptionY.put("label", "Y");
-                            mapOptionY.put("value", true);
+                            mapOptionY.put("value", "true");
                             listOptions.add(mapOptionY);
                             Map mapOptionN = new HashMap<>();
                             mapOptionN.put("label", "N");
-                            mapOptionN.put("value", false);
+                            mapOptionN.put("value", "false");
                             listOptions.add(mapOptionN);
                             map.put("editValue", listOptions);
                         } else if (map.get("value").equals("website")) {
@@ -99,7 +99,7 @@ public class CmsClientFileLibraryController {
 
     @RequestMapping(value = "/filelibrary/info", method = {RequestMethod.GET})
     public CommonResult getFileLibrary(HttpServletRequest request) throws Exception {
-        request.setAttribute("resourceUrl", baseConfig.getWebsiteinfo() + "?id=" + request.getParameter("key"));
+        request.setAttribute("resourceUrl", baseConfig.getFilelibraryinfo() + "?id=" + request.getParameter("key"));
         CommonResult c = commonMethods.getResource(request);
         Map<String, Object> rule = baseConfig.getFormRule("filelibraryupdate");
         List<Map> list = (List<Map>) rule.get("structure");
@@ -149,13 +149,13 @@ public class CmsClientFileLibraryController {
 
     @RequestMapping(value = "/filelibrary/delete", method = {RequestMethod.DELETE})
     public CommonResult deleteFileLibrary(HttpServletRequest request) throws Exception {
-        request.setAttribute("resourceUrl", baseConfig.getWebsitedelete() + "?id=" + request.getParameter("key"));
+        request.setAttribute("resourceUrl", baseConfig.getFilelibrarydelete() + "?id=" + request.getParameter("key"));
         return commonMethods.getResource(request);
     }
 
     @RequestMapping(value = "/filelibrary/update", method = {RequestMethod.POST})
     public CommonResult updateFileLibrary(HttpServletRequest request, @RequestBody JsonNode body) throws Exception {
-        request.setAttribute("resourceUrl", baseConfig.getWebsiteupdate());
+        request.setAttribute("resourceUrl", baseConfig.getFilelibraryupdate());
         return commonMethods.postResource(body, request);
     }
 
@@ -181,7 +181,7 @@ public class CmsClientFileLibraryController {
 
     @RequestMapping(value = "/filelibrary/save", method = {RequestMethod.POST})
     public CommonResult saveFileLibrary(HttpServletRequest request, @RequestBody JsonNode body) throws Exception {
-        request.setAttribute("resourceUrl", baseConfig.getWebsitesave());
+        request.setAttribute("resourceUrl", baseConfig.getFilelibrarysave());
         return commonMethods.postResource(body, request);
     }
 
@@ -191,13 +191,14 @@ public class CmsClientFileLibraryController {
         Map<String, Object> rule = JacksonUtil.mapper.convertValue(body.get("rule"), Map.class);
         List<Map> list = (List<Map>) rule.get("structure");
         Long websiteId = null;
+        Boolean isPublished = null;
         for (Map map : list) {
             map.remove("changed");
             if ("website".equals(map.get("name")) && "website".equals(body.get("updateElement").asText())) {
-                websiteId = body.get("updateData").asLong();
+                websiteId = body.get("updateData") != null && !body.get("updateData").isNull() ? body.get("updateData").asLong() : null;
                 continue;
             }
-            if ( "fileLibraryType".equals(map.get("name"))) {
+            if ( "fileLibraryType".equals(map.get("name"))&& "website".equals(body.get("updateElement").asText())) {
                 if(websiteId != null){
                     request.setAttribute("resourceUrl", baseConfig.getFilelibrarytypeoptionsofwebsite() + "?websiteId=" + websiteId);
                     CommonResult usernamesResult = commonMethods.getResource(request);
@@ -206,6 +207,19 @@ public class CmsClientFileLibraryController {
                     }
                 }else{
                     map.put("items",null);
+                }
+                map.put("changed", true);
+                continue;
+            }
+            if ("isPublished".equals(map.get("name")) && "isPublished".equals(body.get("updateElement").asText())) {
+                isPublished = (body.get("updateData") != null && !body.get("updateData").isNull()) ? true : false;
+                continue;
+            }
+            if ("publishDate".equals(map.get("name")) && "isPublished".equals(body.get("updateElement").asText())) {
+                if (isPublished) {
+                    map.remove("available");
+                } else {
+                    map.put("available", false);
                 }
                 map.put("changed", true);
                 continue;

@@ -82,7 +82,7 @@ public class CmsClientOperationController {
 
     @RequestMapping(value = "/operation/info", method = {RequestMethod.GET})
     public CommonResult getOperation(HttpServletRequest request) throws Exception {
-        request.setAttribute("resourceUrl", baseConfig.getWebsiteinfo() + "?id=" + request.getParameter("key"));
+        request.setAttribute("resourceUrl", baseConfig.getOptioninfo() + "?id=" + request.getParameter("key"));
         CommonResult c = commonMethods.getResource(request);
         Map<String, Object> rule = baseConfig.getFormRule("operationupdate");
         List<Map> list = (List<Map>) rule.get("structure");
@@ -107,13 +107,13 @@ public class CmsClientOperationController {
 
     @RequestMapping(value = "/operation/delete", method = {RequestMethod.DELETE})
     public CommonResult deleteOperation(HttpServletRequest request) throws Exception {
-        request.setAttribute("resourceUrl", baseConfig.getWebsitedelete() + "?id=" + request.getParameter("key"));
+        request.setAttribute("resourceUrl", baseConfig.getOptiondelete() + "?id=" + request.getParameter("key"));
         return commonMethods.getResource(request);
     }
 
     @RequestMapping(value = "/operation/update", method = {RequestMethod.POST})
     public CommonResult updateOperation(HttpServletRequest request, @RequestBody JsonNode body) throws Exception {
-        request.setAttribute("resourceUrl", baseConfig.getWebsiteupdate());
+        request.setAttribute("resourceUrl", baseConfig.getOptionupdate());
         return commonMethods.postResource(body, request);
     }
 
@@ -131,7 +131,7 @@ public class CmsClientOperationController {
 
     @RequestMapping(value = "/operation/save", method = {RequestMethod.POST})
     public CommonResult saveOperation(HttpServletRequest request, @RequestBody JsonNode body) throws Exception {
-        request.setAttribute("resourceUrl", baseConfig.getWebsitesave());
+        request.setAttribute("resourceUrl", baseConfig.getOptionsave());
         return commonMethods.postResource(body, request);
     }
 }

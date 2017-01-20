@@ -83,7 +83,7 @@ public class CmsClientBlockController {
 
     @RequestMapping(value = "/block/info", method = {RequestMethod.GET})
     public CommonResult getBlock(HttpServletRequest request) throws Exception {
-        request.setAttribute("resourceUrl", baseConfig.getWebsiteinfo() + "?id=" + request.getParameter("key"));
+        request.setAttribute("resourceUrl", baseConfig.getBlockinfo() + "?id=" + request.getParameter("key"));
         CommonResult c = commonMethods.getResource(request);
         Map<String, Object> rule = baseConfig.getFormRule("blockupdate");
         List<Map> list = (List<Map>) rule.get("structure");
@@ -202,13 +202,13 @@ public class CmsClientBlockController {
 
     @RequestMapping(value = "/block/delete", method = {RequestMethod.DELETE})
     public CommonResult deleteBlock(HttpServletRequest request) throws Exception {
-        request.setAttribute("resourceUrl", baseConfig.getWebsitedelete() + "?id=" + request.getParameter("key"));
+        request.setAttribute("resourceUrl", baseConfig.getBlockdelete() + "?id=" + request.getParameter("key"));
         return commonMethods.getResource(request);
     }
 
     @RequestMapping(value = "/block/update", method = {RequestMethod.POST})
     public CommonResult updateBlock(HttpServletRequest request, @RequestBody JsonNode body) throws Exception {
-        request.setAttribute("resourceUrl", baseConfig.getWebsiteupdate());
+        request.setAttribute("resourceUrl", baseConfig.getBlockupdate());
         return commonMethods.postResource(body, request);
     }
 
@@ -246,7 +246,7 @@ public class CmsClientBlockController {
 
     @RequestMapping(value = "/block/save", method = {RequestMethod.POST})
     public CommonResult saveBlock(HttpServletRequest request, @RequestBody JsonNode body) throws Exception {
-        request.setAttribute("resourceUrl", baseConfig.getWebsitesave());
+        request.setAttribute("resourceUrl", baseConfig.getBlocksave());
         return commonMethods.postResource(body, request);
     }
 
@@ -259,14 +259,12 @@ public class CmsClientBlockController {
         String websiteId = null;
         for (Map map : list) {
             map.remove("changed");
-            if ("website".equals(map.get("name"))) {
-                if (map.get("defaultValue") != null) {
-                    websiteId = map.get("defaultValue").toString();
-                }
+            if ("website".equals(map.get("name"))&& "website".equals(body.get("updateElement").asText())) {
+                websiteId = body.get("updateData") != null && !body.get("updateData").isNull() ? body.get("updateData").textValue() : null;
                 continue;
             }
             if ("type".equals(map.get("name")) && "type".equals(body.get("updateElement").asText())) {
-                blockTypeSelected = body.get("updateData").textValue();
+                blockTypeSelected = body.get("updateData") != null && !body.get("updateData").isNull() ? body.get("updateData").textValue() : null;
                 continue;
             }
             if ("content".equals(map.get("name"))) {

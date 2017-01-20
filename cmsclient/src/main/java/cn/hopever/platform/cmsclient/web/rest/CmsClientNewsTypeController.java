@@ -71,7 +71,7 @@ public class CmsClientNewsTypeController {
 
     @RequestMapping(value = "/newstype/info", method = {RequestMethod.GET})
     public CommonResult getNewsType(HttpServletRequest request) throws Exception {
-        request.setAttribute("resourceUrl", baseConfig.getWebsiteinfo() + "?id=" + request.getParameter("key"));
+        request.setAttribute("resourceUrl", baseConfig.getNewstypeinfo() + "?id=" + request.getParameter("key"));
         CommonResult c = commonMethods.getResource(request);
         Map<String, Object> rule = baseConfig.getFormRule("newstypeupdate");
         List<Map> list = (List<Map>) rule.get("structure");
@@ -133,13 +133,13 @@ public class CmsClientNewsTypeController {
 
     @RequestMapping(value = "/newstype/delete", method = {RequestMethod.DELETE})
     public CommonResult deleteNewsType(HttpServletRequest request) throws Exception {
-        request.setAttribute("resourceUrl", baseConfig.getWebsitedelete() + "?id=" + request.getParameter("key"));
+        request.setAttribute("resourceUrl", baseConfig.getNewstypedelete() + "?id=" + request.getParameter("key"));
         return commonMethods.getResource(request);
     }
 
     @RequestMapping(value = "/newstype/update", method = {RequestMethod.POST})
     public CommonResult updateNewsType(HttpServletRequest request, @RequestBody JsonNode body) throws Exception {
-        request.setAttribute("resourceUrl", baseConfig.getWebsiteupdate());
+        request.setAttribute("resourceUrl", baseConfig.getNewstypeupdate());
         return commonMethods.postResource(body, request);
     }
 
@@ -171,7 +171,7 @@ public class CmsClientNewsTypeController {
 
     @RequestMapping(value = "/newstype/save", method = {RequestMethod.POST})
     public CommonResult saveNewsType(HttpServletRequest request, @RequestBody JsonNode body) throws Exception {
-        request.setAttribute("resourceUrl", baseConfig.getWebsitesave());
+        request.setAttribute("resourceUrl", baseConfig.getNewstypesave());
         return commonMethods.postResource(body, request);
     }
 
@@ -184,7 +184,7 @@ public class CmsClientNewsTypeController {
         for (Map map : list) {
             map.remove("changed");
             if ("website".equals(map.get("name")) && "website".equals(body.get("updateElement").asText())) {
-                websiteId = body.get("updateData").asLong();
+                websiteId = body.get("updateData") != null && !body.get("updateData").isNull() ? body.get("updateData").asLong() : null;
                 continue;
             }
             if ("newsListTemplate".equals(map.get("name")) || "newsTemplate".equals(map.get("name"))) {

@@ -98,7 +98,7 @@ public class CmsClientNavigateController {
 
     @RequestMapping(value = "/navigate/info", method = {RequestMethod.GET})
     public CommonResult getNavigate(HttpServletRequest request) throws Exception {
-        request.setAttribute("resourceUrl", baseConfig.getWebsiteinfo() + "?id=" + request.getParameter("key"));
+        request.setAttribute("resourceUrl", baseConfig.getNavigateinfo() + "?id=" + request.getParameter("key"));
         CommonResult c = commonMethods.getResource(request);
         Map<String, Object> rule = baseConfig.getFormRule("navigateupdate");
         List<Map> list = (List<Map>) rule.get("structure");
@@ -208,13 +208,13 @@ public class CmsClientNavigateController {
 
     @RequestMapping(value = "/navigate/delete", method = {RequestMethod.DELETE})
     public CommonResult deleteNavigate(HttpServletRequest request) throws Exception {
-        request.setAttribute("resourceUrl", baseConfig.getWebsitedelete() + "?id=" + request.getParameter("key"));
+        request.setAttribute("resourceUrl", baseConfig.getNavigatedelete() + "?id=" + request.getParameter("key"));
         return commonMethods.getResource(request);
     }
 
     @RequestMapping(value = "/navigate/update", method = {RequestMethod.POST})
     public CommonResult updateNavigate(HttpServletRequest request, @RequestBody JsonNode body) throws Exception {
-        request.setAttribute("resourceUrl", baseConfig.getWebsiteupdate());
+        request.setAttribute("resourceUrl", baseConfig.getNavigateupdate());
         return commonMethods.postResource(body, request);
     }
 
@@ -252,7 +252,7 @@ public class CmsClientNavigateController {
 
     @RequestMapping(value = "/navigate/save", method = {RequestMethod.POST})
     public CommonResult saveNavigate(HttpServletRequest request, @RequestBody JsonNode body) throws Exception {
-        request.setAttribute("resourceUrl", baseConfig.getWebsitesave());
+        request.setAttribute("resourceUrl", baseConfig.getNavigatesave());
         return commonMethods.postResource(body, request);
     }
 
@@ -267,7 +267,7 @@ public class CmsClientNavigateController {
             map.remove("changed");
             if ("website".equals(map.get("name"))) {
                 if ("website".equals(body.get("updateElement").asText())) {
-                    websiteId = body.get("updateData").textValue();
+                    websiteId = body.get("updateData") != null && !body.get("updateData").isNull() ? body.get("updateData").textValue() : null;
                 } else {
                     websiteId = map.get("defaultValue")!=null? map.get("defaultValue").toString():null;
                 }
