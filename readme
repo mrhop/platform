@@ -2,6 +2,7 @@ navigate： 8080
 userclient：8081
 cmsclient：8082
 crmclient：8083
+utilsclient：8084
 oauth2client：---
 
 
@@ -97,10 +98,85 @@ deletable
 
 接下来是client --》 module role的处理了，对应的是选中后的client
 
-到了要加入数据进行测试的阶段
+开始进入cms部分，首先是 html的基础完成
+然后是cms基础完成
+然后将user html中的不必要因素除去
+然后是开始cms模块和数据结构的设计
+基本模块拆分完备
+目前考虑数据结构设计
+左侧导航树需要一个滚动条
+
+首先是template，基础格式3*3 4*4 3*4 4*3，最后简单预览时，一个iframe来使用
+template是自适应的，还是固定的，是左右边距的还是整宽的
+然后选择content位置 （中间，中间）（左，中）等contentPosition {left,top,right,bottom} extra_classname
+最终产生一个template
+content需要的块数
+然后是选block，block需要的块数 多对多的关系，另还需要位置关系 纵 横[坐标方式]
+还有其关联的js css以及其他资源，多选
+然后是详细描述，进行保存 --此处form要进行大的改变
+generated_code生成的编码，每次保存和更新的时候，重新做处理
+每次保存的时候，重新生成一次
+注意需要多个template对应不同的页面，比如新闻，比如首页，部分详细页以及其他
+另需要一个poll系统，一个媒体库系统，一个文件系统
+
+1.首先是template，然后是website，然后是block，resource，然后是poll，然后是operation，然后是news FileLibrary article 然后是navigate。
+form 的处理需要再做自定义（用于template）
+
+注意template，news，article，fileLib的cache生成以及清除
 
 
-目前保持所有状态的情况出现问题，click之后刷新出现问题，应该是关联的问题，考虑使用default value的对应！！！，而不仅仅是根据查询后的对应，避免出现点击后，状态更改的情况
-defaultvalue用来记录点击的轨迹！！！，明天把这个实现了
 
-最后一个table history 不刷新的问题需要解决
+
+// cache的处理应该也同样适用于left menu，在更新module的时候进行清除吗？注意是清除对应的client的！！！！！
+
+
+template 列表，新增，修改，删除，删除的话不做关联删除
+
+cms 部分需要判断module role 和user是否有关联且是否是这个role 是否包含即将进行的操作，这个在oauthclient部分进行处理【根据请求的url地址获取到module，并获取到相关的module role，并进行关联确认，同时提供client_id,以便进一步确认】，至于和website的关联放在cmsserver部分处理
+进入到cmsclient部分的处理，需要考虑rule，url，cmsclient关联的业务处理~~~~~~
+sort之后需要处理，在设置rule【client】的情况下处理和考虑，目前就在此处！
+，然后就是save和update
+到article，注意sort和初始化，重新捋一遍
+过滤完成!
+然后是add和update以及info的展示
+
+NAVIGATE父导航,部分的筛选和选择应该采用tree的形式，所以html需要做一个react tree的实现！！~~~
+updateRules~~~~~~~~~~需要在table里面映射做联动
+完成后是前端的部分模块的新增
+然后是商城，商城包含微商城以及正常商城，然后是crm【正常系统以及 app？？】使用react-native
+
+资源上传文件部分，url不变，名称不变，类型不变，替换文件后地址还是不变，但是所属网站也不变，
+然后新增的时候，在保存的时候需要校验名称和website的唯一性，如果不唯一，在保存的时候给出提示
+contentPosition 内容位置的选择，需要提供专门的控件
+templateResources 和 templateBlocks需要考虑
+"submit": {
+      "label": "保存"
+    },
+
+这个保存不需要的时候的处理，在前端client处理
+
+开始进行页面的处理，链接和数据的合成，错误的处理，然后进行自定义的module，比如tree的处理，textarea的处理，然后就进行preview的处理以及页面的显示，然后就是后续的处理......以及整体website的处理
+table structure---》navigate需要新增别名url字段，alias_url!!!
+
+bug:
+
+新闻列表： 所属网站	新闻类型 的联动处理
+文件库列表： 所属网站	使用模板 的联动处理
+
+自定义特殊element： 内容位置 包含模块 包含资源 文章内容
+
+投票名称的点击应该关联到投票option
+
+导航列表里面和新增修改导航的parent的特殊化module处理
+
+操作记录需要记录文章和新闻以及媒体文件处理
+
+
+
+开始逐步处理这些问题，最后的时候开始cms前端的合成以及展示处理，最后写出readme
+最后需要把整个的部署(除了工程部署，数据初始化，以及网站的发布也需要也成文档，就像用户手册一样)写成文档
+问题的处理也需要写明了
+
+1》 update info 部分的处理，比如aviable的处理 开始做这个
+2》 然后是table的筛选条件的联动处理
+3》 others
