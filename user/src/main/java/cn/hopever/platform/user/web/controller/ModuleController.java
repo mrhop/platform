@@ -164,7 +164,7 @@ public class ModuleController {
             mt.setIconClass(null);
         }
         if (map.get("moduleOrder") != null) {
-            if (map.get("isTop") != null) {
+            if (map.get("isTop") != null && map.get("isTop").equals("Y")) {
                 mt.setModuleOrder(Integer.valueOf(map.get("moduleOrder").toString()) * 100);
             } else {
                 if (map.get("parent") != null) {

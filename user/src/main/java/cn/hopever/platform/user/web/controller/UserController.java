@@ -258,7 +258,6 @@ public class UserController {
     @PreAuthorize("#oauth2.hasScope('user_admin_client') and ( hasRole('ROLE_super_admin') or hasRole('ROLE_admin'))")
     @RequestMapping(value = "/save", method = {RequestMethod.POST})
     public Map saveUser(@RequestBody Map<String,Object> body, Principal principal) {
-        Map map = JacksonUtil.mapper.convertValue(body.get("data"), Map.class);
         UserTable user = new UserTable();
         if (this.userTableService.getUserByUsername(body.get("username").toString()) != null) {
             Map mapReturn = new HashMap<>();

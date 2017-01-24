@@ -25,7 +25,7 @@ public class ModuleTable {
     @JoinColumn(name = "client_id", nullable = true)
     private ClientTable client;
 
-    @Column(name = "module_name", nullable = false, length = 50, unique = true)
+    @Column(name = "module_name", nullable = false, length = 50)
     private String moduleName;
 
     @Column(name = "module_order", nullable = true)

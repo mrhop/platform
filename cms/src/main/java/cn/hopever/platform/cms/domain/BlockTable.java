@@ -36,7 +36,7 @@ public class BlockTable {
     private String content;
 
     //使用rest 方式获取 data，动态数据时的数据
-    @Column(name = "data_url", nullable = false)
+    @Column(name = "data_url")
     private String dataUrl;
 
     //如何使用脚本来进行内容的替换和处理【前端使用】，动态时的数据处理

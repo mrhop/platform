@@ -259,15 +259,19 @@ public class CmsClientBlockController {
         String websiteId = null;
         for (Map map : list) {
             map.remove("changed");
-            if ("website".equals(map.get("name"))&& "website".equals(body.get("updateElement").asText())) {
-                websiteId = body.get("updateData") != null && !body.get("updateData").isNull() ? body.get("updateData").textValue() : null;
+            if ("website".equals(map.get("name"))) {
+                if ("website".equals(body.get("updateElement").asText())) {
+                    websiteId = (body.get("updateData") != null && !body.get("updateData").isNull()) ? body.get("updateData").asText() : null;
+                }
                 continue;
             }
-            if ("type".equals(map.get("name")) && "type".equals(body.get("updateElement").asText())) {
-                blockTypeSelected = body.get("updateData") != null && !body.get("updateData").isNull() ? body.get("updateData").textValue() : null;
+            if ("type".equals(map.get("name"))) {
+                if ("type".equals(body.get("updateElement").asText())) {
+                    blockTypeSelected = (body.get("updateData") != null && !body.get("updateData").isNull()) ? body.get("updateData").asText() : null;
+                }
                 continue;
             }
-            if ("content".equals(map.get("name"))) {
+            if ("content".equals(map.get("name")) && "type".equals(body.get("updateElement").asText())) {
                 if (blockTypeSelected != null && "静态内容".equals(blockTypeSelected)) {
                     map.remove("available");
                 } else {
@@ -276,7 +280,7 @@ public class CmsClientBlockController {
                 map.put("changed", true);
                 continue;
             }
-            if ("dataUrl".equals(map.get("name")) || "script".equals(map.get("name"))) {
+            if (("dataUrl".equals(map.get("name")) || "script".equals(map.get("name"))) && "type".equals(body.get("updateElement").asText())) {
                 if (blockTypeSelected != null && "自定义内容".equals(blockTypeSelected)) {
                     map.remove("available");
                 } else {
@@ -286,49 +290,67 @@ public class CmsClientBlockController {
                 continue;
             }
             if ("newsType".equals(map.get("name")) || "newsNumber".equals(map.get("name"))) {
-                if (blockTypeSelected != null && ("热点新闻".equals(blockTypeSelected) || "最新新闻".equals(blockTypeSelected))) {
-                    if (websiteId != null && "newsType".equals(map.get("name"))) {
+                if ("type".equals(body.get("updateElement").asText())) {
+                    if (blockTypeSelected != null && ("热点新闻".equals(blockTypeSelected) || "最新新闻".equals(blockTypeSelected))) {
+                        map.remove("available");
+                    } else {
+                        map.put("available", false);
+                    }
+                }
+                if ("website".equals(body.get("updateElement").asText()) && "newsType".equals(map.get("name"))) {
+                    if (websiteId != null) {
                         request.setAttribute("resourceUrl", baseConfig.getNewstypeoptionsofwebsite() + "?websiteId=" + websiteId);
                         CommonResult usernamesResult = commonMethods.getResource(request);
                         if (CommonResultStatus.SUCCESS.toString().equals(usernamesResult.getStatus()) && usernamesResult.getResponseData().get("data") != null) {
                             map.put("items", usernamesResult.getResponseData().get("data"));
                         }
+                    } else {
+                        map.put("items", null);
                     }
-                    map.remove("available");
-                } else {
-                    map.put("available", false);
                 }
                 map.put("changed", true);
                 continue;
             }
             if ("poll".equals(map.get("name"))) {
-                if (blockTypeSelected != null && "投票".equals(blockTypeSelected)) {
+                if ("type".equals(body.get("updateElement").asText())) {
+                    if (blockTypeSelected != null && "投票".equals(blockTypeSelected)) {
+                        map.remove("available");
+                    } else {
+                        map.put("available", false);
+                    }
+                }
+                if ("website".equals(body.get("updateElement").asText())) {
                     if (websiteId != null) {
                         request.setAttribute("resourceUrl", baseConfig.getPolloptions() + "?websiteId=" + websiteId);
                         CommonResult usernamesResult = commonMethods.getResource(request);
                         if (CommonResultStatus.SUCCESS.toString().equals(usernamesResult.getStatus()) && usernamesResult.getResponseData().get("data") != null) {
                             map.put("items", usernamesResult.getResponseData().get("data"));
                         }
+                    } else {
+                        map.put("items", null);
                     }
-                    map.remove("available");
-                } else {
-                    map.put("available", false);
                 }
                 map.put("changed", true);
                 continue;
             }
             if ("fileLibraryType".equals(map.get("name")) || "fileLibraryNumber".equals(map.get("name"))) {
-                if (blockTypeSelected != null && "文件库".equals(blockTypeSelected)) {
-                    if (websiteId != null&& "fileLibraryType".equals(map.get("name"))) {
+                if ("type".equals(body.get("updateElement").asText())) {
+                    if (blockTypeSelected != null && "文件库".equals(blockTypeSelected)) {
+                        map.remove("available");
+                    } else {
+                        map.put("available", false);
+                    }
+                }
+                if ("website".equals(body.get("updateElement").asText()) && "fileLibraryType".equals(map.get("name"))) {
+                    if (websiteId != null) {
                         request.setAttribute("resourceUrl", baseConfig.getFilelibrarytypeoptionsofwebsite() + "?websiteId=" + websiteId);
                         CommonResult usernamesResult = commonMethods.getResource(request);
                         if (CommonResultStatus.SUCCESS.toString().equals(usernamesResult.getStatus()) && usernamesResult.getResponseData().get("data") != null) {
                             map.put("items", usernamesResult.getResponseData().get("data"));
                         }
+                    } else {
+                        map.put("items", null);
                     }
-                    map.remove("available");
-                } else {
-                    map.put("available", false);
                 }
                 map.put("changed", true);
                 continue;

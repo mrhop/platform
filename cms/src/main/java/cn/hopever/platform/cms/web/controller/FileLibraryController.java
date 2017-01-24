@@ -127,8 +127,7 @@ public class FileLibraryController {
 
     @PreAuthorize("#oauth2.hasScope('cms_admin_client')")
     @RequestMapping(value = "/update", method = {RequestMethod.POST})
-    public Map updateFileLibrary(@RequestBody Map<String, Object> bodyOriginal, Principal principal) {
-        Map body = JacksonUtil.mapper.convertValue(bodyOriginal.get("data"), Map.class);
+    public Map updateFileLibrary(@RequestBody Map<String, Object> body, Principal principal) {
         long id = Long.valueOf(body.get("id").toString());
         FileLibraryTable fileLibraryTable = this.fileLibraryTableService.get(id);
         if (body.get("title") != null) {
@@ -161,8 +160,7 @@ public class FileLibraryController {
 
     @PreAuthorize("#oauth2.hasScope('cms_admin_client')")
     @RequestMapping(value = "/save", method = {RequestMethod.POST})
-    public Map saveFileLibrary(@RequestBody Map<String, Object> bodyOriginal, Principal principal) {
-        Map body = JacksonUtil.mapper.convertValue(bodyOriginal.get("data"), Map.class);
+    public Map saveFileLibrary(@RequestBody Map<String,Object> body, Principal principal) {
         FileLibraryTable fileLibraryTable = new FileLibraryTable();
         if (body.get("title") != null) {
             fileLibraryTable.setFileName(body.get("title").toString());

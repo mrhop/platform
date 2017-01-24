@@ -267,13 +267,11 @@ public class CmsClientNavigateController {
             map.remove("changed");
             if ("website".equals(map.get("name"))) {
                 if ("website".equals(body.get("updateElement").asText())) {
-                    websiteId = body.get("updateData") != null && !body.get("updateData").isNull() ? body.get("updateData").textValue() : null;
-                } else {
-                    websiteId = map.get("defaultValue")!=null? map.get("defaultValue").toString():null;
+                    websiteId = body.get("updateData") != null && !body.get("updateData").isNull() ? body.get("updateData").asText() : null;
                 }
                 continue;
             }
-            if ("parent".equals(map.get("name")) && websiteId != null) {
+            if ("parent".equals(map.get("name")) && "website".equals(body.get("updateElement").asText())) {
                 if (websiteId != null) {
                     request.setAttribute("resourceUrl", baseConfig.getNavigateparentoptions() + "?websiteId=" + websiteId);
                     CommonResult usernamesResult = commonMethods.getResource(request);
@@ -287,11 +285,16 @@ public class CmsClientNavigateController {
                 continue;
             }
             if ("type".equals(map.get("name")) && "type".equals(body.get("updateElement").asText())) {
-                navigateTypeSelected = body.get("updateData").textValue();
+                navigateTypeSelected = body.get("updateData").asText();
                 continue;
             }
             if ("article".equals(map.get("name"))) {
                 if (navigateTypeSelected != null && "文章".equals(navigateTypeSelected)) {
+                    map.remove("available");
+                } else {
+                    map.put("available", false);
+                }
+                if ("website".equals(body.get("updateElement").asText()) && websiteId != null) {
                     if (websiteId != null) {
                         request.setAttribute("resourceUrl", baseConfig.getArticleoptions() + "?websiteId=" + websiteId);
                         CommonResult usernamesResult = commonMethods.getResource(request);
@@ -301,15 +304,17 @@ public class CmsClientNavigateController {
                     } else {
                         map.put("items", null);
                     }
-                    map.remove("available");
-                } else {
-                    map.put("available", false);
                 }
                 map.put("changed", true);
                 continue;
             }
             if ("newsType".equals(map.get("name"))) {
                 if (navigateTypeSelected != null && "新闻".equals(navigateTypeSelected)) {
+                    map.remove("available");
+                } else {
+                    map.put("available", false);
+                }
+                if ("website".equals(body.get("updateElement").asText()) && websiteId != null) {
                     if (websiteId != null) {
                         request.setAttribute("resourceUrl", baseConfig.getNewstypeoptionsofwebsite() + "?websiteId=" + websiteId);
                         CommonResult usernamesResult = commonMethods.getResource(request);
@@ -319,15 +324,17 @@ public class CmsClientNavigateController {
                     } else {
                         map.put("items", null);
                     }
-                    map.remove("available");
-                } else {
-                    map.put("available", false);
                 }
                 map.put("changed", true);
                 continue;
             }
-            if ("fileLibraryType".equals(map.get("name")) ) {
+            if ("fileLibraryType".equals(map.get("name"))) {
                 if (navigateTypeSelected != null && "多媒体".equals(navigateTypeSelected)) {
+                    map.remove("available");
+                } else {
+                    map.put("available", false);
+                }
+                if ("website".equals(body.get("updateElement").asText()) && websiteId != null) {
                     if (websiteId != null) {
                         request.setAttribute("resourceUrl", baseConfig.getFilelibrarytypeoptionsofwebsite() + "?websiteId=" + websiteId);
                         CommonResult usernamesResult = commonMethods.getResource(request);
@@ -337,9 +344,6 @@ public class CmsClientNavigateController {
                     } else {
                         map.put("items", null);
                     }
-                    map.remove("available");
-                } else {
-                    map.put("available", false);
                 }
                 map.put("changed", true);
                 continue;

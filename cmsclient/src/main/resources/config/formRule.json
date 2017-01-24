@@ -1542,13 +1542,6 @@
         "name": "parent",
         "label": "父导航",
         "type": "select",
-        "required": true,
-        "validateRules": [
-          {
-            "name": "REQUIRED_VALIDATE",
-            "errorMsg": "不能为空"
-          }
-        ],
         "dataType": "number"
       },
       {
@@ -1666,19 +1659,13 @@
             "errorMsg": "不能为空"
           }
         ],
+        "updatable": true,
         "dataType": "number"
       },
       {
         "name": "parent",
         "label": "父导航",
         "type": "select",
-        "required": true,
-        "validateRules": [
-          {
-            "name": "REQUIRED_VALIDATE",
-            "errorMsg": "不能为空"
-          }
-        ],
         "dataType": "number"
       },
       {

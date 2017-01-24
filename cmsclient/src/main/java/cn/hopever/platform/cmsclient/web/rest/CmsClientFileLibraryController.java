@@ -11,11 +11,9 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by Donghui Huo on 2016/10/17.
@@ -154,9 +152,45 @@ public class CmsClientFileLibraryController {
     }
 
     @RequestMapping(value = "/filelibrary/update", method = {RequestMethod.POST})
-    public CommonResult updateFileLibrary(HttpServletRequest request, @RequestBody JsonNode body) throws Exception {
+    public CommonResult updateFileLibrary(HttpServletRequest request, @RequestPart("file") MultipartFile[] files) throws Exception {
+        String file = null;
+        if (files != null && files.length > 0) {
+            String resourceAddress = "";
+            request.setAttribute("resourceUrl", baseConfig.getWebsiteinfo() + "?id=" + request.getParameter("website"));
+            CommonResult c = commonMethods.getResource(request);
+            if (CommonResultStatus.SUCCESS.toString().equals(c.getStatus())) {
+                if (c.getResponseData() != null) {
+                    if (c.getResponseData().get("data") != null) {
+                        Map<String, Object> mapData = (Map) c.getResponseData().get("data");
+                        resourceAddress = mapData.get("resourceAddress").toString();
+                    }
+                }
+            }
+            request.setAttribute("resourceUrl", commonProperties.getImageUpload());
+            request.setAttribute("filePath", resourceAddress);
+            CommonResult cr = this.commonMethods.postFile(request, files);
+            if (CommonResultStatus.SUCCESS.toString().equals(cr.getStatus()) && cr.getResponseData().get("data") != null) {
+                List<String> list = ((Map<String, List>) cr.getResponseData().get("data")).get("fileKeys");
+                if (list != null && list.size() > 0) {
+                    file = commonProperties.getImagePathPrev() + list.get(0);
+                }
+            }
+        }
+        HashMap map = new HashMap<>();
+        Set<String> set = request.getParameterMap().keySet();
+        for (String key : set) {
+            if (key.equals("isPublished")) {
+                map.put(key, request.getParameterValues(key));
+            } else {
+                String value = request.getParameter(key);
+                if (value != null && value.length() > 0) {
+                    map.put(key, value);
+                }
+            }
+        }
+        map.put("url", file);
         request.setAttribute("resourceUrl", baseConfig.getFilelibraryupdate());
-        return commonMethods.postResource(body, request);
+        return commonMethods.postResource(map, request);
     }
 
     @RequestMapping(value = "/filelibrary/add", method = {RequestMethod.GET})
@@ -180,9 +214,45 @@ public class CmsClientFileLibraryController {
     }
 
     @RequestMapping(value = "/filelibrary/save", method = {RequestMethod.POST})
-    public CommonResult saveFileLibrary(HttpServletRequest request, @RequestBody JsonNode body) throws Exception {
+    public CommonResult saveFileLibrary(HttpServletRequest request, @RequestPart("file") MultipartFile[] files) throws Exception {
+        String file = null;
+        if (files != null && files.length > 0) {
+            String resourceAddress = "";
+            request.setAttribute("resourceUrl", baseConfig.getWebsiteinfo() + "?id=" + request.getParameter("website"));
+            CommonResult c = commonMethods.getResource(request);
+            if (CommonResultStatus.SUCCESS.toString().equals(c.getStatus())) {
+                if (c.getResponseData() != null) {
+                    if (c.getResponseData().get("data") != null) {
+                        Map<String, Object> mapData = (Map) c.getResponseData().get("data");
+                        resourceAddress = mapData.get("resourceAddress").toString();
+                    }
+                }
+            }
+            request.setAttribute("resourceUrl", commonProperties.getImageUpload());
+            request.setAttribute("filePath", resourceAddress);
+            CommonResult cr = this.commonMethods.postFile(request, files);
+            if (CommonResultStatus.SUCCESS.toString().equals(cr.getStatus()) && cr.getResponseData().get("data") != null) {
+                List<String> list = ((Map<String, List>) cr.getResponseData().get("data")).get("fileKeys");
+                if (list != null && list.size() > 0) {
+                    file = commonProperties.getImagePathPrev() + list.get(0);
+                }
+            }
+        }
+        HashMap map = new HashMap<>();
+        Set<String> set = request.getParameterMap().keySet();
+        for (String key : set) {
+            if (key.equals("isPublished")) {
+                map.put(key, request.getParameterValues(key));
+            } else {
+                String value = request.getParameter(key);
+                if (value != null && value.length() > 0) {
+                    map.put(key, value);
+                }
+            }
+        }
+        map.put("url", file);
         request.setAttribute("resourceUrl", baseConfig.getFilelibrarysave());
-        return commonMethods.postResource(body, request);
+        return commonMethods.postResource(map, request);
     }
 
     @RequestMapping(value = "/filelibrary/rule/update", method = {RequestMethod.POST})
@@ -198,15 +268,15 @@ public class CmsClientFileLibraryController {
                 websiteId = body.get("updateData") != null && !body.get("updateData").isNull() ? body.get("updateData").asLong() : null;
                 continue;
             }
-            if ( "fileLibraryType".equals(map.get("name"))&& "website".equals(body.get("updateElement").asText())) {
-                if(websiteId != null){
+            if ("fileLibraryType".equals(map.get("name")) && "website".equals(body.get("updateElement").asText())) {
+                if (websiteId != null) {
                     request.setAttribute("resourceUrl", baseConfig.getFilelibrarytypeoptionsofwebsite() + "?websiteId=" + websiteId);
                     CommonResult usernamesResult = commonMethods.getResource(request);
                     if (CommonResultStatus.SUCCESS.toString().equals(usernamesResult.getStatus()) && usernamesResult.getResponseData().get("data") != null) {
                         map.put("items", usernamesResult.getResponseData().get("data"));
                     }
-                }else{
-                    map.put("items",null);
+                } else {
+                    map.put("items", null);
                 }
                 map.put("changed", true);
                 continue;

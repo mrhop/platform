@@ -188,17 +188,20 @@ public class NavigateController {
             if (body.get("title") != null) {
                 navigateTable.setTitle(body.get("title").toString());
             }
+            if (body.get("website") != null) {
+                navigateTable.setWebsite(websiteTableService.get(Long.valueOf(body.get("website").toString())));
+            }
             if (body.get("parent") != null) {
                 navigateTable.setParent(navigateTableService.get(Long.valueOf(body.get("parent").toString())));
             }
             if (body.get("level") != null) {
-                navigateTable.setOrderNum(Integer.valueOf(body.get("level").toString()));
+                navigateTable.setLevel(Integer.valueOf(body.get("level").toString()));
             }
             if (body.get("orderNum") != null) {
                 navigateTable.setOrderNum(Integer.valueOf(body.get("orderNum").toString()));
             }
             if (body.get("type") != null) {
-                navigateTable.setOrderNum(Integer.valueOf(body.get("type").toString()));
+                navigateTable.setType(body.get("type").toString());
             }
             if (body.get("article") != null) {
                 navigateTable.setArticle(articleTableService.get(Long.valueOf(body.get("article").toString())));
@@ -219,17 +222,20 @@ public class NavigateController {
         if (body.get("title") != null) {
             navigateTable.setTitle(body.get("title").toString());
         }
+        if (body.get("website") != null) {
+            navigateTable.setWebsite(websiteTableService.get(Long.valueOf(body.get("website").toString())));
+        }
         if (body.get("parent") != null) {
             navigateTable.setParent(navigateTableService.get(Long.valueOf(body.get("parent").toString())));
         }
         if (body.get("level") != null) {
-            navigateTable.setOrderNum(Integer.valueOf(body.get("level").toString()));
+            navigateTable.setLevel(Integer.valueOf(body.get("level").toString()));
         }
         if (body.get("orderNum") != null) {
             navigateTable.setOrderNum(Integer.valueOf(body.get("orderNum").toString()));
         }
         if (body.get("type") != null) {
-            navigateTable.setOrderNum(Integer.valueOf(body.get("type").toString()));
+            navigateTable.setType(body.get("type").toString());
         }
         if (body.get("article") != null) {
             navigateTable.setArticle(articleTableService.get(Long.valueOf(body.get("article").toString())));
