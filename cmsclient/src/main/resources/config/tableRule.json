@@ -615,7 +615,7 @@
     "tfoot": [
       {
         "className": "td-foot",
-        "colSpan": 3,
+        "colSpan": 5,
         "title": "多媒体文件分类列表基础信息"
       }
     ]
