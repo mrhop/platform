@@ -192,7 +192,11 @@ public class NavigateController {
                 navigateTable.setWebsite(websiteTableService.get(Long.valueOf(body.get("website").toString())));
             }
             if (body.get("parent") != null) {
-                navigateTable.setParent(navigateTableService.get(Long.valueOf(body.get("parent").toString())));
+                NavigateTable nt = navigateTableService.get(Long.valueOf(body.get("parent").toString()));
+                navigateTable.setParent(nt);
+                navigateTable.setLevel(nt.getLevel()+1);
+            }else{
+                navigateTable.setLevel(0);
             }
             if (body.get("level") != null) {
                 navigateTable.setLevel(Integer.valueOf(body.get("level").toString()));
@@ -226,10 +230,11 @@ public class NavigateController {
             navigateTable.setWebsite(websiteTableService.get(Long.valueOf(body.get("website").toString())));
         }
         if (body.get("parent") != null) {
-            navigateTable.setParent(navigateTableService.get(Long.valueOf(body.get("parent").toString())));
-        }
-        if (body.get("level") != null) {
-            navigateTable.setLevel(Integer.valueOf(body.get("level").toString()));
+            NavigateTable nt = navigateTableService.get(Long.valueOf(body.get("parent").toString()));
+            navigateTable.setParent(nt);
+            navigateTable.setLevel(nt.getLevel()+1);
+        }else{
+            navigateTable.setLevel(0);
         }
         if (body.get("orderNum") != null) {
             navigateTable.setOrderNum(Integer.valueOf(body.get("orderNum").toString()));

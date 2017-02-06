@@ -70,7 +70,7 @@ public class ArticleController {
                 List<Object> listTmp = new ArrayList<>();
                 listTmp.add("");
                 listTmp.add(at.getTitle());
-                listTmp.add(at.isPublished() ? "Y" : "F");
+                listTmp.add(at.isPublished() ? "Y" : "N");
                 listTmp.add(at.getPublishDate() != null ? DateFormat.sdf.format(at.getPublishDate()) : null);
                 if (at.getWebsite() != null) {
                     listTmp.add(at.getWebsite().getTitle());

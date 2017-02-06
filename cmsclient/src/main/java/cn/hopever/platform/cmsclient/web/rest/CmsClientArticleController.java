@@ -76,11 +76,11 @@ public class CmsClientArticleController {
                             List<Map> listOptions = new ArrayList<>();
                             Map mapOptionY = new HashMap<>();
                             mapOptionY.put("label", "Y");
-                            mapOptionY.put("value", true);
+                            mapOptionY.put("value", "true");
                             listOptions.add(mapOptionY);
                             Map mapOptionN = new HashMap<>();
                             mapOptionN.put("label", "N");
-                            mapOptionN.put("value", false);
+                            mapOptionN.put("value", "false");
                             listOptions.add(mapOptionN);
                             map.put("editValue", listOptions);
                         } else if (map.get("value").equals("website")) {
@@ -110,6 +110,7 @@ public class CmsClientArticleController {
                 if (c.getResponseData().get("data") != null) {
                     Map<String, Object> mapData = (Map) c.getResponseData().get("data");
                     String websiteId = null;
+                    boolean isPublished = false;
                     for (Map map : list) {
                         if ("website".equals(map.get("name"))) {
                             request.setAttribute("resourceUrl", baseConfig.getWebsiteoptions());
@@ -135,6 +136,17 @@ public class CmsClientArticleController {
                                 map.put("defaultValue", mapData.get(map.get("name")));
                             }
                             continue;
+                        }
+                        if ("isPublished".equals(map.get("name"))) {
+                            if ((boolean) mapData.get(map.get("name"))) {
+                                map.put("defaultValue", new Object[]{mapData.get(map.get("name"))});
+                                isPublished = true;
+                            }
+                            continue;
+                        }
+                        if ("publishDate".equals(map.get("name")) && isPublished) {
+                            map.remove("available");
+                            map.put("defaultValue", mapData.get(map.get("name")));
                         }
                         if (mapData.get(map.get("name")) != null) {
                             map.put("defaultValue", mapData.get(map.get("name")));

@@ -55,6 +55,9 @@ public class FileLibraryController {
         if(filterMap.get("fileLibraryType") != null){
             filterMap.put("fileLibraryType", fileLibraryTypeTableService.get(Long.valueOf(filterMap.get("fileLibraryType").toString())));
         }
+        if (filterMap.get("isPublished") != null) {
+            filterMap.put("isPublished", Boolean.valueOf(filterMap.get("isPublished").toString()));
+        }
         List listWebsite = websiteTableService.getWebsiteAsFilter(principal, filterMap.get("website") != null ? filterMap.get("website").toString() : null);
         if(listWebsite!=null){
             filterMap.put("website", listWebsite);
