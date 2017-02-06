@@ -364,6 +364,11 @@
     "editable": true,
     "deletable": true,
     "addable": true,
+    "extraActions":[
+      {"name":"查看投票选项",
+        "url":"polloption/list.html"
+      }
+    ],
     "extraClass": "hover",
     "pager": {
       "show": true,
@@ -390,9 +395,7 @@
       },
       {
         "title": "所属网站",
-        "value": "website",
-        "filter": true,
-        "editType": "select"
+        "value": "website"
       },
       {
         "title": "所属投票",

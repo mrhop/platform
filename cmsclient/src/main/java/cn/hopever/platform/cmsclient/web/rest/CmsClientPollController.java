@@ -37,7 +37,6 @@ public class CmsClientPollController {
         if (body.get("rowSize") == null || body.get("rowSize").isNull()) {
             ((ObjectNode) body).put("rowSize", commonProperties.getPageSize());
         }
-
         CommonResult c = commonMethods.postResource(body, request);
         if (CommonResultStatus.SUCCESS.toString().equals(c.getStatus())) {
             if (c.getResponseData() != null) {
@@ -82,13 +81,13 @@ public class CmsClientPollController {
                     Map<String, Object> mapData = (Map) c.getResponseData().get("data");
                     // List<Map> listReturn = new ArrayList<>();
                     for (Map map : list) {
-                        if ("website".equals(map.get("name")) ) {
+                        if ("website".equals(map.get("name"))) {
                             request.setAttribute("resourceUrl", baseConfig.getWebsiteoptions());
                             CommonResult usernamesResult = commonMethods.getResource(request);
                             if (CommonResultStatus.SUCCESS.toString().equals(usernamesResult.getStatus()) && usernamesResult.getResponseData().get("data") != null) {
                                 map.put("items", usernamesResult.getResponseData().get("data"));
                             }
-                            if(mapData.get(map.get("name"))!=null){
+                            if (mapData.get(map.get("name")) != null) {
                                 map.put("defaultValue", mapData.get(map.get("name")));
                             }
                             continue;
@@ -123,7 +122,7 @@ public class CmsClientPollController {
         Map<String, Object> rule = baseConfig.getFormRule("polladd");
         List<Map> list = (List<Map>) rule.get("structure");
         for (Map map : list) {
-            if ("website".equals(map.get("name")) ) {
+            if ("website".equals(map.get("name"))) {
                 request.setAttribute("resourceUrl", baseConfig.getWebsiteoptions());
                 CommonResult usernamesResult = commonMethods.getResource(request);
                 if (CommonResultStatus.SUCCESS.toString().equals(usernamesResult.getStatus()) && usernamesResult.getResponseData().get("data") != null) {

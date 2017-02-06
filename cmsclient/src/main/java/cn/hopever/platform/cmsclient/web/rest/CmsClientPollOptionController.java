@@ -30,7 +30,7 @@ public class CmsClientPollOptionController {
 
     @RequestMapping(value = "/polloption/list", method = {RequestMethod.GET, RequestMethod.POST})
     public CommonResult getPollOptionList(HttpServletRequest request, @RequestBody JsonNode body) throws Exception {
-        request.setAttribute("resourceUrl", baseConfig.getPolloptionlist() + "?pollId=" + request.getParameter("pollId"));
+        request.setAttribute("resourceUrl", baseConfig.getPolloptionlist() + "?pollId=" + request.getParameter("key"));
         CommonResult c = commonMethods.getResource(request);
         if (CommonResultStatus.SUCCESS.toString().equals(c.getStatus())) {
             if (c.getResponseData() != null) {
