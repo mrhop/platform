@@ -849,9 +849,6 @@
             "label": "是",
             "value": true
           }
-        ],
-        "defaultValue": [
-          true
         ]
       },
       {
@@ -865,9 +862,6 @@
             "label": "是",
             "value": true
           }
-        ],
-        "defaultValue": [
-          true
         ]
       },
       {

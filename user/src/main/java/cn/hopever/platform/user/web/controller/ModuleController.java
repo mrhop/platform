@@ -144,14 +144,9 @@ public class ModuleController {
             }
             mt.setAuthorities(listMr);
         }
-        if (map.get("isTop") != null && map.get("isTop").equals("Y")) {
-            mt.setParent(null);
-            mt.setModuleUrl(null);
-            mt.setIconClass(map.get("iconClass").toString());
-            if (mt.getChildren() != null) {
-                for (ModuleTable mtChild : mt.getChildren()) {
-                    mtChild.setClient(ct);
-                }
+        if (mt.getParent() == null) {
+            if (map.get("iconClass") != null) {
+                mt.setIconClass(map.get("iconClass").toString());
             }
         } else {
             if (map.get("parent") != null) {
@@ -161,25 +156,24 @@ public class ModuleController {
             if (map.get("moduleUrl") != null) {
                 mt.setModuleUrl(map.get("moduleUrl").toString());
             }
-            mt.setIconClass(null);
         }
         if (map.get("moduleOrder") != null) {
-            if (map.get("isTop") != null && map.get("isTop").equals("Y")) {
+            if (mt.getParent() == null) {
                 mt.setModuleOrder(Integer.valueOf(map.get("moduleOrder").toString()) * 100);
             } else {
-                if (map.get("parent") != null) {
+                if (mtParent != null) {
                     mt.setModuleOrder(mtParent.getModuleOrder() + Integer.valueOf(map.get("moduleOrder").toString()));
                 } else {
-                    mt.setModuleOrder(null);
+                    mt.setModuleOrder(mt.getParent().getModuleOrder() + Integer.valueOf(map.get("moduleOrder").toString()));
                 }
             }
         }
-        if (map.get("available") != null) {
+        if (map.get("available") != null && ((List) map.get("available")).size() > 0) {
             mt.setAvailable(true);
         } else {
             mt.setAvailable(false);
         }
-        if (map.get("activated") != null) {
+        if (map.get("activated") != null && ((List) map.get("activated")).size() > 0) {
             mt.setActivated(true);
         } else {
             mt.setActivated(false);
@@ -194,6 +188,7 @@ public class ModuleController {
     public Map saveUser(@RequestBody JsonNode body, Principal principal) {
         Map map = JacksonUtil.mapper.convertValue(body.get("data"), Map.class);
         ModuleTable mt = new ModuleTable();
+        ModuleTable mtParent = null;
         //对module的值进行设置，module name可以重复
         mt.setModuleName(map.get("moduleName").toString());
         mt.setClient(this.clientTableService.getById(Long.valueOf(map.get("client").toString())));
@@ -211,7 +206,8 @@ public class ModuleController {
             mt.setIconClass(map.get("iconClass").toString());
         } else {
             if (map.get("parent") != null) {
-                mt.setParent(moduleTableService.getById(Long.valueOf(map.get("parent").toString())));
+                mtParent = moduleTableService.getById(Long.valueOf(map.get("parent").toString()));
+                mt.setParent(mtParent);
             }
             if (map.get("moduleUrl") != null) {
                 mt.setModuleUrl(map.get("moduleUrl").toString());
@@ -222,20 +218,19 @@ public class ModuleController {
             if (map.get("isTop") != null && ((List) map.get("isTop")).size() > 0) {
                 mt.setModuleOrder(Integer.valueOf(map.get("moduleOrder").toString()) * 100);
             } else {
-                if (map.get("parent") != null) {
-                    ModuleTable mtParent = moduleTableService.getById(Long.valueOf(map.get("parent").toString()));
+                if (mtParent != null) {
                     mt.setModuleOrder(mtParent.getModuleOrder() + Integer.valueOf(map.get("moduleOrder").toString()));
                 } else {
                     mt.setModuleOrder(null);
                 }
             }
         }
-        if (map.get("available") != null) {
+        if (map.get("available") != null && ((List) map.get("available")).size() > 0) {
             mt.setAvailable(true);
         } else {
             mt.setAvailable(false);
         }
-        if (map.get("activated") != null) {
+        if (map.get("activated") != null && ((List) map.get("activated")).size() > 0) {
             mt.setActivated(true);
         } else {
             mt.setActivated(false);
