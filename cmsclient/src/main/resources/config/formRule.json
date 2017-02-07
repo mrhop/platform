@@ -372,6 +372,8 @@
         "label": "内容位置",
         "type": "text",
         "required": true,
+        "readonly": true,
+        "clickFun":"cmsfuns.template_content_position",
         "validateRules": [
           {
             "name": "REQUIRED_VALIDATE",
@@ -480,6 +482,8 @@
         "label": "内容位置",
         "type": "text",
         "required": true,
+        "readonly": true,
+        "clickFun":"cmsfuns.template_content_position",
         "validateRules": [
           {
             "name": "REQUIRED_VALIDATE",
