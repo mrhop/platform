@@ -41,6 +41,7 @@ public class CmsClientPollOptionController {
                 }
                 if (body.get("init") != null && body.get("init").asBoolean()) {
                     c.getResponseData().put("rules", baseConfig.getTableRule("pollOptionList"));
+                    c.getResponseData().put("additionalFeature", ((Map) baseConfig.getMapRules().get("tableRules")).get("pollOptionListAdditionalFeature"));
                 }
             }
         }
@@ -86,16 +87,23 @@ public class CmsClientPollOptionController {
 
     @RequestMapping(value = "/polloption/add", method = {RequestMethod.GET})
     public CommonResult addPollOption(HttpServletRequest request) throws Exception {
+        request.setAttribute("resourceUrl", baseConfig.getPollinfo() + "?id=" + request.getParameter("key"));
+        CommonResult cPollInfo = commonMethods.getResource(request);
+        Map<String, Object> mapData = (Map) cPollInfo.getResponseData().get("data");
+
         CommonResult c = new CommonResult();
         Map<String, Object> rule = baseConfig.getFormRule("polloptionadd");
         List<Map> list = (List<Map>) rule.get("structure");
         for (Map map : list) {
+            if ("poll".equals(map.get("name")) ) {
+                map.put("defaultValue", mapData.get("title"));
+                continue;
+            }
             if ("website".equals(map.get("name")) ) {
-                request.setAttribute("resourceUrl", baseConfig.getWebsiteoptions());
-                CommonResult usernamesResult = commonMethods.getResource(request);
-                if (CommonResultStatus.SUCCESS.toString().equals(usernamesResult.getStatus()) && usernamesResult.getResponseData().get("data") != null) {
-                    map.put("items", usernamesResult.getResponseData().get("data"));
-                }
+                request.setAttribute("resourceUrl", baseConfig.getWebsiteinfo() + "?id=" + mapData.get("website"));
+                CommonResult cWebsite = commonMethods.getResource(request);
+                Map<String, Object> mapDataWebsite = (Map) cWebsite.getResponseData().get("data");
+                map.put("defaultValue", mapDataWebsite.get("title"));
                 continue;
             }
         }
@@ -106,7 +114,7 @@ public class CmsClientPollOptionController {
 
     @RequestMapping(value = "/polloption/save", method = {RequestMethod.POST})
     public CommonResult savePollOption(HttpServletRequest request, @RequestBody JsonNode body) throws Exception {
-        request.setAttribute("resourceUrl", baseConfig.getPolloptionsave());
+        request.setAttribute("resourceUrl", baseConfig.getPolloptionsave()+ "?pollId=" + request.getParameter("key"));
         return commonMethods.postResource(body, request);
     }
 

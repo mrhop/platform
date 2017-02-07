@@ -410,6 +410,12 @@
       }
     ]
   },
+  "pollOptionListAdditionalFeature": {
+    "editable": true,
+    "deletable": true,
+    "addable": true,
+    "extraClass": "hover"
+  },
   "operationList": {
     "thead": [
       {

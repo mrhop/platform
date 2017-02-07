@@ -1,6 +1,7 @@
 package cn.hopever.platform.cms.web.controller;
 
 import cn.hopever.platform.cms.domain.PollOptionTable;
+import cn.hopever.platform.cms.domain.PollTable;
 import cn.hopever.platform.cms.service.PollOptionTableService;
 import cn.hopever.platform.cms.service.PollTableService;
 import cn.hopever.platform.cms.service.WebsiteTableService;
@@ -78,12 +79,12 @@ public class PollOptionController {
         map.put("title", pot.getTitle());
         map.put("voteTimes", pot.getVoteTimes());
         if (pot.getWebsite() != null) {
-            map.put("website",  pot.getWebsite().getTitle());
+            map.put("website", pot.getWebsite().getTitle());
         } else {
             map.put("website", null);
         }
         if (pot.getPoll() != null) {
-            map.put("poll",  pot.getPoll().getTitle());
+            map.put("poll", pot.getPoll().getTitle());
         } else {
             map.put("poll", null);
         }
@@ -108,19 +109,16 @@ public class PollOptionController {
 
     @PreAuthorize("#oauth2.hasScope('cms_admin_client')")
     @RequestMapping(value = "/save", method = {RequestMethod.POST})
-    public Map savePollOption(@RequestBody Map<String, Object> bodyOriginal, Principal principal) {
+    public Map savePollOption(@RequestParam Long pollId, @RequestBody Map<String, Object> bodyOriginal, Principal principal) {
         Map body = JacksonUtil.mapper.convertValue(bodyOriginal.get("data"), Map.class);
         PollOptionTable pollOptionTable = new PollOptionTable();
         if (body.get("title") != null) {
             pollOptionTable.setTitle(body.get("title").toString());
         }
         pollOptionTable.setVoteTimes(0);
-        if (body.get("website") != null) {
-            pollOptionTable.setWebsite(websiteTableService.get(Long.valueOf(body.get("website").toString())));
-        }
-        if (body.get("poll") != null) {
-            pollOptionTable.setPoll(pollTableService.get(Long.valueOf(body.get("poll").toString())));
-        }
+        PollTable pollTable = pollTableService.get(pollId);
+        pollOptionTable.setWebsite(pollTable.getWebsite());
+        pollOptionTable.setPoll(pollTable);
         this.pollOptionTableService.save(pollOptionTable);
         return null;
     }

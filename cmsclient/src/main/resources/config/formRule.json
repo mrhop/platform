@@ -1360,13 +1360,14 @@
       {
         "name": "voteTimes",
         "label": "投票次数",
-        "type": "text",
+        "type": "number",
         "placeholder": "投票次数",
         "required": true,
         "validateRules": [
           {
-            "name": "REQUIRED_VALIDATE",
-            "errorMsg": "不能为空"
+            "name": "custom_validate",
+            "validateRegex": "^(\\d+)$",
+            "errorMsg": "必须为数字"
           }
         ]
       },
@@ -1419,30 +1420,15 @@
       },
       {
         "name": "website",
-        "label": "所属网站",
-        "type": "select",
-        "required": true,
-        "validateRules": [
-          {
-            "name": "REQUIRED_VALIDATE",
-            "errorMsg": "不能为空"
-          }
-        ],
-        "updatable": true,
-        "dataType": "number"
+        "label": "所属投票",
+        "type": "text",
+        "readonly": true
       },
       {
         "name": "poll",
         "label": "所属投票",
-        "type": "select",
-        "required": true,
-        "validateRules": [
-          {
-            "name": "REQUIRED_VALIDATE",
-            "errorMsg": "不能为空"
-          }
-        ],
-        "dataType": "number"
+        "type": "text",
+        "readonly": true
       },
       {
         "name": "id",
