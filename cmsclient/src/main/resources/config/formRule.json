@@ -470,6 +470,7 @@
         "label": "布局范围",
         "type": "select",
         "required": true,
+        "changeFun":"template_layout_scale_change",
         "validateRules": [
           {
             "name": "REQUIRED_VALIDATE",
