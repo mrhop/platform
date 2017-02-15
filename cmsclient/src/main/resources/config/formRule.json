@@ -404,7 +404,8 @@
         "name": "templateBlocks",
         "label": "包含模块",
         "type": "checkbox",
-        "dataType": "number"
+        "dataType": "number",
+        "clickFun":"template_content_position_click"
       },
       {
         "name": "templateResources",
@@ -515,6 +516,7 @@
         "name": "templateBlocks",
         "label": "包含模块",
         "type": "checkbox",
+        "changeFun":"template_include_blocks_change",
         "dataType": "number"
       },
       {
