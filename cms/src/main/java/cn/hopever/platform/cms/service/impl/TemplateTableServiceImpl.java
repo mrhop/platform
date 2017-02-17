@@ -3,6 +3,8 @@ package cn.hopever.platform.cms.service.impl;
 import cn.hopever.platform.cms.domain.TemplateTable;
 import cn.hopever.platform.cms.domain.WebsiteTable;
 import cn.hopever.platform.cms.repository.CustomTemplateTableRepository;
+import cn.hopever.platform.cms.repository.TemplateBlockTableRepository;
+import cn.hopever.platform.cms.repository.TemplateResourceTableRepository;
 import cn.hopever.platform.cms.repository.TemplateTableRepository;
 import cn.hopever.platform.cms.service.TemplateTableService;
 import org.slf4j.Logger;
@@ -24,6 +26,10 @@ public class TemplateTableServiceImpl implements TemplateTableService {
     @Autowired
     private TemplateTableRepository templateTableRepository;
     @Autowired
+    private TemplateBlockTableRepository templateBlockTableRepository;
+    @Autowired
+    private TemplateResourceTableRepository templateResourceTableRepository;
+    @Autowired
     private CustomTemplateTableRepository customTemplateTableRepository;
 
     //
@@ -40,6 +46,16 @@ public class TemplateTableServiceImpl implements TemplateTableService {
     @Override
     public void delete(Long id) {
         templateTableRepository.delete(id);
+    }
+
+    @Override
+    public void deleteTemplateBlockByTemplate(TemplateTable templateTable) {
+        templateBlockTableRepository.deleteByTemplate(templateTable);
+    }
+
+    @Override
+    public void deleteTemplateResourceByTemplate(TemplateTable templateTable) {
+        templateResourceTableRepository.deleteByTemplate(templateTable);
     }
 
     @Override

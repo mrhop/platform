@@ -9,6 +9,7 @@
     <script type="text/javascript">
         var commonProperties = ${messagesStr}
     </script>
+    <script src="//cdn.ckeditor.com/4.6.2/full/ckeditor.js"></script>
     <script src="${pageContext.request.contextPath}/js/vendor.js"></script>
     <script src="${pageContext.request.contextPath}/js/tools.js"></script>
     <script src="${pageContext.request.contextPath}/js/common-components.js"></script>

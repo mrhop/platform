@@ -14,7 +14,7 @@ import java.util.List;
 @Table(name = "platform_cms_template")
 @Data
 @EqualsAndHashCode(of = {"id"})
-@ToString(exclude = {"templateBlocks","templateResources","website"})
+@ToString(exclude = {"templateBlocks", "templateResources", "website"})
 public class TemplateTable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,13 +37,13 @@ public class TemplateTable {
     @Column(name = "content_position", nullable = false)
     private String contentPosition;//使用model 弹出的方式来进行处理--content or news or fileLib ,核心部分//block-关联到navigate导航{"start":[1,1],"end":[2,2]}
 
-    @Column(name = "content_script",columnDefinition="TEXT")
+    @Column(name = "content_script", columnDefinition = "TEXT")
     private String contentScript;//重新排版文章或者新闻内容时使用
 
-    @OneToMany(mappedBy = "template")
+    @OneToMany(mappedBy = "template", cascade = {CascadeType.ALL})
     private List<TemplateBlockTable> templateBlocks;
 
-    @OneToMany(mappedBy = "template")
+    @OneToMany(mappedBy = "template", cascade = {CascadeType.ALL})
     private List<TemplateResourceTable> templateResources;
 
     @ManyToOne

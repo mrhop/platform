@@ -1,11 +1,16 @@
 package cn.hopever.platform.cms.web.controller;
 
-import cn.hopever.platform.cms.domain.*;
+import cn.hopever.platform.cms.domain.TemplateBlockTable;
+import cn.hopever.platform.cms.domain.TemplateResourceTable;
+import cn.hopever.platform.cms.domain.TemplateTable;
+import cn.hopever.platform.cms.domain.WebsiteTable;
 import cn.hopever.platform.cms.service.BlockTableService;
 import cn.hopever.platform.cms.service.ResourceTableService;
 import cn.hopever.platform.cms.service.TemplateTableService;
 import cn.hopever.platform.cms.service.WebsiteTableService;
 import cn.hopever.platform.utils.json.JacksonUtil;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +21,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -122,7 +128,7 @@ public class TemplateController {
 
     @PreAuthorize("#oauth2.hasScope('cms_admin_client')")
     @RequestMapping(value = "/info", method = {RequestMethod.GET})
-    public Map info(@RequestParam Long id, Principal principal) {
+    public Map info(@RequestParam Long id, Principal principal) throws IOException {
         if (websiteTableService.validatePermission(principal, templateTableService.get(id).getWebsite())) {
             TemplateTable tt = this.templateTableService.get(id);
             Map<String, Object> map = new HashMap<>();
@@ -140,21 +146,32 @@ public class TemplateController {
             }
             if (tt.getTemplateBlocks() != null) {
                 List<Long> templateBlocks = new ArrayList<>();
+                Map<String,Object> blocksPosition = new HashMap<>();
+
                 for (TemplateBlockTable tbt : tt.getTemplateBlocks()) {
                     templateBlocks.add(tbt.getBlock().getId());
+                    blocksPosition.put("block_id_"+tbt.getBlock().getId(),JacksonUtil.mapper.readValue(tbt.getBlockPosition(),new TypeReference<HashMap<String,List>>(){}));
                 }
                 map.put("templateBlocks", templateBlocks);
+                map.put("blocksPosition", blocksPosition);
             } else {
                 map.put("templateBlocks", null);
+                map.put("blocksPosition", null);
             }
             if (tt.getTemplateResources() != null) {
                 List<Long> templateResources = new ArrayList<>();
+                Map<String,Object> resources = new HashMap<>();
+
                 for (TemplateResourceTable trt : tt.getTemplateResources()) {
                     templateResources.add(trt.getResource().getId());
+                    String position = "{\"location\":\""+(trt.isTop()?"head":"foot")+"\",\"order\":"+trt.getOrderNum()+"}";
+                    resources.put("resource_id_"+trt.getResource().getId(),JacksonUtil.mapper.readValue(position,new TypeReference<HashMap<String,Object>>(){}));
                 }
                 map.put("templateResources", templateResources);
+                map.put("resources", resources);
             } else {
                 map.put("templateResources", null);
+                map.put("resources", null);
             }
             return map;
         }
@@ -172,7 +189,7 @@ public class TemplateController {
 
     @PreAuthorize("#oauth2.hasScope('cms_admin_client')")
     @RequestMapping(value = "/update", method = {RequestMethod.POST})
-    public Map updateTemplate(@RequestBody Map<String, Object> bodyOriginal, Principal principal) {
+    public Map updateTemplate(@RequestBody Map<String, Object> bodyOriginal, Principal principal) throws JsonProcessingException {
         Map body = JacksonUtil.mapper.convertValue(bodyOriginal.get("data"), Map.class);
         if (websiteTableService.validatePermission(principal, templateTableService.get(Long.valueOf(body.get("id").toString())).getWebsite())) {
             //do update
@@ -199,17 +216,17 @@ public class TemplateController {
             if (body.get("website") != null) {
                 templateTable.setWebsite(websiteTableService.get(Long.valueOf(body.get("website").toString())));
             }
-
+            templateTableService.deleteTemplateBlockByTemplate(templateTable);
             if (body.get("templateBlocks") != null) {
-                List<Map<String, Object>> templateBlocks = (List<Map<String, Object>>) body.get("templateBlocks");
+                List<Integer> templateBlocks = (List) body.get("templateBlocks");
+                Map<String,Map> blocksPosition = (Map)body.get("blocksPosition");
                 if (templateBlocks.size() > 0) {
                     List<TemplateBlockTable> list = new ArrayList<>();
-                    for (Map map : templateBlocks) {
+                    for (Integer blockId : templateBlocks) {
                         TemplateBlockTable tbt = new TemplateBlockTable();
-                        Map mapBlock = (Map) map.get("block");
-                        tbt.setBlock(blockTableService.get(Long.valueOf(mapBlock.get("id").toString())));
+                        tbt.setBlock(blockTableService.get(Long.valueOf(blockId.toString())));
                         tbt.setTemplate(templateTable);
-                        tbt.setBlockPosition(map.get("blockPosition").toString());
+                        tbt.setBlockPosition(JacksonUtil.mapper.writeValueAsString(blocksPosition.get("block_id_"+blockId)));
                         list.add(tbt);
                     }
                     templateTable.setTemplateBlocks(list);
@@ -219,21 +236,19 @@ public class TemplateController {
             } else {
                 templateTable.setTemplateBlocks(null);
             }
+            templateTableService.deleteTemplateResourceByTemplate(templateTable);
             if (body.get("templateResources") != null) {
-                List<Map<String, Object>> templateResources = (List<Map<String, Object>>) body.get("templateResources");
+                List<Integer> templateResources = (List) body.get("templateResources");
+                Map<String,Map> resources = (Map)body.get("resources");
                 if (templateResources.size() > 0) {
                     List<TemplateResourceTable> list = new ArrayList<>();
-                    for (Map map : templateResources) {
+                    for (Integer resourceId : templateResources) {
                         TemplateResourceTable trt = new TemplateResourceTable();
-                        Map mapResource = (Map) map.get("resource");
-                        trt.setResource(resourceTableService.get(Long.valueOf(mapResource.get("id").toString())));
+                        trt.setResource(resourceTableService.get(Long.valueOf(resourceId.toString())));
                         trt.setTemplate(templateTable);
-                        if (map.get("top") != null && ((List) map.get("top")).size() > 0) {
-                            trt.setTop(true);
-                        } else {
-                            trt.setTop(false);
-                        }
-                        trt.setOrderNum(Integer.valueOf(map.get("orderNum").toString()));
+                        Map<String,Object> position =  resources.get("resource_id_"+resourceId);
+                        trt.setOrderNum(Integer.valueOf(position.get("order").toString()));
+                        trt.setTop(position.get("location")==null||"head".equals(position.get("location")));
                         list.add(trt);
                     }
                     templateTable.setTemplateResources(list);
@@ -250,7 +265,7 @@ public class TemplateController {
 
     @PreAuthorize("#oauth2.hasScope('cms_admin_client')")
     @RequestMapping(value = "/save", method = {RequestMethod.POST})
-    public Map saveTemplate(@RequestBody Map<String, Object> bodyOriginal, Principal principal) {
+    public Map saveTemplate(@RequestBody Map<String, Object> bodyOriginal, Principal principal) throws JsonProcessingException {
         Map body = JacksonUtil.mapper.convertValue(bodyOriginal.get("data"), Map.class);
         TemplateTable templateTable = new TemplateTable();
         if (body.get("name") != null) {
@@ -275,15 +290,16 @@ public class TemplateController {
             templateTable.setWebsite(websiteTableService.get(Long.valueOf(body.get("website").toString())));
         }
         if (body.get("templateBlocks") != null) {
-            List<Map<String, Object>> templateBlocks = (List<Map<String, Object>>) body.get("templateBlocks");
+            List<Integer> templateBlocks = (List) body.get("templateBlocks");
+            Map<String,Map> blocksPosition = (Map)body.get("blocksPosition");
+
             if (templateBlocks.size() > 0) {
                 List<TemplateBlockTable> list = new ArrayList<>();
-                for (Map map : templateBlocks) {
+                for (Integer blockId : templateBlocks) {
                     TemplateBlockTable tbt = new TemplateBlockTable();
-                    Map mapBlock = (Map) map.get("block");
-                    tbt.setBlock(blockTableService.get(Long.valueOf(mapBlock.get("id").toString())));
+                    tbt.setBlock(blockTableService.get(Long.valueOf(blockId.toString())));
                     tbt.setTemplate(templateTable);
-                    tbt.setBlockPosition(map.get("blockPosition").toString());
+                    tbt.setBlockPosition(JacksonUtil.mapper.writeValueAsString(blocksPosition.get("block_id_"+blockId)));
                     list.add(tbt);
                 }
                 templateTable.setTemplateBlocks(list);
@@ -294,20 +310,17 @@ public class TemplateController {
             templateTable.setTemplateBlocks(null);
         }
         if (body.get("templateResources") != null) {
-            List<Map<String, Object>> templateResources = (List<Map<String, Object>>) body.get("templateResources");
+            List<Integer> templateResources = (List) body.get("templateResources");
+            Map<String,Map> resources = (Map)body.get("resources");
             if (templateResources.size() > 0) {
                 List<TemplateResourceTable> list = new ArrayList<>();
-                for (Map map : templateResources) {
+                for (Integer resourceId : templateResources) {
                     TemplateResourceTable trt = new TemplateResourceTable();
-                    Map mapResource = (Map) map.get("resource");
-                    trt.setResource(resourceTableService.get(Long.valueOf(mapResource.get("id").toString())));
+                    trt.setResource(resourceTableService.get(Long.valueOf(resourceId.toString())));
                     trt.setTemplate(templateTable);
-                    if (map.get("top") != null && ((List) map.get("top")).size() > 0) {
-                        trt.setTop(true);
-                    } else {
-                        trt.setTop(false);
-                    }
-                    trt.setOrderNum(Integer.valueOf(map.get("orderNum").toString()));
+                    Map<String,Object> position =  resources.get("resource_id_"+resourceId);
+                    trt.setOrderNum(Integer.valueOf(position.get("order").toString()));
+                    trt.setTop(position.get("location")==null||"head".equals(position.get("location")));
                     list.add(trt);
                 }
                 templateTable.setTemplateResources(list);

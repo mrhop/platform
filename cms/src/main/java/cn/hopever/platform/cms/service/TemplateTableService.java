@@ -23,6 +23,10 @@ public interface TemplateTableService {
 
     public void delete(Long id);
 
+    public void deleteTemplateBlockByTemplate(TemplateTable templateTable);
+
+    public void deleteTemplateResourceByTemplate(TemplateTable templateTable);
+
     public TemplateTable get(Long id);
 
     public List<TemplateTable> getListByWebsiteOrNull(WebsiteTable websiteTable);

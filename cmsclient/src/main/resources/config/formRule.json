@@ -360,6 +360,7 @@
         "label": "布局范围",
         "type": "select",
         "required": true,
+        "changeFun":"template_layout_scale_change",
         "validateRules": [
           {
             "name": "REQUIRED_VALIDATE",
@@ -405,13 +406,24 @@
         "label": "包含模块",
         "type": "checkbox",
         "dataType": "number",
-        "clickFun":"template_content_position_click"
+        "changeFun":"template_include_blocks_change"
+      },
+      {
+        "name": "blocksPosition",
+        "type": "hidden",
+        "available": false
       },
       {
         "name": "templateResources",
         "label": "包含资源",
+        "changeFun":"template_include_resources_change",
         "type": "checkbox",
         "dataType": "number"
+      },
+      {
+        "name": "resources",
+        "type": "hidden",
+        "available": false
       },
       {
         "name": "id",
@@ -522,6 +534,7 @@
       {
         "name": "templateResources",
         "label": "包含资源",
+        "changeFun":"template_include_resources_change",
         "type": "checkbox",
         "dataType": "number"
       },
@@ -2200,7 +2213,7 @@
       {
         "name": "content",
         "label": "文章内容",
-        "type": "textarea",
+        "type": "ckeditor",
         "placeholder": "文章内容",
         "required": true,
         "validateRules": [
