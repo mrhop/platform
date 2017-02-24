@@ -112,6 +112,8 @@ config:
         filelibraryupdate: http://localhost:9092/cms/filelibrary/update
         filelibrarysave: http://localhost:9092/cms/filelibrary/save
         filelibrarydelete: http://localhost:9092/cms/filelibrary/delete
+        filelibrarylistbytype: http://localhost:9092/cms/filelibrary/list/bytype
+
         #fileLibraryType
         filelibrarytypelist: http://localhost:9092/cms/filelibrarytype/list
         filelibrarytypeinfo: http://localhost:9092/cms/filelibrarytype/info

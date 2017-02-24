@@ -311,4 +311,17 @@ public class CmsClientFileLibraryController {
         return c;
     }
 
+
+    @RequestMapping(value = "/filelibrary/list/bytype", method = {RequestMethod.GET, RequestMethod.POST})
+    public CommonResult getFileLibraryListByType(HttpServletRequest request,@RequestBody(required = false) JsonNode body) throws Exception {
+       String postUrl =  baseConfig.getFilelibrarylistbytype();
+        if(request.getParameter("type")!=null){
+            postUrl = baseConfig.getFilelibrarylistbytype()+"?type="+request.getParameter("type");
+        }
+        request.setAttribute("resourceUrl", postUrl);
+        //暂时不考虑分页,以后会考虑分页
+        CommonResult c = commonMethods.postResource(body, request);
+        return c;
+    }
+
 }

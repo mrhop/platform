@@ -103,6 +103,8 @@ public class BaseConfig {
     private String filelibraryupdate;
     private String filelibrarysave;
     private String filelibrarydelete;
+    private String filelibrarylistbytype;
+
     //    #fileLibraryType
     private String filelibrarytypelist;
     private String filelibrarytypeinfo;

@@ -14,6 +14,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -33,6 +34,11 @@ public class CustomFileLibraryTableRepositoryImpl extends SimpleJpaRepository<Fi
     @Override
     public Page<FileLibraryTable> findByFilters(Map<String, Object> mapFilter, Pageable pageable) {
         return super.findAll(filterConditions1(mapFilter), pageable);
+    }
+
+    @Override
+    public List<FileLibraryTable> findByTypeAndFilters(Map<String, Object> mapFilter) {
+        return  super.findAll(filterConditions2(mapFilter));
     }
 
     private Specification<FileLibraryTable> filterConditions1(Map<String, Object> mapFilter) {
@@ -55,6 +61,29 @@ public class CustomFileLibraryTableRepositoryImpl extends SimpleJpaRepository<Fi
                             predicateReturn = predicateInternal;
                         } else {
                             predicateReturn = builder.and(predicateReturn, predicateInternal);
+                        }
+                    }
+                }
+                return predicateReturn;
+            }
+        };
+    }
+
+    private Specification<FileLibraryTable> filterConditions2(Map<String, Object> mapFilter) {
+        return new Specification<FileLibraryTable>() {
+            public Predicate toPredicate(Root<FileLibraryTable> root, CriteriaQuery<?> query,
+                                         CriteriaBuilder builder) {
+                Predicate predicateReturn =  builder.equal(root.get("isPublished"),true);;
+                query.distinct(true);
+                if (mapFilter != null) {
+                    for (String key : mapFilter.keySet()) {
+                        if (key.equals("website")) {
+                            predicateReturn =builder.and(predicateReturn,root.join("website").in(mapFilter.get(key)));
+                        } else if (key.equals("superType")) {
+                            //image!
+                            predicateReturn = builder.and(predicateReturn,builder.equal(root.get(key), mapFilter.get(key)));
+                        } else if(key.equals("fileName")){
+                            predicateReturn = builder.and(predicateReturn,builder.like(root.get(key), "%" + mapFilter.get(key) + "%"));
                         }
                     }
                 }

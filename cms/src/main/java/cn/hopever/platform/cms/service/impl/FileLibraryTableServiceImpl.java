@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Map;
 
 @Service("fileLibraryTableService")
@@ -26,7 +27,12 @@ public class FileLibraryTableServiceImpl implements FileLibraryTableService {
 
     @Override
     public Page<FileLibraryTable> getList(Pageable pageable, Map<String, Object> filterMap) {
-        return customFileLibraryTableRepository.findByFilters(filterMap,pageable);
+        return customFileLibraryTableRepository.findByFilters(filterMap, pageable);
+    }
+
+    @Override
+    public List<FileLibraryTable> getListByType(Map<String, Object> filterMap) {
+        return customFileLibraryTableRepository.findByTypeAndFilters(filterMap);
     }
 
     @Override

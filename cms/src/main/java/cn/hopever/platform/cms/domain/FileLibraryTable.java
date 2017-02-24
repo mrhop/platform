@@ -30,6 +30,12 @@ public class FileLibraryTable {
     @Column(nullable = false)
     private String url;
 
+    @Column
+    private String type;
+
+    @Column(name = "super_type", nullable = false)
+    private String superType;
+
     @Column(name = "is_published", nullable = false)
     private boolean isPublished = true;
 
