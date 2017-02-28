@@ -24,6 +24,9 @@ public class CommonProperties {
     private String imageUpload;
     private String fileUpload;
     private String docUpload;
+    private String imageDel;
+    private String fileDel;
+    private String docDel;
     private String imagePathPrev;
     private String filePathPrev;
     private String docPathPrev;

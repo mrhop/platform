@@ -3,12 +3,11 @@ package cn.hopever.platform.utilsweb.web.rest;
 import fm.last.moji.MojiFile;
 import fm.last.moji.spring.SpringMojiBean;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -25,6 +24,7 @@ import java.util.Map;
 @RequestMapping(produces = "application/json")
 public class UtilsWebController {
 
+    Logger logger = LoggerFactory.getLogger(UtilsWebController.class);
 
     @Autowired
     @Qualifier("mojiImages")
@@ -37,7 +37,7 @@ public class UtilsWebController {
     private SpringMojiBean mojiDocs;
 
     //@PreAuthorize("#oauth2.hasScope('internal_client') and isAuthenticated()")
-    @RequestMapping(value = "/upload/image", method = {RequestMethod.POST, RequestMethod.GET})
+    @RequestMapping(value = "/upload/image", method = {RequestMethod.POST})
     public Map uploadImg(HttpServletRequest request, @RequestPart("files") MultipartFile[] files) throws Exception {
         return upload(request,files,mojiImages);
     }
@@ -52,6 +52,27 @@ public class UtilsWebController {
     @RequestMapping(value = "/upload/file", method = {RequestMethod.POST})
     public Map uploadFile(HttpServletRequest request, @RequestPart("files") MultipartFile[] files) throws Exception {
         return upload(request,files,mojiFiles);
+    }
+
+    @RequestMapping(value = "/delete/image", method = { RequestMethod.POST})
+    public void deleteImg(@RequestBody Map<String, Object> body) throws Exception {
+        String fileUrl = body.get("fileUrl").toString();
+        logger.info("we check:"+fileUrl);
+        mojiImages.getFile(fileUrl).delete();
+    }
+
+    @RequestMapping(value = "/delete/doc", method = {RequestMethod.POST})
+    public void deleteDoc(@RequestBody Map<String, Object> body) throws Exception {
+        String fileUrl = body.get("fileUrl").toString();
+        logger.info("we check:"+fileUrl);
+        mojiDocs.getFile(fileUrl).delete();
+    }
+
+    @RequestMapping(value = "/delete/file", method = {RequestMethod.POST})
+    public void deleteFile(@RequestBody Map<String, Object> body) throws Exception {
+        String fileUrl = body.get("fileUrl").toString();
+        logger.info("we check:"+fileUrl);
+        mojiFiles.getFile(fileUrl).delete();
     }
     private Map upload(HttpServletRequest request, @RequestPart("files") MultipartFile[] files, SpringMojiBean mojiBean) throws IOException {
         String filePath = request.getParameter("filePath");

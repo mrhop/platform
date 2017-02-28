@@ -98,9 +98,13 @@ public class FileLibraryController {
 
     @PreAuthorize("#oauth2.hasScope('cms_admin_client')")
     @RequestMapping(value = "/delete", method = {RequestMethod.GET})
-    public void delete(@RequestParam Long id, Principal principal) {
+    public Map delete(@RequestParam Long id, Principal principal) {
         //需要判断是否普通用户有相关的website可处理权限
+        String url = this.fileLibraryTableService.get(id).getUrl();
         fileLibraryTableService.delete(id);
+        Map map = new HashMap<>();
+        map.put("url",url);
+        return map;
     }
 
     @PreAuthorize("#oauth2.hasScope('cms_admin_client')")
@@ -202,11 +206,11 @@ public class FileLibraryController {
                     fileLibraryTable.setType(type);
                     if (type.equals("png") || type.equals("gif") || type.equals("jpg") || type.equals("jpeg")) {
                         fileLibraryTable.setSuperType("image");
-                    } else if (type.equals("dat") || type.equals("mpg") || type.equals("mpeg") || type.equals("mp4") || type.equals("wmv") || type.equals("asf") || type.equals("rm") || type.equals("rmvb") || type.equals("mov") || type.equals("avi")) {
+                    } else if (type.equals("dat") || type.equals("flv") || type.equals("mpg") || type.equals("mpeg") || type.equals("mp4") || type.equals("wmv") || type.equals("asf") || type.equals("rm") || type.equals("rmvb") || type.equals("mov") || type.equals("avi")) {
                         fileLibraryTable.setSuperType("video");
                     } else if (type.equals("mp3") || type.equals("wma") || type.equals("wav") || type.equals("ape") || type.equals("flac") || type.equals("ogg") || type.equals("aac")) {
                         fileLibraryTable.setSuperType("audio");
-                    } else if (type.equals("flv")) {
+                    } else if (type.equals("swf")) {
                         fileLibraryTable.setSuperType("flash");
                     } else {
                         fileLibraryTable.setSuperType("document");
@@ -252,6 +256,7 @@ public class FileLibraryController {
         Iterable<WebsiteTable> listWebsite = null;
         if (mapBody != null && mapBody.get("website") != null && !mapBody.get("website").isNull()) {
             filterMap.put("website", this.websiteTableService.get(mapBody.get("website").asLong()));
+            filterMap.put("websiteFilter", true);
         } else {
             listWebsite = this.websiteTableService.getWebsiteAsFilter(principal);
         }
@@ -266,6 +271,7 @@ public class FileLibraryController {
                 mapTemp.put("id", flt.getId());
                 mapTemp.put("url", flt.getUrl());
                 mapTemp.put("fileName", flt.getFileName());
+                mapTemp.put("type", flt.getSuperType());
                 listReturn.add(mapTemp);
             }
             map.put("files", listReturn);

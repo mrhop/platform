@@ -160,7 +160,17 @@ public class CmsClientFileLibraryController {
     @RequestMapping(value = "/filelibrary/delete", method = {RequestMethod.DELETE})
     public CommonResult deleteFileLibrary(HttpServletRequest request) throws Exception {
         request.setAttribute("resourceUrl", baseConfig.getFilelibrarydelete() + "?id=" + request.getParameter("key"));
-        return commonMethods.getResource(request);
+        CommonResult c = commonMethods.getResource(request);
+        if (CommonResultStatus.SUCCESS.toString().equals(c.getStatus())) {
+            //del files
+            request.setAttribute("resourceUrl", commonProperties.getFileDel());
+            String originUrl = ((Map<String, String>) c.getResponseData().get("data")).get("url");
+            String fileUrl = originUrl.replace(commonProperties.getFilePathPrev(),"");
+            Map mapParam = new HashMap<>();
+            mapParam.put("fileUrl",fileUrl);
+            this.commonMethods.postResource(mapParam,request);
+        }
+        return c;
     }
 
     @RequestMapping(value = "/filelibrary/update", method = {RequestMethod.POST})
@@ -178,13 +188,13 @@ public class CmsClientFileLibraryController {
                     }
                 }
             }
-            request.setAttribute("resourceUrl", commonProperties.getImageUpload());
-            request.setAttribute("filePath", resourceAddress);
+            request.setAttribute("resourceUrl", commonProperties.getFileUpload());
+            request.setAttribute("filePath", "cms/" + resourceAddress);
             CommonResult cr = this.commonMethods.postFile(request, files);
             if (CommonResultStatus.SUCCESS.toString().equals(cr.getStatus()) && cr.getResponseData().get("data") != null) {
                 List<String> list = ((Map<String, List>) cr.getResponseData().get("data")).get("fileKeys");
                 if (list != null && list.size() > 0) {
-                    file = commonProperties.getImagePathPrev() + list.get(0);
+                    file = commonProperties.getFilePathPrev() + list.get(0);
                 }
             }
         }
@@ -240,13 +250,13 @@ public class CmsClientFileLibraryController {
                     }
                 }
             }
-            request.setAttribute("resourceUrl", commonProperties.getImageUpload());
-            request.setAttribute("filePath", resourceAddress);
+            request.setAttribute("resourceUrl", commonProperties.getFileUpload());
+            request.setAttribute("filePath", "cms/" + resourceAddress);
             CommonResult cr = this.commonMethods.postFile(request, files);
             if (CommonResultStatus.SUCCESS.toString().equals(cr.getStatus()) && cr.getResponseData().get("data") != null) {
                 List<String> list = ((Map<String, List>) cr.getResponseData().get("data")).get("fileKeys");
                 if (list != null && list.size() > 0) {
-                    file = commonProperties.getImagePathPrev() + list.get(0);
+                    file = commonProperties.getFilePathPrev() + list.get(0);
                 }
             }
         }
@@ -313,15 +323,70 @@ public class CmsClientFileLibraryController {
 
 
     @RequestMapping(value = "/filelibrary/list/bytype", method = {RequestMethod.GET, RequestMethod.POST})
-    public CommonResult getFileLibraryListByType(HttpServletRequest request,@RequestBody(required = false) JsonNode body) throws Exception {
-       String postUrl =  baseConfig.getFilelibrarylistbytype();
-        if(request.getParameter("type")!=null){
-            postUrl = baseConfig.getFilelibrarylistbytype()+"?type="+request.getParameter("type");
+    public CommonResult getFileLibraryListByType(HttpServletRequest request, @RequestBody(required = false) JsonNode body) throws Exception {
+        String postUrl = baseConfig.getFilelibrarylistbytype();
+        if (request.getParameter("type") != null) {
+            postUrl = baseConfig.getFilelibrarylistbytype() + "?type=" + request.getParameter("type");
         }
         request.setAttribute("resourceUrl", postUrl);
         //暂时不考虑分页,以后会考虑分页
         CommonResult c = commonMethods.postResource(body, request);
         return c;
+    }
+
+
+    @RequestMapping(value = "/filelibrary/upload/byckeditor", produces = "text/html; charset=UTF-8", method = {RequestMethod.POST})
+    public String uploadFileInCKeditor(HttpServletRequest request, @RequestPart("upload") MultipartFile file) throws Exception {
+        StringBuilder returnStr = new StringBuilder("<script type=\"text/javascript\">window.parent.CKEDITOR.tools.callFunction(");
+        returnStr.append("\"").append(request.getParameter("CKEditorFuncNum")).append("\",");
+
+        if (file != null) {
+            if (request.getParameter("type") != null) {
+                String[] urlArr = file.getOriginalFilename().split("\\.");
+                String type = null;
+                if (urlArr != null && urlArr.length > 1) {
+                    type = urlArr[urlArr.length - 1].toLowerCase();
+                }
+                if (type == null) {
+                    returnStr.append("\"").append("\",\"上传文件类型错误.\");</script>");
+                    return returnStr.toString();
+
+                } else {
+                    if (request.getParameter("type").equals("image") && !type.equals("png") && !type.equals("gif") && !type.equals("jpg") && !type.equals("jpeg")) {
+                        returnStr.append("\"").append("\",\"上传文件类型错误.\");</script>");
+                        return returnStr.toString();
+                    }
+                    if (request.getParameter("type").equals("flash") && !type.equals("swf")) {
+                        returnStr.append("\"").append("\",\"上传文件类型错误.\");</script>");
+                        return returnStr.toString();
+                    }
+                }
+
+            }
+            request.setAttribute("resourceUrl", commonProperties.getFileUpload());
+            request.setAttribute("filePath", "cms/public/resource/");
+            CommonResult cr = this.commonMethods.postFile(request, new MultipartFile[]{file});
+            String filePath = null;
+            if (CommonResultStatus.SUCCESS.toString().equals(cr.getStatus()) && cr.getResponseData().get("data") != null) {
+                List<String> list = ((Map<String, List>) cr.getResponseData().get("data")).get("fileKeys");
+                if (list != null && list.size() > 0) {
+                    filePath = commonProperties.getFilePathPrev() + list.get(0);
+                    HashMap map = new HashMap<>();
+                    map.put("isPublished", new String[]{"Y"});
+                    map.put("publishDate", new Date().getTime());
+                    map.put("title", file.getOriginalFilename());
+                    map.put("url", filePath);
+                    request.setAttribute("resourceUrl", baseConfig.getFilelibrarysave());
+                    CommonResult crSave = commonMethods.postResource(map, request);
+                    if (CommonResultStatus.SUCCESS.toString().equals(crSave.getStatus())) {
+                        returnStr.append("\"").append(filePath).append("\");</script>");
+                        return returnStr.toString();
+                    }
+                }
+            }
+        }
+        returnStr.append("\"").append("\",\"服务器端错误.\");</script>");
+        return returnStr.toString();
     }
 
 }

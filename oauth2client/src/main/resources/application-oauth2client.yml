@@ -16,6 +16,9 @@ config:
         imageUpload: http://utils.hopever.cn/upload/image
         fileUpload: http://utils.hopever.cn/upload/file
         docUpload: http://utils.hopever.cn/upload/doc
+        imageDel: http://utils.hopever.cn/delete/image
+        fileDel: http://utils.hopever.cn/delete/file
+        docDel: http://utils.hopever.cn/delete/doc
 #        imagePathPrev: /mogilefs/images/
 #        filePathPrev:  /mogilefs/files/
 #        docPathPrev:  /mogilefs/docs/

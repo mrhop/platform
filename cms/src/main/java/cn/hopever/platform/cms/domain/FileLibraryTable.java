@@ -49,7 +49,7 @@ public class FileLibraryTable {
     private String createUser;
 
     @ManyToOne
-    @JoinColumn(name = "website_id", nullable = false)
+    @JoinColumn(name = "website_id")
     private WebsiteTable website;
 
 }

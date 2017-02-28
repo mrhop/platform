@@ -78,7 +78,11 @@ public class CustomFileLibraryTableRepositoryImpl extends SimpleJpaRepository<Fi
                 if (mapFilter != null) {
                     for (String key : mapFilter.keySet()) {
                         if (key.equals("website")) {
-                            predicateReturn =builder.and(predicateReturn,root.join("website").in(mapFilter.get(key)));
+                            if(mapFilter.get("websiteFilter")!=null){
+                                predicateReturn =builder.and(predicateReturn,builder.or(root.join(key).in(mapFilter.get(key)),builder.isNull(root.get(key))));
+                            }else{
+                                predicateReturn =builder.and(predicateReturn,root.join(key).in(mapFilter.get(key)));
+                            }
                         } else if (key.equals("superType")) {
                             //image!
                             predicateReturn = builder.and(predicateReturn,builder.equal(root.get(key), mapFilter.get(key)));
