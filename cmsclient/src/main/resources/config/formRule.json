@@ -929,7 +929,7 @@
       {
         "name": "content",
         "label": "新闻内容",
-        "type": "textarea",
+        "type": "ckeditor",
         "placeholder": "新闻内容",
         "required": true,
         "validateRules": [
@@ -1052,7 +1052,7 @@
       {
         "name": "content",
         "label": "新闻内容",
-        "type": "textarea",
+        "type": "ckeditor",
         "placeholder": "新闻内容",
         "required": true,
         "validateRules": [
@@ -2096,7 +2096,7 @@
       {
         "name": "content",
         "label": "文章内容",
-        "type": "textarea",
+        "type": "ckeditor",
         "placeholder": "文章内容",
         "required": true,
         "validateRules": [
