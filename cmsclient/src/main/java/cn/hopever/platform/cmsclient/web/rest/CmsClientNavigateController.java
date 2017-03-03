@@ -6,12 +6,14 @@ import cn.hopever.platform.oauth2client.web.common.CommonMethods;
 import cn.hopever.platform.utils.json.JacksonUtil;
 import cn.hopever.platform.utils.web.CommonResult;
 import cn.hopever.platform.utils.web.CommonResultStatus;
+import cn.hopever.platform.utils.web.CookieUtil;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -56,15 +58,25 @@ public class CmsClientNavigateController {
                 //rule的联动
                 if (body.get("filters") != null && !body.get("filters").isNull()) {
                     JsonNode website = body.get("filters").get("website");
-                    if (website != null && !website.isNull()) {
-                        String websiteId = website.asText();
-                        List<Map> updateRules = new ArrayList<>();
-                        Map map = new HashMap<>();
-                        map.put("name", "parent");
-                        map.put("url", baseConfig.getNavigateparentoptions() + "?websiteId=" + websiteId);
-                        updateRules.add(map);
-                        c.getResponseData().put("updateRules", updateRules);
+                    if (website != null) {
+                        if (!website.isNull()) {
+                            String websiteId = website.asText();
+                            List<Map> updateRules = new ArrayList<>();
+                            Map map = new HashMap<>();
+                            map.put("name", "parent");
+                            Cookie baseurlCookie = CookieUtil.getCookieByName("baseurl", request.getCookies());
+                            map.put("url", (baseurlCookie != null ? baseurlCookie.getValue() : "/") + "navigate/tree?websiteId=" + websiteId);
+                            updateRules.add(map);
+                            c.getResponseData().put("updateRules", updateRules);
+                        }
                     }
+                } else {
+                    List<Map> updateRules = new ArrayList<>();
+                    Map map = new HashMap<>();
+                    map.put("name", "parent");
+                    map.put("url", "none");
+                    updateRules.add(map);
+                    c.getResponseData().put("updateRules", updateRules);
                 }
                 if (body.get("init") != null && !body.get("init").isNull() && body.get("init").asBoolean()) {
                     Map<String, Object> mapNavigateList = baseConfig.getTableRule("navigateList");
@@ -349,5 +361,11 @@ public class CmsClientNavigateController {
         }
         c.setResponseData(rule);
         return c;
+    }
+
+    @RequestMapping(value = "/navigate/tree", method = {RequestMethod.GET})
+    public CommonResult getListByWebsiteAndParent(HttpServletRequest request, @RequestParam Long websiteId, @RequestParam(required = false) Long parentId) throws Exception {
+        request.setAttribute("resourceUrl", baseConfig.getNavigateparentoptions() + "?websiteId=" + websiteId + (parentId != null ? ("&parentId=" + parentId) : ""));
+        return commonMethods.getResource(request);
     }
 }

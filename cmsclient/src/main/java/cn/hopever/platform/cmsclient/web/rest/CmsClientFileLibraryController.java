@@ -64,6 +64,13 @@ public class CmsClientFileLibraryController {
                         map.put("items", filelibrarytypeoptions.getResponseData().get("data"));
                         updateRules.add(map);
                         c.getResponseData().put("updateRules", updateRules);
+                    } else {
+                        List<Map> updateRules = new ArrayList<>();
+                        Map map = new HashMap<>();
+                        map.put("name", "fileLibraryType");
+                        map.put("items", null);
+                        updateRules.add(map);
+                        c.getResponseData().put("updateRules", updateRules);
                     }
                 }
                 if (body.get("init") != null && !body.get("init").isNull() && body.get("init").asBoolean()) {
@@ -165,10 +172,10 @@ public class CmsClientFileLibraryController {
             //del files
             request.setAttribute("resourceUrl", commonProperties.getFileDel());
             String originUrl = ((Map<String, String>) c.getResponseData().get("data")).get("url");
-            String fileUrl = originUrl.replace(commonProperties.getFilePathPrev(),"");
+            String fileUrl = originUrl.replace(commonProperties.getFilePathPrev(), "");
             Map mapParam = new HashMap<>();
-            mapParam.put("fileUrl",fileUrl);
-            this.commonMethods.postResource(mapParam,request);
+            mapParam.put("fileUrl", fileUrl);
+            this.commonMethods.postResource(mapParam, request);
         }
         return c;
     }

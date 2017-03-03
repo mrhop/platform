@@ -68,6 +68,13 @@ public class CmsClientNewsController {
                         map.put("items", newstypeoptions.getResponseData().get("data"));
                         updateRules.add(map);
                         c.getResponseData().put("updateRules", updateRules);
+                    } else {
+                        List<Map> updateRules = new ArrayList<>();
+                        Map map = new HashMap<>();
+                        map.put("name", "newsType");
+                        map.put("items", null);
+                        updateRules.add(map);
+                        c.getResponseData().put("updateRules", updateRules);
                     }
                 }
                 if (body.get("init") != null && !body.get("init").isNull() && body.get("init").asBoolean()) {
