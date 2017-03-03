@@ -56,7 +56,7 @@ public class CmsClientOperationController {
                     Map<String, Object> mapOptionList = baseConfig.getTableRule("operationList");
                     List<Map> headList = (List) mapOptionList.get("thead");
                     for (Map<String, Object> map : headList) {
-                        if (map.get("value").equals("relatedOperation")) {
+                        if (map.get("name").equals("relatedOperation")) {
                             List<Map> listOptions = new ArrayList<>();
                             List<String> relatedOperations = baseConfig.getRelatedOperations();
                             for(String relatedOperation:relatedOperations){
@@ -65,11 +65,11 @@ public class CmsClientOperationController {
                                 mapOption.put("value",relatedOperation);
                                 listOptions.add(mapOption);
                             }
-                            map.put("editValue", listOptions);
-                        } else if (map.get("value").equals("website")) {
+                            map.put("items", listOptions);
+                        } else if (map.get("name").equals("website")) {
                             request.setAttribute("resourceUrl", baseConfig.getWebsiteoptions());
                             CommonResult c1 = commonMethods.getResource(request);
-                            map.put("editValue", c1.getResponseData().get("data"));
+                            map.put("items", c1.getResponseData().get("data"));
                         }
                     }
                     c.getResponseData().put("rules", mapOptionList);

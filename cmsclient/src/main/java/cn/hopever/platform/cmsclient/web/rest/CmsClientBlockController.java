@@ -57,7 +57,7 @@ public class CmsClientBlockController {
                     Map<String, Object> mapBlockList = baseConfig.getTableRule("blockList");
                     List<Map> headList = (List) mapBlockList.get("thead");
                     for (Map<String, Object> map : headList) {
-                        if (map.get("value").equals("type")) {
+                        if (map.get("name").equals("type")) {
                             List<String> blockTypes = baseConfig.getBlockTypes();
                             List<Map> listOptions = new ArrayList<>();
                             for (String blockType : blockTypes) {
@@ -66,11 +66,11 @@ public class CmsClientBlockController {
                                 mapOption.put("value", blockType);
                                 listOptions.add(mapOption);
                             }
-                            map.put("editValue", listOptions);
-                        } else if (map.get("value").equals("website")) {
+                            map.put("items", listOptions);
+                        } else if (map.get("name").equals("website")) {
                             request.setAttribute("resourceUrl", baseConfig.getWebsiteoptions());
                             CommonResult c1 = commonMethods.getResource(request);
-                            map.put("editValue", c1.getResponseData().get("data"));
+                            map.put("items", c1.getResponseData().get("data"));
                         }
                     }
                     c.getResponseData().put("rules", mapBlockList);

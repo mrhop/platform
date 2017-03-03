@@ -60,8 +60,8 @@ public class CmsClientFileLibraryController {
                         CommonResult filelibrarytypeoptions = commonMethods.getResource(request);
                         List<Map> updateRules = new ArrayList<>();
                         Map map = new HashMap<>();
-                        map.put("value", "fileLibraryType");
-                        map.put("editValue", filelibrarytypeoptions.getResponseData().get("data"));
+                        map.put("name", "fileLibraryType");
+                        map.put("items", filelibrarytypeoptions.getResponseData().get("data"));
                         updateRules.add(map);
                         c.getResponseData().put("updateRules", updateRules);
                     }
@@ -70,7 +70,7 @@ public class CmsClientFileLibraryController {
                     Map<String, Object> mapFileLibraryList = baseConfig.getTableRule("fileLibraryList");
                     List<Map> headList = (List) mapFileLibraryList.get("thead");
                     for (Map<String, Object> map : headList) {
-                        if (map.get("value").equals("isPublished")) {
+                        if (map.get("name").equals("isPublished")) {
                             List<Map> listOptions = new ArrayList<>();
                             Map mapOptionY = new HashMap<>();
                             mapOptionY.put("label", "Y");
@@ -80,11 +80,11 @@ public class CmsClientFileLibraryController {
                             mapOptionN.put("label", "N");
                             mapOptionN.put("value", "false");
                             listOptions.add(mapOptionN);
-                            map.put("editValue", listOptions);
-                        } else if (map.get("value").equals("website")) {
+                            map.put("items", listOptions);
+                        } else if (map.get("name").equals("website")) {
                             request.setAttribute("resourceUrl", baseConfig.getWebsiteoptions());
                             CommonResult c1 = commonMethods.getResource(request);
-                            map.put("editValue", c1.getResponseData().get("data"));
+                            map.put("items", c1.getResponseData().get("data"));
                         }
                     }
                     c.getResponseData().put("rules", mapFileLibraryList);

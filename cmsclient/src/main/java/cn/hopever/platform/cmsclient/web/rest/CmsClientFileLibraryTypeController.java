@@ -62,8 +62,8 @@ public class CmsClientFileLibraryTypeController {
                         CommonResult templateoptions = commonMethods.getResource(request);
                         List<Map> updateRules = new ArrayList<>();
                         Map map = new HashMap<>();
-                        map.put("value","template");
-                        map.put("editValue",templateoptions.getResponseData().get("data"));
+                        map.put("name","template");
+                        map.put("items",templateoptions.getResponseData().get("data"));
                         updateRules.add(map);
                         c.getResponseData().put("updateRules", updateRules);
                     }
@@ -72,10 +72,10 @@ public class CmsClientFileLibraryTypeController {
                     Map<String, Object> mapFileLibraryTypeList = baseConfig.getTableRule("fileLibraryTypeList");
                     List<Map> headList = (List) mapFileLibraryTypeList.get("thead");
                     for (Map<String, Object> map : headList) {
-                        if (map.get("value").equals("website")) {
+                        if (map.get("name").equals("website")) {
                             request.setAttribute("resourceUrl", baseConfig.getWebsiteoptions());
                             CommonResult c1 = commonMethods.getResource(request);
-                            map.put("editValue", c1.getResponseData().get("data"));
+                            map.put("items", c1.getResponseData().get("data"));
                         }
                     }
                     c.getResponseData().put("rules", mapFileLibraryTypeList);

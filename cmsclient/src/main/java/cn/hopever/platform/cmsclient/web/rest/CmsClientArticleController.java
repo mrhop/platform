@@ -62,8 +62,8 @@ public class CmsClientArticleController {
                         CommonResult templateoptions = commonMethods.getResource(request);
                         List<Map> updateRules = new ArrayList<>();
                         Map map = new HashMap<>();
-                        map.put("value", "template");
-                        map.put("editValue", templateoptions.getResponseData().get("data"));
+                        map.put("name", "template");
+                        map.put("items", templateoptions.getResponseData().get("data"));
                         updateRules.add(map);
                         c.getResponseData().put("updateRules", updateRules);
                     }
@@ -72,7 +72,7 @@ public class CmsClientArticleController {
                     Map<String, Object> mapArticleList = baseConfig.getTableRule("articleList");
                     List<Map> headList = (List) mapArticleList.get("thead");
                     for (Map<String, Object> map : headList) {
-                        if (map.get("value").equals("isPublished")) {
+                        if (map.get("name").equals("isPublished")) {
                             List<Map> listOptions = new ArrayList<>();
                             Map mapOptionY = new HashMap<>();
                             mapOptionY.put("label", "Y");
@@ -82,11 +82,11 @@ public class CmsClientArticleController {
                             mapOptionN.put("label", "N");
                             mapOptionN.put("value", "false");
                             listOptions.add(mapOptionN);
-                            map.put("editValue", listOptions);
-                        } else if (map.get("value").equals("website")) {
+                            map.put("items", listOptions);
+                        } else if (map.get("name").equals("website")) {
                             request.setAttribute("resourceUrl", baseConfig.getWebsiteoptions());
                             CommonResult c1 = commonMethods.getResource(request);
-                            map.put("editValue", c1.getResponseData().get("data"));
+                            map.put("items", c1.getResponseData().get("data"));
                         }
                     }
                     c.getResponseData().put("rules", mapArticleList);

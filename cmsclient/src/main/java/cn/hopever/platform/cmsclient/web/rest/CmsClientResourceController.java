@@ -56,7 +56,7 @@ public class CmsClientResourceController {
                     Map<String, Object> mapResourceList = baseConfig.getTableRule("resourceList");
                     List<Map> headList = (List) mapResourceList.get("thead");
                     for (Map<String, Object> map : headList) {
-                        if (map.get("value").equals("type")) {
+                        if (map.get("name").equals("type")) {
                             List<String> resourceTypes = baseConfig.getResourceTypes();
                             List<Map> listOptions = new ArrayList<>();
                             for (String resourceType : resourceTypes) {
@@ -65,11 +65,11 @@ public class CmsClientResourceController {
                                 mapOption.put("value", resourceType);
                                 listOptions.add(mapOption);
                             }
-                            map.put("editValue", listOptions);
-                        } else if (map.get("value").equals("website")) {
+                            map.put("items", listOptions);
+                        } else if (map.get("name").equals("website")) {
                             request.setAttribute("resourceUrl", baseConfig.getWebsiteoptions());
                             CommonResult c1 = commonMethods.getResource(request);
-                            map.put("editValue", c1.getResponseData().get("data"));
+                            map.put("items", c1.getResponseData().get("data"));
                         }
                     }
                     c.getResponseData().put("rules", mapResourceList);

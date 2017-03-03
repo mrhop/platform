@@ -58,12 +58,10 @@ public class CmsClientNavigateController {
                     JsonNode website = body.get("filters").get("website");
                     if (website != null && !website.isNull()) {
                         String websiteId = website.asText();
-                        request.setAttribute("resourceUrl", baseConfig.getNavigateparentoptions() + "?websiteId=" + websiteId);
-                        CommonResult navigateparentoptions = commonMethods.getResource(request);
                         List<Map> updateRules = new ArrayList<>();
                         Map map = new HashMap<>();
-                        map.put("value", "parent");
-                        map.put("editValue", navigateparentoptions.getResponseData().get("data"));
+                        map.put("name", "parent");
+                        map.put("url", baseConfig.getNavigateparentoptions() + "?websiteId=" + websiteId);
                         updateRules.add(map);
                         c.getResponseData().put("updateRules", updateRules);
                     }
@@ -72,7 +70,7 @@ public class CmsClientNavigateController {
                     Map<String, Object> mapNavigateList = baseConfig.getTableRule("navigateList");
                     List<Map> headList = (List) mapNavigateList.get("thead");
                     for (Map<String, Object> map : headList) {
-                        if (map.get("value").equals("type")) {
+                        if (map.get("name").equals("type")) {
                             List<String> navigateTypes = baseConfig.getNavigateTypes();
                             List<Map> listOptions = new ArrayList<>();
                             for (String navigateType : navigateTypes) {
@@ -81,11 +79,11 @@ public class CmsClientNavigateController {
                                 mapOption.put("value", navigateType);
                                 listOptions.add(mapOption);
                             }
-                            map.put("editValue", listOptions);
-                        } else if (map.get("value").equals("website")) {
+                            map.put("items", listOptions);
+                        } else if (map.get("name").equals("website")) {
                             request.setAttribute("resourceUrl", baseConfig.getWebsiteoptions());
                             CommonResult c1 = commonMethods.getResource(request);
-                            map.put("editValue", c1.getResponseData().get("data"));
+                            map.put("items", c1.getResponseData().get("data"));
                         }
                     }
                     c.getResponseData().put("rules", mapNavigateList);

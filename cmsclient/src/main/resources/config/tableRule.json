@@ -10,7 +10,7 @@
         "title": "标题",
         "value": "title",
         "filter": true,
-        "editType": "text"
+        "type": "text"
       },
       {
         "title": "关键字",
@@ -60,7 +60,7 @@
         "title": "名称",
         "value": "name",
         "filter": true,
-        "editType": "text"
+        "type": "text"
       },
       {
         "title": "链接地址",
@@ -70,13 +70,14 @@
         "title": "资源类型",
         "value": "type",
         "filter": true,
-        "editType": "select"
+        "type": "select"
       },
       {
         "title": "所属网站",
         "value": "website",
         "filter": true,
-        "editType": "select"
+        "type": "select",
+        "dataType": "number"
       }
     ],
     "tfoot": [
@@ -113,7 +114,7 @@
         "title": "名称",
         "value": "name",
         "filter": true,
-        "editType": "text"
+        "type": "text"
       },
       {
         "title": "布局类型",
@@ -131,7 +132,8 @@
         "title": "所属网站",
         "value": "website",
         "filter": true,
-        "editType": "select"
+        "type": "select",
+        "dataType": "number"
       }
     ],
     "tfoot": [
@@ -168,19 +170,21 @@
         "title": "模块名称",
         "value": "name",
         "filter": true,
-        "editType": "text"
+        "type": "text"
       },
       {
         "title": "模块类型",
         "value": "type",
         "filter": true,
-        "editType": "select"
+        "type": "select"
+
       },
       {
         "title": "所属网站",
         "value": "website",
         "filter": true,
-        "editType": "select"
+        "type": "select",
+        "dataType": "number"
       }
     ],
     "tfoot": [
@@ -217,25 +221,27 @@
         "title": "标题",
         "value": "title",
         "filter": true,
-        "editType": "text"
+        "type": "text"
       },
       {
         "title": "副标题",
         "value": "subtitle",
         "filter": true,
-        "editType": "text"
+        "type": "text"
       },
       {
         "title": "所属网站",
         "value": "website",
         "filter": true,
-        "editType": "select"
+        "type": "select",
+        "dataType": "number"
       },
       {
         "title": "新闻类型",
         "value": "newsType",
         "filter": true,
-        "editType": "select"
+        "type": "select",
+        "dataType": "number"
       },
       {
         "title": "点击率",
@@ -247,7 +253,7 @@
         "title": "已发布",
         "value": "isPublished",
         "filter": true,
-        "editType": "select",
+        "type": "select",
         "sortable": "true"
       },
       {
@@ -290,7 +296,7 @@
         "title": "标题",
         "value": "title",
         "filter": true,
-        "editType": "text"
+        "type": "text"
       },
       {
         "title": "新闻列表模板",
@@ -304,7 +310,8 @@
         "title": "所属网站",
         "value": "website",
         "filter": true,
-        "editType": "select"
+        "type": "select",
+        "dataType": "number"
       }
     ],
     "tfoot": [
@@ -341,13 +348,14 @@
         "title": "标题",
         "value": "title",
         "filter": true,
-        "editType": "text"
+        "type": "text"
       },
       {
         "title": "所属网站",
         "value": "website",
         "filter": true,
-        "editType": "select"
+        "type": "select",
+        "dataType": "number"
       }
     ],
     "tfoot": [
@@ -383,23 +391,23 @@
       {
         "className": "td-id",
         "title": "#",
-        "value": "serialNum"
+        "name": "serialNum"
       },
       {
         "title": "标题",
-        "value": "title"
+        "name": "title"
       },
       {
         "title": "投票次数",
-        "value": "voteTimes"
+        "name": "voteTimes"
       },
       {
         "title": "所属网站",
-        "value": "website"
+        "name": "website"
       },
       {
         "title": "所属投票",
-        "value": "poll"
+        "name": "poll"
       }
     ],
     "tfoot": [
@@ -421,33 +429,34 @@
       {
         "className": "td-id",
         "title": "#",
-        "value": "serialNum"
+        "name": "serialNum"
       },
       {
         "title": "关联操作",
-        "value": "relatedOperation",
+        "name": "relatedOperation",
         "filter": true,
-        "editType": "select"
+        "type": "select"
       },
       {
         "title": "IP地址",
-        "value": "ip"
+        "name": "ip"
       },
       {
         "title": "操作员",
-        "value": "operationUser",
+        "name": "operationUser",
         "filter": true,
-        "editType": "text"
+        "type": "text"
       },
       {
         "title": "操作时间",
-        "value": "operationDate"
+        "name": "operationDate"
       },
       {
         "title": "所属网站",
-        "value": "website",
+        "name": "website",
         "filter": true,
-        "editType": "select"
+        "type": "select",
+        "dataType": "number"
       }
     ],
     "tfoot": [
@@ -478,35 +487,36 @@
       {
         "className": "td-id",
         "title": "#",
-        "value": "serialNum"
+        "name": "serialNum"
       },
       {
         "title": "标题",
-        "value": "title",
+        "name": "title",
         "filter": true,
-        "editType": "text"
+        "type": "text"
       },
       {
         "title": "所属网站",
-        "value": "website",
+        "name": "website",
         "filter": true,
-        "editType": "select"
+        "type": "select",
+        "dataType": "number"
       },
       {
         "title": "父导航",
-        "value": "parent",
+        "name": "parent",
         "filter": true,
-        "editType": "text"
+        "type": "tree"
       },
       {
         "title": "等级",
-        "value": "level"
+        "name": "level"
       },
       {
         "title": "导航类型",
-        "value": "type",
+        "name": "type",
         "filter": true,
-        "editType": "select"
+        "type": "select"
       }
     ],
     "tfoot": [
@@ -537,39 +547,41 @@
       {
         "className": "td-id",
         "title": "#",
-        "value": "serialNum"
+        "name": "serialNum"
       },
       {
         "title": "文件名",
-        "value": "fileName",
+        "name": "fileName",
         "filter": true,
-        "editType": "text"
+        "type": "text"
       },
       {
         "title": "所属网站",
-        "value": "website",
+        "name": "website",
         "filter": true,
-        "editType": "select"
+        "type": "select",
+        "dataType": "number"
       },
       {
         "title": "文件分类",
-        "value": "fileLibraryType",
+        "name": "fileLibraryType",
         "filter": true,
-        "editType": "select"
+        "type": "select",
+        "dataType": "number"
       },
       {
         "title": "文件地址",
-        "value": "url"
+        "name": "url"
       },
       {
         "title": "已发布",
-        "value": "isPublished",
+        "name": "isPublished",
         "filter": true,
-        "editType": "select"
+        "type": "select"
       },
       {
         "title": "发布时间",
-        "value": "publishDate"
+        "name": "publishDate"
       }
     ],
     "tfoot": [
@@ -600,25 +612,27 @@
       {
         "className": "td-id",
         "title": "#",
-        "value": "serialNum"
+        "name": "serialNum"
       },
       {
         "title": "标题",
-        "value": "title",
+        "name": "title",
         "filter": true,
-        "editType": "text"
+        "type": "text"
       },
       {
         "title": "所属网站",
-        "value": "website",
+        "name": "website",
         "filter": true,
-        "editType": "select"
+        "type": "select",
+        "dataType": "number"
       },
       {
         "title": "使用模板",
-        "value": "template",
+        "name": "template",
         "filter": true,
-        "editType": "select"
+        "type": "select",
+        "dataType": "number"
       }
     ],
     "tfoot": [
@@ -649,43 +663,45 @@
       {
         "className": "td-id",
         "title": "#",
-        "value": "serialNum"
+        "name": "serialNum"
       },
       {
         "title": "标题",
-        "value": "title",
+        "name": "title",
         "filter": true,
-        "editType": "text"
+        "type": "text"
       },
       {
         "title": "已发布",
-        "value": "isPublished",
+        "name": "isPublished",
         "filter": true,
-        "editType": "select"
+        "type": "select"
       },
       {
         "title": "发布时间",
-        "value": "publishDate"
+        "name": "publishDate"
       },
       {
         "title": "所属网站",
-        "value": "website",
+        "name": "website",
         "filter": true,
-        "editType": "select"
+        "type": "select",
+        "dataType": "number"
       },
       {
         "title": "使用模板",
-        "value": "template",
+        "name": "template",
         "filter": true,
-        "editType": "select"
+        "type": "select",
+        "dataType": "number"
       },
       {
         "title": "创建人",
-        "value": "createUser"
+        "name": "createUser"
       },
       {
         "title": "创建时间",
-        "value": "createDate"
+        "name": "createDate"
       }
     ],
     "tfoot": [

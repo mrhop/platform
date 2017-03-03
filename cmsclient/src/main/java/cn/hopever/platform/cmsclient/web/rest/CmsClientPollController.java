@@ -53,10 +53,10 @@ public class CmsClientPollController {
                     Map<String, Object> mapPollList = baseConfig.getTableRule("pollList");
                     List<Map> headList = (List) mapPollList.get("thead");
                     for (Map<String, Object> map : headList) {
-                        if (map.get("value").equals("website")) {
+                        if (map.get("name").equals("website")) {
                             request.setAttribute("resourceUrl", baseConfig.getWebsiteoptions());
                             CommonResult c1 = commonMethods.getResource(request);
-                            map.put("editValue", c1.getResponseData().get("data"));
+                            map.put("items", c1.getResponseData().get("data"));
                         }
                     }
                     c.getResponseData().put("rules", mapPollList);
