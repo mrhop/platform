@@ -106,10 +106,34 @@ public class NavigateController {
 
     @PreAuthorize("#oauth2.hasScope('cms_admin_client')")
     @RequestMapping(value = "/parent/options", method = {RequestMethod.GET})
-    public List<Map> getListByWebsite(@RequestParam Long websiteId, Principal principal) {
-        WebsiteTable wt = websiteTableService.get(websiteId);
-        List<NavigateTable> list = navigateTableService.getListByWebsite(wt);
-        return this.getChildren(list);
+    public List<Map<String, Object>> getListByWebsiteAndParent(@RequestParam Long websiteId, @RequestParam(required = false) Long parentId, Principal principal) {
+        if (parentId == null) {
+            WebsiteTable wt = websiteTableService.get(websiteId);
+            List<NavigateTable> list = navigateTableService.getListByWebsite(wt);
+            //do return
+            if (list != null && list.size() > 0) {
+                return this.getTreeData(list);
+            }
+        } else {
+            NavigateTable navigateTable = navigateTableService.get(parentId);
+            List<NavigateTable> list = navigateTable.getChildren();
+            if (list != null && list.size() > 0) {
+                return this.getTreeData(list);
+            }
+        }
+        return null;
+    }
+
+    private List<Map<String, Object>> getTreeData(List<NavigateTable> list) {
+        List<Map<String, Object>> listReturn = new ArrayList<>();
+        for (NavigateTable navigateTable : list) {
+            Map<String, Object> mapTemp = new HashMap<>();
+            mapTemp.put("id", navigateTable.getId());
+            mapTemp.put("title", navigateTable.getTitle());
+            mapTemp.put("hasChild", navigateTable.getChildren() != null && navigateTable.getChildren().size() > 0);
+            listReturn.add(mapTemp);
+        }
+        return listReturn;
     }
 
     private List<Map> getChildren(List<NavigateTable> list) {
@@ -192,10 +216,12 @@ public class NavigateController {
                 navigateTable.setWebsite(websiteTableService.get(Long.valueOf(body.get("website").toString())));
             }
             if (body.get("parent") != null) {
-                NavigateTable nt = navigateTableService.get(Long.valueOf(body.get("parent").toString()));
-                navigateTable.setParent(nt);
-                navigateTable.setLevel(nt.getLevel()+1);
-            }else{
+                if(!body.get("parent").equals(body.get("id"))){
+                    NavigateTable nt = navigateTableService.get(Long.valueOf(body.get("parent").toString()));
+                    navigateTable.setParent(nt);
+                    navigateTable.setLevel(nt.getLevel() + 1);
+                }
+            } else {
                 navigateTable.setLevel(0);
             }
             if (body.get("level") != null) {
@@ -232,8 +258,8 @@ public class NavigateController {
         if (body.get("parent") != null) {
             NavigateTable nt = navigateTableService.get(Long.valueOf(body.get("parent").toString()));
             navigateTable.setParent(nt);
-            navigateTable.setLevel(nt.getLevel()+1);
-        }else{
+            navigateTable.setLevel(nt.getLevel() + 1);
+        } else {
             navigateTable.setLevel(0);
         }
         if (body.get("orderNum") != null) {

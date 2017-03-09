@@ -74,7 +74,6 @@ public class CmsClientNavigateController {
                     List<Map> updateRules = new ArrayList<>();
                     Map map = new HashMap<>();
                     map.put("name", "parent");
-                    map.put("url", "none");
                     updateRules.add(map);
                     c.getResponseData().put("updateRules", updateRules);
                 }
@@ -135,11 +134,16 @@ public class CmsClientNavigateController {
                         }
                         if ("parent".equals(map.get("name"))) {
                             if (websiteId != null) {
-                                request.setAttribute("resourceUrl", baseConfig.getNavigateparentoptions() + "?websiteId=" + websiteId);
-                                CommonResult usernamesResult = commonMethods.getResource(request);
-                                if (CommonResultStatus.SUCCESS.toString().equals(usernamesResult.getStatus()) && usernamesResult.getResponseData().get("data") != null) {
-                                    map.put("items", usernamesResult.getResponseData().get("data"));
-                                }
+//                                request.setAttribute("resourceUrl", baseConfig.getNavigateparentoptions() + "?websiteId=" + websiteId);
+//                                CommonResult usernamesResult = commonMethods.getResource(request);
+//                                if (CommonResultStatus.SUCCESS.toString().equals(usernamesResult.getStatus()) && usernamesResult.getResponseData().get("data") != null) {
+//                                    map.put("items", usernamesResult.getResponseData().get("data"));
+//                                }
+                                Cookie baseurlCookie = CookieUtil.getCookieByName("baseurl", request.getCookies());
+                                map.put("url", (baseurlCookie != null ? baseurlCookie.getValue() : "/") + "navigate/tree?websiteId=" + websiteId);
+
+                            }else{
+                                map.remove("url");
                             }
                             if (mapData.get(map.get("name")) != null) {
                                 map.put("defaultValue", mapData.get(map.get("name")));
@@ -283,13 +287,16 @@ public class CmsClientNavigateController {
             }
             if ("parent".equals(map.get("name")) && "website".equals(body.get("updateElement").asText())) {
                 if (websiteId != null) {
-                    request.setAttribute("resourceUrl", baseConfig.getNavigateparentoptions() + "?websiteId=" + websiteId);
-                    CommonResult usernamesResult = commonMethods.getResource(request);
-                    if (CommonResultStatus.SUCCESS.toString().equals(usernamesResult.getStatus()) && usernamesResult.getResponseData().get("data") != null) {
-                        map.put("items", usernamesResult.getResponseData().get("data"));
-                    }
+                    Cookie baseurlCookie = CookieUtil.getCookieByName("baseurl", request.getCookies());
+                    map.put("url", (baseurlCookie != null ? baseurlCookie.getValue() : "/") + "navigate/tree?websiteId=" + websiteId);
+
+//                    request.setAttribute("resourceUrl", baseConfig.getNavigateparentoptions() + "?websiteId=" + websiteId);
+//                    CommonResult usernamesResult = commonMethods.getResource(request);
+//                    if (CommonResultStatus.SUCCESS.toString().equals(usernamesResult.getStatus()) && usernamesResult.getResponseData().get("data") != null) {
+//                        map.put("items", usernamesResult.getResponseData().get("data"));
+//                    }
                 } else {
-                    map.put("items", null);
+                    map.remove("url");
                 }
                 map.put("changed", true);
                 continue;
@@ -308,11 +315,13 @@ public class CmsClientNavigateController {
                     if (websiteId != null) {
                         request.setAttribute("resourceUrl", baseConfig.getArticleoptions() + "?websiteId=" + websiteId);
                         CommonResult usernamesResult = commonMethods.getResource(request);
-                        if (CommonResultStatus.SUCCESS.toString().equals(usernamesResult.getStatus()) && usernamesResult.getResponseData().get("data") != null) {
+                        if (CommonResultStatus.SUCCESS.toString().equals(usernamesResult.getStatus()) ) {
                             map.put("items", usernamesResult.getResponseData().get("data"));
+                        }else{
+                            map.remove("items");
                         }
                     } else {
-                        map.put("items", null);
+                        map.remove("items");
                     }
                 }
                 map.put("changed", true);
@@ -330,9 +339,11 @@ public class CmsClientNavigateController {
                         CommonResult usernamesResult = commonMethods.getResource(request);
                         if (CommonResultStatus.SUCCESS.toString().equals(usernamesResult.getStatus()) && usernamesResult.getResponseData().get("data") != null) {
                             map.put("items", usernamesResult.getResponseData().get("data"));
+                        }else{
+                            map.remove("items");
                         }
                     } else {
-                        map.put("items", null);
+                        map.remove("items");
                     }
                 }
                 map.put("changed", true);
@@ -350,9 +361,11 @@ public class CmsClientNavigateController {
                         CommonResult usernamesResult = commonMethods.getResource(request);
                         if (CommonResultStatus.SUCCESS.toString().equals(usernamesResult.getStatus()) && usernamesResult.getResponseData().get("data") != null) {
                             map.put("items", usernamesResult.getResponseData().get("data"));
+                        }else{
+                            map.remove("items");
                         }
                     } else {
-                        map.put("items", null);
+                        map.remove("items");
                     }
                 }
                 map.put("changed", true);

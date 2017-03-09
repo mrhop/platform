@@ -1547,8 +1547,7 @@
       {
         "name": "parent",
         "label": "父导航",
-        "type": "select",
-        "dataType": "number"
+        "type": "tree"
       },
       {
         "name": "orderNum",
@@ -1671,8 +1670,7 @@
       {
         "name": "parent",
         "label": "父导航",
-        "type": "select",
-        "dataType": "number"
+        "type": "tree"
       },
       {
         "name": "orderNum",

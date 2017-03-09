@@ -24,7 +24,7 @@
   
   mogupload --trackers=127.0.0.1:7001 --domain=images --key='bg.jpg' --file='/home/temp/bg.jpg'
   mogupload --trackers=127.0.0.1:7001 --domain=files --key='/abc/bg.jpg' --file='/home/temp/bg.jpg'
-moglistkeys --trackers=172.16.27.1:7001 --domain=images
+moglistkeys --trackers=127.0.0.1:7001 --domain=files
 mogfileinfo --trackers=127.0.0.1:7001 --domain=files --key='vendor.css'
 
 mogdelete --trackers=127.0.0.1:7001 --domain='files' --key="/abc/bg.jpg"
